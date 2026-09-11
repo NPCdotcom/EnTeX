@@ -5,16 +5,16 @@ description: Score whether this turn advanced the goal and followed the plan. Us
 
 # Action Evaluate
 
-**Tier**: L1 ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧevaluate
+**Tier**: L1 · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §evaluate
 
 | Mode | When |
 |------|------|
-| **full** | execution ﾂｷ Loop2 ﾂｷ reanchor |
+| **full** | execution · Loop2 · reanchor |
 | **mini** | Loop1 read-only (Role 0) |
 | **skip** | lightweight |
 
-nav mismatch 竊・turn_reward 竕､ 0.5 ﾂｷ [PM_ROUTING.md](../../docs/PM_ROUTING.md) ﾂｧ evaluation
+nav mismatch → turn_reward ≤ 0.5 · [PM_ROUTING.md](../../docs/PM_ROUTING.md) § evaluation
 
-Rubric: [`references/rubric.md`](references/rubric.md) ﾂｷ deep evaluate: **evaluate-reference** (L2)
+Rubric: [`references/rubric.md`](references/rubric.md) · deep evaluate: **evaluate-reference** (L2)
 
 Canonical: [AGENT_EVALUATION.md](../../docs/AGENT_EVALUATION.md)

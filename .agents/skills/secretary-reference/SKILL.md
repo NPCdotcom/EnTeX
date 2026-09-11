@@ -5,8 +5,8 @@ description: Gather light context for briefing after memory recall. Use when pre
 
 # Secretary Reference
 
-**Tier**: L1 ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧ1
+**Tier**: L1 · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §1
 
 Gather: [`references/context-gather-checklist.md`](references/context-gather-checklist.md)
 
-Loop2 detail: `docs/PM_ROUTING.md` ﾂｧ Loop2
+Loop2 detail: `docs/PM_ROUTING.md` § Loop2

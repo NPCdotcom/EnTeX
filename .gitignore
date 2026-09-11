@@ -68,3 +68,6 @@ venv/
 # WSL / editor swap
 *.swp
 *.swo
+
+# Claude Code のローカル権限（マシン固有・共有しない）
+.claude/settings.local.json

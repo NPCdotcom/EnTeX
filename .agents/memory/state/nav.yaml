@@ -4,17 +4,19 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "P0 charter filled; dev env scaffolded; awaiting user Go to P1 / roadmap step 1"
+  intent: "P0 charter filled; dev env scaffolded; harness+git conventions ported from dip; awaiting user Go to P1 / roadmap step 1"
   turn_estimate: 3
   chat_id_hint: "entex-env"
 
 navigation:
-  active_thread_id: "env-scaffold"
+  active_thread_id: "harness-from-dip"
   active_plan: ""
   next_actions:
     - "User decides P0 gate (proposal: Go). Then 要求 for first doc-type: サークル月次報告書"
     - "Roadmap step 1: `entex render <json>` with first doc-package under packages/ (CLI JSON→PDF)"
     - "WSL clone ~/EnTeX has no GitHub SSH key — add key or use credential helper before pushing from WSL"
+    - "From now on: no direct commits on main — branch `issue/owner/slug`, commit `prefix:text`, PR into main (AGENTS.md)"
+    - "Tell NPC about the new branch/commit/PR rules and the CodeRabbit habit (`@coderabbitai review`)"
   blockers: []
 
 alignment:

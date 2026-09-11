@@ -5,8 +5,8 @@ description: Read nav.yaml and the memory index before acting. Use at turn start
 
 # Memory Reference
 
-**Tier**: L1 ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧ2
+**Tier**: L1 · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §2
 
-Read [`references/recall-workflow.md`](references/recall-workflow.md) 窶・nav Phase 0 first.
+Read [`references/recall-workflow.md`](references/recall-workflow.md) — nav Phase 0 first.
 
-Canonical: `docs/MEMORY_ARCHITECTURE.md` ﾂｷ `docs/CONTEXT_TIERS.md`
+Canonical: `docs/MEMORY_ARCHITECTURE.md` · `docs/CONTEXT_TIERS.md`
