@@ -4,3 +4,7 @@ env/node/node_modules/
 **/__pycache__/
 *.py[cod]
 .pytest_cache/
+
+# User-global memory lives in ~/.agents/memory/global — not this repo
+memory/global/
+
