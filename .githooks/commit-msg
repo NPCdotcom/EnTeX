@@ -1,0 +1,32 @@
+#!/bin/sh
+# コミットメッセージが `接頭辞:やったこと` の形式かを検査する。
+# 規則の正は AGENTS.md「Git 運用」。この hook はその機械検査であって、規則そのものではない。
+# 導入: make hooks（core.hooksPath を .githooks に向ける）
+
+set -e
+
+msg_file="$1"
+first_line=$(sed -n '1p' "$msg_file")
+
+# マージ・リバート・fixup/squash は git が生成する定型文なので対象外
+case "$first_line" in
+  "Merge "*|"Revert "*|"fixup!"*|"squash!"*|"#"*) exit 0 ;;
+esac
+
+prefixes='feat|ui|remove|fix|docs|style|refact|perf|test|wip|chore'
+
+if printf '%s' "$first_line" | grep -Eq "^($prefixes):[^ ]"; then
+  exit 0
+fi
+
+cat >&2 <<MSG
+[git hook] コミットメッセージが規約の形式に合わない。
+  受け取った1行目: $first_line
+
+形式: 接頭辞:やったこと （コロンの後に空白を入れない）
+接頭辞: feat / ui / remove / fix / docs / style / refact / perf / test / wip / chore
+例: feat:JSONから.texを組み立てる
+
+規則の正は AGENTS.md「Git 運用」。
+MSG
+exit 1

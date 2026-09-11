@@ -6,6 +6,7 @@
 Makefile   text eol=lf
 Dockerfile text eol=lf
 *.ps1      text eol=crlf
+.githooks/* text eol=lf
 
 # Binary
 *.pdf  binary

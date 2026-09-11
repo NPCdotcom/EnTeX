@@ -1,0 +1,28 @@
+#!/bin/sh
+# main への直接コミットを拒否する。
+# 規則の正は AGENTS.md「Git 運用」。導入: make hooks
+
+set -e
+
+branch=$(git symbolic-ref --short -q HEAD || echo "")
+
+# マージの解決中は素通しする（PR を手元でマージする場合など）
+if [ -f "$(git rev-parse --git-dir)/MERGE_HEAD" ]; then
+  exit 0
+fi
+
+case "$branch" in
+  main|master)
+    cat >&2 <<MSG
+[git hook] 現在のブランチは $branch であり、直接コミットしてはいけない。
+
+手順: main を最新化 → 作業ブランチを作成 → 実装 → commit → push → GitHub で PR → main へマージ
+ブランチ名の形式: issue番号/担当者/やること （担当者は aster / npc）
+例: git switch -c 7/aster/cli_render_json
+
+規則の正は AGENTS.md「Git 運用」。
+MSG
+    exit 1
+    ;;
+esac
+exit 0

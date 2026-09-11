@@ -113,6 +113,7 @@ cd EnTeX
 - コミット: `接頭辞:やったこと`（コロンの後に空白なし。`feat` / `fix` / `docs` / `refact` / `chore` など）
 - PR を出す前に `make lint` と `make test` を通す（TeX を触ったときは `make docker-test` と `make tex-smoke` も）
 - レビューが要るときは PR に `@coderabbitai review` をコメントする
+- 上の3点は `.githooks/` の hook が検査する。**クローン後に一度 `make hooks`**（`make setup` からも呼ばれる）
 
 ## Docs entry
 
