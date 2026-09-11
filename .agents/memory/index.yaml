@@ -1,5 +1,5 @@
-# Example project index 窶・copy to index.yaml (local, not committed)
-# cp .agents/memory/index.yaml.example .agents/memory/index.yaml
+# EnTeX project index — entries the agent kit recalls. Keep in sync with the files it points at.
+# Template: .agents/memory/index.yaml.example
 
 version: 1
 updated: "2026-09-12"
@@ -21,7 +21,7 @@ entries:
     tier: state
     granularity: anchor
     path: .agents/memory/state/nav.yaml
-    summary: "Session nav 窶・intent, next_actions, pressure"
+    summary: "Session nav — intent, next_actions, pressure"
     tags: [nav, control-plane, every_turn]
     recall: every_turn
     linked: [project-state]
@@ -46,4 +46,3 @@ entries:
   #   tags: [shell]
   #   recall: on_demand
   #   linked: [lesson-powershell-heredoc]
-

@@ -1,24 +1,26 @@
-﻿# Project documentation
+# Project documentation
 
 | Path | Purpose |
 |------|---------|
-| [FIRST_PROJECT_START.md](FIRST_PROJECT_START.md) | 譛蛻昴・ 1 繝励Ο繧ｸ繧ｧ繧ｯ繝医・襍ｷ蜍墓焔鬆・ｼ域ｱ守畑・・|
-| [PROJECT_LIFECYCLE.md](PROJECT_LIFECYCLE.md) | Phases P0窶撤6, scope H0窶滴5, PDCA rules |
-| [_example/](_example/) | 荳ｭ遶九し繝ｳ繝励Ν・亥炎髯､蜿ｯ・・|
+| [FIRST_PROJECT_START.md](FIRST_PROJECT_START.md) | 最初の 1 プロジェクトの起動手順（汎用） |
+| [PROJECT_LIFECYCLE.md](PROJECT_LIFECYCLE.md) | Phases P0–P6, scope H0–H5, PDCA rules |
 | [project-state.yaml](project-state.yaml) | Current phase / scope focus / gates |
-| [requirements/](requirements/) | Per-topic 隕∵ｱゅ・隕∽ｻｶ・・1窶撤2・・|
-| [design/](design/) | H0窶滴5 design |
+| [TEAM.md](TEAM.md) | Members (NPC / Aster) |
+| [design/](design/) | H0–H5 design。製品の正本は [design/product/charter.md](design/product/charter.md) |
 | [adr/](adr/) | Architecture decisions |
 | [glossary/](glossary/) | Terms |
-| [LINEAR_PHASE_MAP.md](LINEAR_PHASE_MAP.md) | Linear states 竊・P/H・・ptional・・|
+| [evaluations/](evaluations/) | Evaluation records |
+| [reviews/](reviews/) | Review records |
+| [../schemas/](../schemas/) | Shared schemas（IR / API） |
+| [../design/](../design/) | Design artifacts（図・モック） |
 
-Plans: [.agents/plans/](../.agents/plans/README.md)  
+未作成（必要になった段階で作る）:
+
+- `requirements/` — Per-topic 要求・要件（P1–P2）
+- `LINEAR_PHASE_MAP.md` — Linear states ↔ P/H（optional。`project-state.yaml` の `linear_sync.map_doc` が参照している）
+
+Plans: [.agents/plans/](../.agents/plans/README.md)
 Kit: [.agents/README.md](../.agents/README.md)
+Agent guide: [../AGENTS.md](../AGENTS.md)
 
-Copy from kit on bootstrap: see [FIRST_PROJECT_START.md](FIRST_PROJECT_START.md).  
-Do **not** ship kit-only paths to production without renaming `sample-*` / `example-*` slugs.
-
-| [TEAM.md](TEAM.md) | Members (NPC / Aster) |
-| [../schemas/](../schemas/) | Shared schemas |
-| [../design/](../design/) | Design artifacts |
-
+キットから持ち込んだ雛形を本番の成果物にするときは、`sample-*` / `example-*` のスラッグを先に改名する。

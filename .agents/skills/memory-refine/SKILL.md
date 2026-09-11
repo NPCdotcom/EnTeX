@@ -5,10 +5,10 @@ description: Archive stale threads and supersede outdated memory entries. Use af
 
 # Memory Refine
 
-**Tier**: L1 conditional ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧrefine
+**Tier**: L1 conditional · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §refine
 
-Triggers: [`references/refine-triggers.md`](references/refine-triggers.md) ﾂｷ ops: [`references/refine-operations.md`](references/refine-operations.md)
+Triggers: [`references/refine-triggers.md`](references/refine-triggers.md) · ops: [`references/refine-operations.md`](references/refine-operations.md)
 
-Boundary: reason=propose ﾂｷ critique=score ﾂｷ refine=organize ﾂｷ record=write
+Boundary: reason=propose · critique=score · refine=organize · record=write
 
 Canonical: [AGENT_EVALUATION.md](../../docs/AGENT_EVALUATION.md)

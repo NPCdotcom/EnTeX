@@ -5,10 +5,10 @@ description: Map user intent to Cursor roles after the turn brief. Use when choo
 
 # Secretary Route
 
-**Tier**: L1 ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧroute
+**Tier**: L1 · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §route
 
-Routing: [`references/routing-table.md`](references/routing-table.md) ﾂｷ G6: [`references/workspace-detection.md`](references/workspace-detection.md)
+Routing: [`references/routing-table.md`](references/routing-table.md) · G6: [`references/workspace-detection.md`](references/workspace-detection.md)
 
-G1: empty `lifecycle_plan.profile` 竊・**adaptive-lifecycle-plan** required.
+G1: empty `lifecycle_plan.profile` → **adaptive-lifecycle-plan** required.
 
-Canonical: [PM_ROUTING.md](../../docs/PM_ROUTING.md) ﾂｷ [AIDLC_KIT_MAP.md](../../docs/AIDLC_KIT_MAP.md)
+Canonical: [PM_ROUTING.md](../../docs/PM_ROUTING.md) · [AIDLC_KIT_MAP.md](../../docs/AIDLC_KIT_MAP.md)

@@ -5,9 +5,9 @@ description: Self-RAG style check that recalled memory supports this turn. Use a
 
 # Memory Critique
 
-**Tier**: L1 conditional ﾂｷ **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) ﾂｧcritique
+**Tier**: L1 conditional · **Chain**: [`_chains/pm-turn.md`](../_chains/pm-turn.md) §critique
 
-After **full** action-evaluate only 窶・skip on lightweight / mini.
+After **full** action-evaluate only — skip on lightweight / mini.
 
 Checklist: [`references/critique-checklist.md`](references/critique-checklist.md)
 
