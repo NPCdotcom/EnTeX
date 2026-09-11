@@ -1,4 +1,16 @@
-﻿# EnTeX — プロジェクト概要
+---
+title: EnTeX プロジェクト概要（charter）
+kind: design
+phase: P0
+scope_level: H0
+status: draft
+updated: 2026-09-12
+authors:
+  - NPC (NPCdotcom)
+  - Aster (astel_isk)
+---
+
+# EnTeX — プロジェクト概要
 
 ## 0. メタ
 
