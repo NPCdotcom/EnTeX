@@ -1,20 +1,20 @@
-﻿# EnTeX session nav — shared control plane (committed for collaborator sync)
+﻿# EnTeX session nav — local control plane (not part of product charter)
 version: 1
 updated: "2026-09-11"
 scope: project
 
 session:
-  intent: "bootstrap-complete — await product charter"
-  turn_estimate: 1
-  chat_id_hint: "entex-bootstrap"
+  intent: "fill P0 project overview charter"
+  turn_estimate: 2
+  chat_id_hint: "entex-charter"
 
 navigation:
-  active_thread_id: "bootstrap"
+  active_thread_id: "charter"
   active_plan: ""
   next_actions:
-    - "Invite collaborator astel_isk on GitHub (Settings → Collaborators)"
-    - "Draft docs/design/product/charter.md (P0)"
-    - "Confirm WSL Ubuntu toolchain for EnTeX"
+    - "Fill docs/design/product/charter.md (use 目安/例; skip empty optional sections)"
+    - "Invite collaborator astel_isk on GitHub if not yet"
+    - "After draft: move unresolved items into Open questions; user may set status agreed"
   blockers: []
 
 alignment:
