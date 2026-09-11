@@ -1,20 +1,20 @@
-﻿# EnTeX session nav — local control plane (not part of product charter)
+# EnTeX session nav — local control plane (not part of product charter)
 version: 1
-updated: "2026-09-11"
+updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "fill P0 project overview charter"
-  turn_estimate: 2
-  chat_id_hint: "entex-charter"
+  intent: "P0 charter filled; dev env scaffolded; awaiting user Go to P1 / roadmap step 1"
+  turn_estimate: 3
+  chat_id_hint: "entex-env"
 
 navigation:
-  active_thread_id: "charter"
+  active_thread_id: "env-scaffold"
   active_plan: ""
   next_actions:
-    - "Fill docs/design/product/charter.md (use 目安/例; skip empty optional sections)"
-    - "Invite collaborator astel_isk on GitHub if not yet"
-    - "After draft: move unresolved items into Open questions; user may set status agreed"
+    - "User decides P0 gate (proposal: Go). Then 要求 for first doc-type: サークル月次報告書"
+    - "Roadmap step 1: `entex render <json>` with first doc-package under packages/ (CLI JSON→PDF)"
+    - "WSL clone ~/EnTeX has no GitHub SSH key — add key or use credential helper before pushing from WSL"
   blockers: []
 
 alignment:
@@ -31,6 +31,6 @@ pressure:
   pre_compact_recommended: false
 
 verification:
-  last_verified_at: "2026-09-11"
-  last_nav_brief_at: "2026-09-11"
+  last_verified_at: "2026-09-12"
+  last_nav_brief_at: "2026-09-12"
   chat_vs_file_delta: none
