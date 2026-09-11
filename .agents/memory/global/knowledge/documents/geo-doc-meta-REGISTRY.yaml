@@ -1,0 +1,249 @@
+# GEO_DOC_REGISTRY v1
+
+{
+  "version": 1,
+  "topic": "geoscience",
+  "flat": true,
+  "self_contained": true,
+  "files": [
+    {
+      "file": "geo-doc-geoscience-overview.md",
+      "id": "geo.topic.overview",
+      "tags": [
+        "overview"
+      ],
+      "title": "地球科学の全体像"
+    },
+    {
+      "file": "geo-doc-geology.md",
+      "id": "geo.topic.geology",
+      "tags": [
+        "geology",
+        "solid-earth"
+      ],
+      "title": "地質学"
+    },
+    {
+      "file": "geo-doc-stratigraphy.md",
+      "id": "geo.topic.stratigraphy",
+      "tags": [
+        "stratigraphy",
+        "solid-earth"
+      ],
+      "title": "層序学"
+    },
+    {
+      "file": "geo-doc-sedimentology.md",
+      "id": "geo.topic.sedimentology",
+      "tags": [
+        "sedimentology",
+        "solid-earth"
+      ],
+      "title": "堆積学"
+    },
+    {
+      "file": "geo-doc-structural-geology.md",
+      "id": "geo.topic.structural_geology",
+      "tags": [
+        "structure",
+        "tectonics"
+      ],
+      "title": "構造地質学"
+    },
+    {
+      "file": "geo-doc-historical-geology.md",
+      "id": "geo.topic.historical_geology",
+      "tags": [
+        "earth-history"
+      ],
+      "title": "地史学"
+    },
+    {
+      "file": "geo-doc-paleontology.md",
+      "id": "geo.topic.paleontology",
+      "tags": [
+        "fossils",
+        "evolution"
+      ],
+      "title": "古生物学"
+    },
+    {
+      "file": "geo-doc-petrology.md",
+      "id": "geo.topic.petrology",
+      "tags": [
+        "rocks",
+        "igneous"
+      ],
+      "title": "岩石学"
+    },
+    {
+      "file": "geo-doc-mineralogy.md",
+      "id": "geo.topic.mineralogy",
+      "tags": [
+        "minerals",
+        "crystals"
+      ],
+      "title": "鉱物学"
+    },
+    {
+      "file": "geo-doc-ore-deposits.md",
+      "id": "geo.topic.ore_deposits",
+      "tags": [
+        "ore",
+        "resources"
+      ],
+      "title": "鉱床学"
+    },
+    {
+      "file": "geo-doc-volcanology.md",
+      "id": "geo.topic.volcanology",
+      "tags": [
+        "volcano",
+        "magma"
+      ],
+      "title": "火山学"
+    },
+    {
+      "file": "geo-doc-geochemistry.md",
+      "id": "geo.topic.geochemistry",
+      "tags": [
+        "isotopes",
+        "elements"
+      ],
+      "title": "地球化学"
+    },
+    {
+      "file": "geo-doc-geophysics.md",
+      "id": "geo.topic.geophysics",
+      "tags": [
+        "gravity",
+        "magnetism"
+      ],
+      "title": "地球物理学"
+    },
+    {
+      "file": "geo-doc-seismology.md",
+      "id": "geo.topic.seismology",
+      "tags": [
+        "earthquake",
+        "seismic-waves"
+      ],
+      "title": "地震学"
+    },
+    {
+      "file": "geo-doc-oceanography.md",
+      "id": "geo.topic.oceanography",
+      "tags": [
+        "ocean",
+        "circulation"
+      ],
+      "title": "海洋学"
+    },
+    {
+      "file": "geo-doc-cryosphere.md",
+      "id": "geo.topic.cryosphere",
+      "tags": [
+        "glacier",
+        "ice"
+      ],
+      "title": "雪氷学"
+    },
+    {
+      "file": "geo-doc-soil-science.md",
+      "id": "geo.topic.soil_science",
+      "tags": [
+        "soil",
+        "pedology"
+      ],
+      "title": "土壌学"
+    },
+    {
+      "file": "geo-doc-atmospheric-science.md",
+      "id": "geo.topic.atmospheric_science",
+      "tags": [
+        "atmosphere"
+      ],
+      "title": "大気科学"
+    },
+    {
+      "file": "geo-doc-meteorology.md",
+      "id": "geo.topic.meteorology",
+      "tags": [
+        "weather"
+      ],
+      "title": "気象学"
+    },
+    {
+      "file": "geo-doc-climatology.md",
+      "id": "geo.topic.climatology",
+      "tags": [
+        "climate",
+        "koppen"
+      ],
+      "title": "気候学"
+    },
+    {
+      "file": "geo-doc-physical-geography.md",
+      "id": "geo.topic.physical_geography",
+      "tags": [
+        "landscape"
+      ],
+      "title": "自然地理学"
+    },
+    {
+      "file": "geo-doc-geodesy.md",
+      "id": "geo.topic.geodesy",
+      "tags": [
+        "gps",
+        "ellipsoid"
+      ],
+      "title": "測地学"
+    },
+    {
+      "file": "geo-doc-geomorphology.md",
+      "id": "geo.topic.geomorphology",
+      "tags": [
+        "erosion",
+        "landforms"
+      ],
+      "title": "地形学"
+    },
+    {
+      "file": "geo-doc-hydrology.md",
+      "id": "geo.topic.hydrology",
+      "tags": [
+        "watershed",
+        "runoff"
+      ],
+      "title": "水文学"
+    },
+    {
+      "file": "geo-doc-limnology.md",
+      "id": "geo.topic.limnology",
+      "tags": [
+        "lakes",
+        "eutrophication"
+      ],
+      "title": "陸水学"
+    },
+    {
+      "file": "geo-doc-planetary-science.md",
+      "id": "geo.topic.planetary_science",
+      "tags": [
+        "planets",
+        "solar-system"
+      ],
+      "title": "惑星科学"
+    },
+    {
+      "file": "geo-doc-earth-structure.md",
+      "id": "geo.topic.earth_structure",
+      "tags": [
+        "mantle",
+        "core",
+        "moho"
+      ],
+      "title": "地球の構造"
+    }
+  ]
+}

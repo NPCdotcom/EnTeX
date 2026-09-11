@@ -1,0 +1,315 @@
+# Global memory index — NPCdotcom promoted
+# Windows: %USERPROFILE%\.agents\memory\global\index.yaml
+# Not committed to project git.
+
+version: 1
+updated: "2026-06-22"
+scope: global
+
+read_budget:
+  anchor_max: 2
+  thread_max: 0
+  episode_latest_max: 0
+
+entries:
+  - id: lesson-learning-complete-index
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/learning-complete-index.md
+    summary: "全学習トピック横断索引; learning/index.yaml; 6トピック"
+    tags: [learning, index, roadmap, cross-topic]
+    recall: on_demand
+    linked:
+      - lesson-chemistry-learning-complete
+      - lesson-math-learning-complete
+      - lesson-physics-learning-progress
+      - lesson-cpp-learning-progress
+      - lesson-product-dev-learning-complete
+      - npcdotcom-philosophy
+    promoted_at: "2026-06-22"
+    core_confirmed_at: "2026-06-22"
+
+  - id: npcdotcom-philosophy
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/philosophy/npcdotcom-philosophy.md
+    summary: "NPCdotcom: 核心E-15(空×登録→現実近似); registry/OCP/美; P1-P10"
+    tags: [npcdotcom, philosophy, design, registry, simulation, core-e15]
+    recall: every_turn
+    linked: [npcdotcom-preferences, lesson-npcdotcom-landscape]
+    core_confirmed_at: "2026-06-18"
+
+  - id: npcdotcom-preferences
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/preferences/npcdotcom-preferences.md
+    summary: "NPCdotcom: JP, sim, 現実近似動機, 低レイヤー許容, landscape-research"
+    tags: [npcdotcom, preferences, research]
+    recall: on_demand
+    linked: [npcdotcom-philosophy]
+    updated: "2026-06-18"
+
+  - id: lesson-npcdotcom-landscape
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/npcdotcom-landscape-hooks.md
+    summary: "CUDA/Vulkan/sim landscape hooks; see learning sources"
+    tags: [npcdotcom, cuda, vulkan, lesson]
+    recall: on_demand
+    linked: [npcdotcom-philosophy]
+
+  - id: lesson-chemistry-learning-complete
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/chemistry-learning-complete.md
+    summary: "化学 P0-P11 Cycle36完走; learning/chemistry; 計画分停止"
+    tags: [chemistry, learning, roadmap, complete]
+    recall: on_demand
+    linked: [lesson-learning-complete-index, lesson-chemistry-p11-synthesis, lesson-chemistry-p11-round4, chem-doc-meta-index]
+    promoted_at: "2026-06-20"
+    core_confirmed_at: "2026-06-20"
+
+  - id: lesson-chemistry-p11-synthesis
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/chemistry-p11-synthesis.md
+    summary: "P11 Cycle01-26総括; toy教訓; 第1-3期"
+    tags: [chemistry, p11, lesson]
+    recall: on_demand
+    linked: [lesson-chemistry-learning-complete]
+
+  - id: lesson-chemistry-p11-round4
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/chemistry-p11-round4-synthesis.md
+    summary: "P11 Cycle28-36; FEP->ML/AL系列; 第4期"
+    tags: [chemistry, p11, round4, lesson]
+    recall: on_demand
+    linked: [lesson-chemistry-learning-complete]
+
+  - id: chem-doc-meta-index
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/documents/chem-doc-meta-INDEX.md
+    summary: "化学 docs 20件; flat; self-contained topic texts"
+    tags: [chemistry, documents, registry, regex]
+    recall: on_demand
+    linked: [lesson-chemistry-learning-complete]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-math-learning-complete
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/math-learning-complete.md
+    summary: "数学 P0-P9 C32完走; learning/math; global lessons; 指示待ち"
+    tags: [math, learning, roadmap, complete]
+    recall: on_demand
+    linked: [lesson-learning-complete-index, lesson-math-p0-p8-synthesis, lesson-math-p9-early-synthesis, lesson-math-p9-synthesis, lesson-math-learning-p9-cross-review, math-doc-meta-index]
+    promoted_at: "2026-06-22"
+    core_confirmed_at: "2026-06-22"
+
+  - id: lesson-math-p0-p8-synthesis
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/math-p0-p8-synthesis.md
+    summary: "数学 P0-P8基礎; 三分野; 10実験dir"
+    tags: [math, p0-p8, lesson]
+    recall: on_demand
+    linked: [lesson-math-learning-complete]
+
+  - id: lesson-math-p9-early-synthesis
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/math-p9-early-synthesis.md
+    summary: "P9 C01-10 MSCサーベイ; 測度/グラフ/PDE/ゲーム"
+    tags: [math, p9, lesson, survey]
+    recall: on_demand
+    linked: [lesson-math-learning-complete, lesson-math-p9-synthesis]
+
+  - id: lesson-math-learning-p9-cross-review
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/math-learning-p9-cross-review.md
+    summary: "P9 C32横断レビュー詳細; 双曲xゲーム"
+    tags: [math, learning, roadmap, p9, cross-review]
+    recall: on_demand
+    linked: [lesson-math-learning-complete, lesson-math-p9-synthesis]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-math-p9-synthesis
+    scope: global
+    tier: knowledge
+    granularity: archive
+    path: knowledge/lessons/math-p9-synthesis.md
+    summary: "P9 C11-32並行track; 双曲+ゲームtoy教訓"
+    tags: [math, p9, lesson, hyperbolic, game-theory]
+    recall: on_demand
+    linked: [lesson-math-learning-complete, lesson-math-p9-early-synthesis, lesson-math-learning-p9-cross-review, math-doc-meta-index]
+
+  - id: math-doc-meta-index
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/documents/math-doc-meta-INDEX.md
+    summary: "数学 docs 21件; flat; self-contained topic texts"
+    tags: [math, documents, registry, regex]
+    recall: on_demand
+    linked: [lesson-math-learning-complete]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-secretary-mob-facilitator
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/secretary-as-mob-facilitator.md
+    summary: "product-dev: secretary=Mob facilitator; 1-user Gate; no multi-agent"
+    tags: [product-dev, aidlc, secretary, lesson]
+    recall: on_demand
+    linked: [lesson-adaptive-lifecycle-plan, lesson-ai-driven-hitl, lesson-brownfield-reverse-engineering]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-adaptive-lifecycle-plan
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/adaptive-lifecycle-plan-pattern.md
+    summary: "AI-DLC Workflow Planning via skill; profiles; lifecycle_plan state"
+    tags: [product-dev, aidlc, lifecycle, lesson]
+    recall: on_demand
+    linked: [lesson-secretary-mob-facilitator, lesson-brownfield-reverse-engineering]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-ai-driven-hitl
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/ai-driven-hitl-positioning.md
+    summary: "AI-driven+HITL positioning; anti-autonomous default; audit gates"
+    tags: [product-dev, aidlc, hitl, lesson]
+    recall: on_demand
+    linked: [lesson-secretary-mob-facilitator]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-brownfield-reverse-engineering
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/brownfield-reverse-engineering-pattern.md
+    summary: "brownfield RE via skill+6 templates; P1前; G2; not aidlc copy"
+    tags: [product-dev, aidlc, brownfield, lesson]
+    recall: on_demand
+    linked: [lesson-adaptive-lifecycle-plan]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-infrastructure-design
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/infrastructure-design-pattern.md
+    summary: "G9 IaC via P3 systems templates+Checkov example; no new skill"
+    tags: [product-dev, aidlc, infrastructure, lesson]
+    recall: on_demand
+    linked: [lesson-adaptive-lifecycle-plan]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-continuous-discovery-delegation
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/continuous-discovery-delegation-pattern.md
+    summary: "p-07: weekly discovery=cadence template; OST/outcome in kit; no mandatory interviews"
+    tags: [product-dev, discovery, continuous-discovery, lesson]
+    recall: on_demand
+    linked: [lesson-product-dev-landscape-milestone]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-operations-feedback-loop
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/operations-feedback-loop-pattern.md
+    summary: "a-08: G4 four templates; feedback-to-inception closes Operations loop; user Go"
+    tags: [product-dev, aidlc, operations, g4, lesson]
+    recall: on_demand
+    linked: [lesson-product-dev-landscape-milestone, lesson-infrastructure-design]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-product-dev-landscape-milestone
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/product-dev-landscape-milestone.md
+    summary: "landscape 25 cycles done; o-11 kit; AIDD/AI-DLC/SDD+HITL; boundaries"
+    tags: [product-dev, landscape, milestone, lesson]
+    recall: on_demand
+    linked: [lesson-adaptive-lifecycle-plan, lesson-continuous-discovery-delegation, lesson-operations-feedback-loop, lesson-context-tiering]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-context-tiering
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/context-tiering-pattern.md
+    summary: "R-3 refresh: L0-L3 tiers; _chains; PM_ROUTING canon; L0 48 lines"
+    tags: [product-dev, refresh, context, tiers, r-3, lesson]
+    recall: on_demand
+    linked: [lesson-product-dev-landscape-milestone, lesson-adaptive-lifecycle-plan]
+    promoted_at: "2026-06-22"
+
+  - id: lesson-physics-learning-progress
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/physics-learning-progress.md
+    summary: "物理学 P0-P8完走; P9 C112; learning/physics; 継続可能"
+    tags: [physics, learning, roadmap, p9, in-progress]
+    recall: on_demand
+    linked: [lesson-learning-complete-index]
+    promoted_at: "2026-06-22"
+    core_confirmed_at: "2026-06-22"
+
+  - id: lesson-cpp-learning-progress
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/cpp-learning-progress.md
+    summary: "C++ LearnCpp/CG/MS+フェーズ1-6完走; learning/cpp"
+    tags: [cpp, learning, learncpp, cuda, vulkan]
+    recall: on_demand
+    linked: [lesson-learning-complete-index]
+    promoted_at: "2026-06-22"
+    core_confirmed_at: "2026-06-22"
+
+  - id: lesson-product-dev-learning-complete
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/lessons/product-dev-learning-complete.md
+    summary: "product-dev landscape25完走; 8+1 patterns; learning/product-dev"
+    tags: [product-dev, aidlc, aidd, landscape, complete]
+    recall: on_demand
+    linked:
+      - lesson-learning-complete-index
+      - lesson-product-dev-landscape-milestone
+      - lesson-secretary-mob-facilitator
+      - lesson-adaptive-lifecycle-plan
+      - lesson-ai-driven-hitl
+      - lesson-brownfield-reverse-engineering
+      - lesson-infrastructure-design
+      - lesson-continuous-discovery-delegation
+      - lesson-operations-feedback-loop
+      - lesson-context-tiering
+    promoted_at: "2026-06-22"
+    core_confirmed_at: "2026-06-22"

@@ -1,0 +1,14 @@
+---
+description: Cursor roles execute tools per PM brief via role-execute; external memory; Subagents removed.
+alwaysApply: false
+---
+
+# Cursor tooling — role execution
+
+**対象**: `role-execute` 実行時。
+
+- brief の Cursor 補助に従う
+- 結果は **memory-flush** 対象に含める
+- Hermes / Subagent 禁止
+
+Rule `cursor-tooling-pm`, `secretary-gate`

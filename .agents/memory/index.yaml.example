@@ -1,0 +1,48 @@
+# Example project index — copy to index.yaml (local, not committed)
+# cp .agents/memory/index.yaml.example .agents/memory/index.yaml
+
+version: 1
+updated: ""
+scope: project
+
+priority_order: [index, state, episodes, traces, evaluations, knowledge, history, rewards]
+
+read_budget:
+  anchor_max: 5
+  thread_max: 3
+  episode_latest_max: 2
+
+# Global layer: separate index at ~/.agents/memory/global/index.yaml
+# See docs/MEMORY_ARCHITECTURE.md
+
+entries:
+  - id: nav-control-plane
+    scope: project
+    tier: state
+    granularity: anchor
+    path: .agents/memory/state/nav.yaml
+    summary: "Session nav — intent, next_actions, pressure"
+    tags: [nav, control-plane, every_turn]
+    recall: every_turn
+    linked: [project-state]
+
+  - id: project-state
+    scope: team
+    tier: state
+    granularity: anchor
+    path: docs/project-state.yaml
+    summary: "Phase, H scope, gate_status, blockers"
+    tags: [lifecycle, gate, canonical]
+    recall: every_turn
+    linked: []
+
+  # Optional pointer to global knowledge (no duplicate body):
+  # - id: link-global-lessons
+  #   scope: project
+  #   tier: index
+  #   granularity: archive
+  #   path: null
+  #   summary: "See global index: lesson-powershell-heredoc"
+  #   tags: [shell]
+  #   recall: on_demand
+  #   linked: [lesson-powershell-heredoc]

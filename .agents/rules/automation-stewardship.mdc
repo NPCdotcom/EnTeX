@@ -1,0 +1,42 @@
+---
+description: P5-P6—Cursor role automator—agreed-plan automation cycles; not main PM
+alwaysApply: false
+---
+
+# Automation stewardship（automator）
+
+Automation is for **agreed plan cycles** only:
+`plan-agreed -> do -> check -> done/blocked`.
+
+## Hard gates
+
+- Target plan `status: agreed`
+- Acceptance criteria explicit and testable
+- Related design exists
+- Cursor role + skill sequence explicit in brief
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| Readiness | `automation-reference` |
+| Execute | `automation-run` |
+| Audit | `automation-record` |
+| Role | **`automator`** |
+
+## Boundaries
+
+| Need | Prefer |
+|------|--------|
+| Design ambiguity | `spec_designer` |
+| Plan changes | `plan_slicer` |
+| Planned implementation | `builder` |
+| Small fix | `hotfixer` |
+| Check | `reviewer` |
+| Progress health | `evaluator` |
+
+## Prohibitions
+
+- No execution from draft plans
+- PM must pass **router gate** every turn before role execution
+- **Subagent 禁止**

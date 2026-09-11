@@ -1,0 +1,11 @@
+{
+  "name": "@agents/kit-tooling",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Agent-only tooling (not project app deps). Add CLIs here when a skill needs Node.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {},
+  "dependencies": {}
+}

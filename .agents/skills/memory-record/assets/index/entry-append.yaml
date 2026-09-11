@@ -1,0 +1,11 @@
+id:
+scope: project | global | team
+tier: state | episodes | knowledge | history | index
+granularity: anchor | thread | archive
+path:
+summary: ""
+tags: []
+recall: every_turn | next_turn | on_demand
+linked: []
+supersedes:
+project_id: null   # global entries only, optional

@@ -1,0 +1,41 @@
+---
+description: P5+—Cursor role hotfixer—small post-Do fixes; not main PM
+alwaysApply: false
+---
+
+# Patch stewardship（hotfixer）
+
+**`hotfixer`** = 大きな Do のあと、またはレビュー直後の **短期的・小さな** ソース修正。
+
+## When to use
+
+- バグ・リグレッション・typo・設定の一行修正
+- ユーザーからの **小さな** 変更依頼
+- `reviewer` が指摘した **局所** 缺陷の修正
+
+## When not to use
+
+| Situation | Prefer |
+|-----------|--------|
+| 垂直スライス・複数 criteria | **`builder`** |
+| Scope 拡大・新仕様 | **`plan_slicer`** / **`spec_designer`** |
+| 行レベルレビュー本体 | **`reviewer`** |
+| 5 ファイル超・大規模リファクタ | **`builder`** |
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| Eligibility | `patch-reference` |
+| Apply fix | `patch-conduct` |
+| Plan log | `patch-record` |
+| Role | **`hotfixer`** |
+
+## Caps
+
+- ≤ **5 files**, ≤ **~80 net lines**
+- 一症状 / 一依頼
+
+## vs PM
+
+PM はパッチを自分でコミットしない。brief 経由で **`hotfixer`** を実行（`role-execute`）。**Subagent 禁止.**

@@ -1,0 +1,9 @@
+id: thread-{slug}
+scope: project
+tier: episodes
+granularity: thread
+path: ".agents/memory/episodes/YYYY-MM-DD-{slug}.md"
+summary: "{≤80 chars}"
+tags: []
+recall: next_turn
+linked: [project-state]

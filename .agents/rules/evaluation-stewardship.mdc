@@ -1,0 +1,39 @@
+---
+description: P6 Act—Cursor role evaluator—plan/project evaluation and rollback; not main PM
+alwaysApply: false
+---
+
+# Evaluation stewardship（evaluator）
+
+Not line-level code review — use **`reviewer`**.
+
+## When to use
+
+### In-flight plan
+
+- Long **Do** phases, milestone checkpoints
+- Acceptance criteria completion rate
+- Scope drift or blockers → recommend plan split / phase rollback
+
+### Whole project
+
+- Phase boundaries
+- Prioritize next design / plan / implementation work
+- User asks for status, retrospective
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| Context | `evaluate-reference` |
+| Plan evaluation | `plan-evaluate` |
+| Project evaluation | `project-evaluate` |
+| Record | `evaluate-record` |
+| Role | **`evaluator`** |
+
+## Artifacts
+
+| Type | Location |
+|------|----------|
+| Reports | `docs/evaluations/`（optional） |
+| Plan snapshot | plan PDCA / Progress |

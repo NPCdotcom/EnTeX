@@ -1,0 +1,22 @@
+# Rewards rollup — copy to rollup.yaml when first evaluation runs
+
+version: 1
+updated: ""
+
+window:
+  turns: 20          # rolling window size
+  mean_turn_reward: 0.0
+  last_turn_reward: 0.0
+
+totals:
+  turns_evaluated: 0
+  L2_count: 0
+  refine_count: 0
+
+competency_gaps_open: []
+# accurate_retrieval | test_time_learning | long_range | selective_forgetting
+
+recent:
+  - turn_id: ""
+    date: ""
+    turn_reward: 0.0

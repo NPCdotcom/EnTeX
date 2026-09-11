@@ -1,0 +1,9 @@
+---
+kind: handoff
+created: YYYY-MM-DD
+topics: [T1-label]
+related_plan: .agents/plans/programs/foo.md
+current_phase: P4
+scope_level: H4
+phase_rollback: false
+---

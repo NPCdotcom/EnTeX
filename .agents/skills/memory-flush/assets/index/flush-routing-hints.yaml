@@ -1,0 +1,45 @@
+# Flush routing — scope hints for memory-reason / memory-flush
+
+# Tag → default scope (override when project-specific term)
+tag_scope_defaults:
+  preferences: global
+  coding-style: global
+  shell: global
+  windows: global
+  lifecycle: project
+  gate: team
+  terminology: project
+  alignment: project
+  canonical: team
+
+# Tier → allowed scopes
+tier_scopes:
+  episodes: [project]
+  thread: [project]
+  state: [project, team]
+  knowledge:
+    alignment: [project]
+    lessons: [project, global]
+    philosophy: [global, team]
+    preferences: [global]
+  history: [project]
+  traces: [project]
+  evaluations: [project]
+  rewards: [project]
+
+# L1 always writes
+l1:
+  scope: project
+  tier: episodes
+  index: project
+
+# Global path root (see global-paths.md)
+global_root:
+  windows: "%USERPROFILE%\\.agents\\memory\\global"
+  unix: "~/.agents/memory/global"
+
+# Learning sandbox (not memory tier — direct write under learning/<topic>/)
+# See docs/LEARNING_SANDBOX.md · promote to lessons only after trace + critique
+learning_scratch:
+  notes: learning/<topic>/notes/
+  experiments: learning/<topic>/experiments/

@@ -1,0 +1,36 @@
+# Global memory index — copy to:
+#   Windows: %USERPROFILE%\.agents\memory\global\index.yaml
+#   Unix:    ~/.agents/memory/global/index.yaml
+#
+# Not committed to any project git repo.
+
+version: 1
+updated: ""
+scope: global
+
+read_budget:
+  anchor_max: 2
+  thread_max: 0          # threads live in project memory only
+  episode_latest_max: 0
+
+entries:
+  - id: user-preferences
+    scope: global
+    tier: knowledge
+    granularity: anchor
+    path: knowledge/preferences/_README.md
+    summary: "Coding style, language, tool preferences"
+    tags: [preferences]
+    recall: every_turn
+    linked: []
+
+  # Example cross-project lesson (create file when first recorded):
+  # - id: lesson-powershell-heredoc
+  #   scope: global
+  #   tier: knowledge
+  #   granularity: anchor
+  #   path: knowledge/lessons/powershell-heredoc.md
+  #   summary: "PS: use here-string not bash HEREDOC in git commit"
+  #   tags: [shell, windows]
+  #   recall: on_demand
+  #   linked: []

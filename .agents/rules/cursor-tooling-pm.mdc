@@ -1,0 +1,26 @@
+---
+description: Main agent PM only—apply Cursor tools from turn-brief via role-execute; nav update every turn; Subagents forbidden.
+alwaysApply: false
+---
+
+# Cursor tooling — PM
+
+1. turn-brief の **Cursor 補助** を確認
+2. P0–P4 → **WebSearch + browser**（`terminology-research`）
+3. **role-execute** で skill + ツール手順を Cursor 内実行
+4. ターン終端 → evaluate → **memory-flush** → **memory-record**（**nav.yaml 必更新** · pre_compact 時 **L2**）
+
+## 分担
+
+- 割当 → `router` + `cursor-tool-select`
+- 実行 → PM + `role-execute`
+
+## 禁止
+
+Subagent · Hermes · OS ブラウザのみ案内（P0–P4 用語）· **ad-hoc `python -c` / 未登録スクリプト**（→ `skills/_SCRIPT_POLICY.md` · `env/bin/agents-run.py`）
+
+## Shell（キット作業）
+
+キット監査・メンテは **`python env/bin/agents-run.py <skill> <stem>`** のみ。プロジェクトのテスト/build は builder 行の明示時のみ。
+
+Policy: `docs/TERMINOLOGY_RESEARCH_POLICY.md` · Routing: `docs/PM_ROUTING.md` · Scripts: `skills/_SCRIPT_POLICY.md`

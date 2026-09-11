@@ -1,0 +1,10 @@
+id: "{slug}"
+scope: global
+tier: knowledge
+granularity: anchor | archive
+path: "knowledge/lessons/{slug}.md"   # relative to global memory root
+summary: "{one_line}"
+tags: []
+recall: every_turn | on_demand
+linked: []
+project_id: null   # optional: tie to one repo

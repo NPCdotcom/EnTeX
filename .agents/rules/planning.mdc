@@ -1,0 +1,40 @@
+---
+description: P4—Hermes plan_slicer—.agents/plans/ implementation planning; not main PM
+alwaysApply: false
+---
+
+# Planning stewardship（plan_slicer）
+
+**Plans**: `.agents/plans/`  
+**What to build**: `docs/design/` → **`spec_designer`**
+
+## When to use
+
+- After P3 / upper **H** agreed per `docs/PROJECT_LIFECYCLE.md`
+- Plan paths: `programs/`, `algorithms/`; user confirm before `plan-record`
+- Before **Do** — verify plan & acceptance criteria
+
+For deliberation use **`spec_designer`** or `design-deliberate` / `design-reference`.
+
+## Mandatory web research（P4）
+
+Before `plan-record`:
+
+1. **`terminology-research`** — criteria, DoD, scope, sprint/plan 用語（WebSearch + browser）
+2. Terminology alignment in plan draft or linked deliberation
+
+Policy: `docs/TERMINOLOGY_RESEARCH_POLICY.md`
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| **Terminology** | **`terminology-research`**（Cursor 側・必須 P4） |
+| Reference | `plan-reference` |
+| Record | `plan-record` |
+| Role | **`plan_slicer`** |
+
+## Do gate
+
+- Do not start large work on `draft` plans unless user allows prototype
+- Implementation: **`builder`** — not plan_slicer

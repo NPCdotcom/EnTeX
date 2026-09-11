@@ -1,0 +1,12 @@
+## Lifecycle gate
+- current_phase: P? (from project-state or inferred)
+- scope_focus: H? path
+- target_action: plan-record | implement-conduct | design-record | ...
+- gate: pass | block
+- gate_proposal: Go | Conditional Go | Recycle | Hold | Kill | n/a（Gate Keeper = ユーザー）
+- gate_status_current: (from project-state gate_status.current)
+- gate_conditions_open: (list if conditional)
+- blockers: (bullet list)
+- terminology_research: done | required | n/a
+- upstream_H_missing: (H0..H5 paths not agreed)
+- recommendation: (2–4 options + おすすめ 1 — 決定はユーザー/PM)

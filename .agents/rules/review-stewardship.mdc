@@ -1,0 +1,33 @@
+---
+description: P6—Cursor role reviewer—PDCA Check and acceptance review; not main PM
+alwaysApply: false
+---
+
+# Review stewardship（reviewer）
+
+Default: report in chat. Persist via `review-record` when needed.
+
+Narrow defects → **`hotfixer`**. Large gaps → **`plan_slicer`** / **`builder`**.
+
+## When to use
+
+- PDCA **Check** after **Do**
+- User asks for review / PR check
+- Verify acceptance criteria in code
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| Context | `review-reference` |
+| Conduct | `review-conduct` |
+| Record | `review-record` |
+| Role | **`reviewer`** |
+
+## Boundaries
+
+| Need | Prefer |
+|------|--------|
+| Progress / health | `evaluator` |
+| Plan rewrite | `plan_slicer` |
+| Spec gap | `spec_designer` |

@@ -1,0 +1,11 @@
+---
+description: Index of skills and rules by phase. Canonical table in role-skill-catalog only.
+alwaysApply: false
+---
+
+# Phase index
+
+**Canonical table**: `skills/role-skill-catalog/references/full-catalog.md`  
+**Tiers**: `docs/CONTEXT_TIERS.md` · **Loop**: `docs/PM_ROUTING.md`
+
+Do not duplicate Role×Skill or gate tables in this file.

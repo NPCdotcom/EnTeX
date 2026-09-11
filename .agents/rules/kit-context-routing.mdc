@@ -1,0 +1,12 @@
+---
+description: Routes context—PM uses AGENTS.md, nav, pm-turn. Subagent and Hermes disabled.
+alwaysApply: true
+---
+
+# Kit context routing
+
+**Canonical**: `docs/PM_ROUTING.md` · `docs/MANDATORY_PROCEDURES.md` · `AGENTS.md`
+
+Every turn: `pm-turn-start` → `role-execute` → `pm-turn-end` · Control plane: `nav.yaml` + `project-state.yaml`
+
+**Forbidden**: Subagent · Hermes · chat-only next_actions · Loop1 P/H re-inference

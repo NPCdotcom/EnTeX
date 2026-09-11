@@ -1,0 +1,54 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+
+# Secrets / local credentials (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets/
+
+# Build / package caches
+node_modules/
+dist/
+build/
+out/
+target/
+coverage/
+*.log
+*.tmp
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Agent runtime (generated only — kit assets under .agents/ ARE tracked)
+.agents/env/python/.venv/
+.agents/env/node/node_modules/
+
+# Cursor junctions / generated hooks bridge (recreate via .agents/scripts/link-cursor.*)
+.cursor/rules
+.cursor/skills
+.cursor/hooks
+.cursor/hooks.json
+
+# IDE local
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# WSL / editor swap
+*.swp
+*.swo

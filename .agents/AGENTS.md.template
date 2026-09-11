@@ -1,0 +1,47 @@
+# {{PROJECT_NAME}} — Agent Guide
+
+> Kit: [.agents/README.md](.agents/README.md) · Tiers: [.agents/docs/CONTEXT_TIERS.md](.agents/docs/CONTEXT_TIERS.md)
+
+## PM (IDE + external memory)
+
+**No Subagents** · **No Hermes** · Memory: `.agents/memory/`
+
+| Layer | Canonical |
+|-------|-----------|
+| L0 gate | `rules/secretary-gate` · `rules/no-subagents` |
+| Every turn | `pm-turn-start` → `role-execute` → `pm-turn-end` · [PM_ROUTING.md](.agents/docs/PM_ROUTING.md) · `nav.yaml` |
+| Loop2 | [PM_ROUTING.md](.agents/docs/PM_ROUTING.md) §Loop2 · `project-state.yaml` |
+
+Roles: [CURSOR_ROLES.md](.agents/docs/CURSOR_ROLES.md) · Catalog: `skills/role-skill-catalog`
+
+User chat: **Japanese** · Kit canon: **English** — [LANGUAGE_POLICY.md](.agents/docs/LANGUAGE_POLICY.md)
+
+{{DELEGATION_EXAMPLES}}
+
+---
+
+## Project
+
+| Field | Value |
+|-------|-------|
+| Name | **{{PROJECT_NAME}}** |
+| Description | {{ONE_LINE_DESCRIPTION}} |
+| Stack | {{TECH_STACK}} |
+
+## Stack docs
+
+| Topic | Link |
+|-------|------|
+| Language / runtime | {{STACK_LANG_DOC}} |
+| Framework | {{STACK_FRAMEWORK_DOC}} |
+| Style | {{STYLE_GUIDE}} |
+
+## Lifecycle
+
+[PROJECT_LIFECYCLE.md](docs/PROJECT_LIFECYCLE.md) · `docs/project-state.yaml` · `.agents/memory/index.yaml`
+
+## Principles
+
+{{DESIGN_PRINCIPLES}}
+
+{{STACK_SPECIFIC_NOTES}}

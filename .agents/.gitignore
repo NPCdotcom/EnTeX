@@ -1,0 +1,6 @@
+﻿# Generated runtime only — skills/rules/docs/plans/memory scaffolding are tracked for team share
+env/python/.venv/
+env/node/node_modules/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/

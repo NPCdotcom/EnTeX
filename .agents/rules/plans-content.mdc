@@ -1,0 +1,53 @@
+---
+description: P4—Conventions for .agents/plans/ implementation plans
+globs: .agents/plans/**/*
+alwaysApply: false
+---
+
+# Plans content conventions
+
+## Purpose
+
+- Implementation scope, steps, **acceptance criteria**
+- PDCA Plan / Act log
+- Cursor Plan mode workspace target
+
+**Deliberation** → `docs/design/*.deliberation.md`  
+**Spec body** → `docs/design/*.md`
+
+## Frontmatter
+
+```yaml
+---
+title: ...
+kind: plan
+status: draft | agreed | superseded
+scope_level: product | element | system | framework | program | algorithm
+pdca_class: S0 | S1
+pdca_eligible: true | false
+related_design: docs/design/...
+related_requirements: docs/requirements/<slug>/要件.md
+unit_scope: docs/design/programs/<slug>.md   # optional · H4/H5 unit（AI-DLC Unit / s-02）
+parent_hierarchy: { product, element, system, framework }
+promoted_from: optional
+---
+```
+
+- **PDCA Do** 既定: `programs/`, `algorithms/` only with `pdca_eligible: true`
+- H0–H2 plans: `pdca_eligible: false` required
+- S1: ≤5 acceptance criteria recommended（≈ 1 Bolt · `s-02`）
+
+## Unit 完走（AI-DLC Unit · s-02/s-03）
+
+- **unit** = `unit_scope`（H4 program または H5 algorithm の `related_design`）
+- **bolt** = 本 plan 1 件（S1 · `pdca_class: S1`）
+- **unit 完了** = 同一 `unit_scope` 配下の plan がすべて `done` または `superseded`（`draft`/`agreed` の open がゼロ）
+- 中途離脱 → plan 分割 · `superseded` · P3 巻き戻し（`PROJECT_LIFECYCLE.md`）
+
+## Sections
+
+Goal, Scope hierarchy table, Scope, Acceptance criteria, Agent recommendations, User thinking (`>`), Dependencies, Facts / Assumptions / Open, Progress assessments, PDCA log
+
+## Index
+
+Update `.agents/plans/README.md` on create or rename.

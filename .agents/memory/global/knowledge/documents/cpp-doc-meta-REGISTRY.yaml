@@ -1,0 +1,120 @@
+# CPP_DOC_REGISTRY v1
+
+{
+  "version": 1,
+  "topic": "cpp",
+  "flat": true,
+  "self_contained": true,
+  "files": [
+    {
+      "file": "cpp-doc-cpp-overview.md",
+      "id": "cpp.topic.overview",
+      "tags": ["overview", "standards"]
+    },
+    {
+      "file": "cpp-doc-language-fundamentals.md",
+      "id": "cpp.topic.language_fundamentals",
+      "tags": ["syntax", "types", "control-flow"]
+    },
+    {
+      "file": "cpp-doc-memory-ownership.md",
+      "id": "cpp.topic.memory_ownership",
+      "tags": ["pointers", "raii", "smart-pointers"]
+    },
+    {
+      "file": "cpp-doc-classes-oop.md",
+      "id": "cpp.topic.classes_oop",
+      "tags": ["classes", "inheritance", "polymorphism"]
+    },
+    {
+      "file": "cpp-doc-templates-exceptions-io.md",
+      "id": "cpp.topic.templates_exceptions",
+      "tags": ["templates", "exceptions", "iostream"]
+    },
+    {
+      "file": "cpp-doc-stl.md",
+      "id": "cpp.topic.stl",
+      "tags": ["containers", "algorithms", "iterators"]
+    },
+    {
+      "file": "cpp-doc-modern-cpp.md",
+      "id": "cpp.topic.modern_cpp",
+      "tags": ["cpp11", "cpp17", "cpp20"]
+    },
+    {
+      "file": "cpp-doc-build-tooling.md",
+      "id": "cpp.topic.build_tooling",
+      "tags": ["cmake", "vcpkg", "gtest"]
+    },
+    {
+      "file": "cpp-doc-core-guidelines.md",
+      "id": "cpp.topic.core_guidelines",
+      "tags": ["guidelines", "design"]
+    },
+    {
+      "file": "cpp-doc-concurrency.md",
+      "id": "cpp.topic.concurrency",
+      "tags": ["threads", "mutex", "async"]
+    },
+    {
+      "file": "cpp-doc-networking-asio.md",
+      "id": "cpp.topic.networking",
+      "tags": ["asio", "tcp", "sockets"]
+    },
+    {
+      "file": "cpp-doc-gui-sdl.md",
+      "id": "cpp.topic.gui_sdl",
+      "tags": ["sdl", "gui", "window"]
+    },
+    {
+      "file": "cpp-doc-custom-data-structures.md",
+      "id": "cpp.topic.custom_ds",
+      "tags": ["linked-list", "hash", "sorting"]
+    },
+    {
+      "file": "cpp-doc-cuda-programming.md",
+      "id": "cpp.topic.cuda",
+      "tags": ["gpu", "cuda", "kernels"]
+    },
+    {
+      "file": "cpp-doc-vulkan-graphics.md",
+      "id": "cpp.topic.vulkan",
+      "tags": ["vulkan", "graphics", "rendering"]
+    },
+    {
+      "file": "cpp-doc-cp-complexity-search-greedy.md",
+      "id": "cpp.topic.cp_complexity",
+      "tags": ["complexity", "sort", "binary-search", "greedy"]
+    },
+    {
+      "file": "cpp-doc-cp-stl-union-find.md",
+      "id": "cpp.topic.cp_stl_ds",
+      "tags": ["union-find", "priority-queue", "containers"]
+    },
+    {
+      "file": "cpp-doc-cp-recursion-backtracking.md",
+      "id": "cpp.topic.cp_search",
+      "tags": ["backtracking", "meet-in-middle"]
+    },
+    {
+      "file": "cpp-doc-cp-dynamic-programming.md",
+      "id": "cpp.topic.cp_dp",
+      "tags": ["dp", "knapsack", "lis"]
+    },
+    {
+      "file": "cpp-doc-cp-graph-algorithms.md",
+      "id": "cpp.topic.cp_graphs",
+      "tags": ["bfs", "dfs", "dijkstra", "mst"]
+    },
+    {
+      "file": "cpp-doc-cp-range-queries.md",
+      "id": "cpp.topic.cp_range_queries",
+      "tags": ["segment-tree", "fenwick", "sparse-table"]
+    },
+    {
+      "file": "cpp-doc-cp-number-theory.md",
+      "id": "cpp.topic.cp_number_theory",
+      "tags": ["modular", "gcd", "crt"]
+    }
+  ]
+}

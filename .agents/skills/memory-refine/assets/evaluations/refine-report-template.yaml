@@ -1,0 +1,18 @@
+# Memory refine report
+
+turn_id: ""
+date: ""
+trigger: turn_reward | L2 | confabulation | index_size | critique
+
+operations:
+  - op: archive_thread | supersedes | reject_lesson | merge_thread | shard_index | append_reward
+    target_id: ""
+    scope: project | global
+    reason: ""
+
+rollup:
+  turns_evaluated: 0
+  mean_turn_reward: 0.0
+  competency_gaps_open: []
+
+next: memory-record

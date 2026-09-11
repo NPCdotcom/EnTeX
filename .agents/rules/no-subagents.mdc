@@ -1,0 +1,10 @@
+---
+description: Forbid Cursor Subagents and Hermes MCP.
+alwaysApply: true
+---
+
+# No Subagents
+
+Do not launch Subagents or Hermes. Use `role-execute` in this chat.
+
+Canonical: `docs/CURSOR_ROLES.md`

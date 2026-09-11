@@ -1,0 +1,25 @@
+# nav.yaml — fields to update every standard turn
+
+Path: `.agents/memory/state/nav.yaml`
+
+| Field | Source |
+|-------|--------|
+| `updated` | ISO-8601 now |
+| `session.turn_estimate` | +1 from context-guard |
+| `session.intent` | turn-brief / user goal（1行） |
+| `navigation.next_actions` | nav-brief or turn-brief（≤3） |
+| `navigation.active_thread_id` | current thread |
+| `navigation.active_plan` | active_pdca mirror |
+| `alignment.phase` | Loop2 sync from project-state |
+| `alignment.scope_level` | Loop2 sync |
+| `alignment.gate_status` | Loop2 sync |
+| `pressure.level` | context-guard |
+| `pressure.signals` | context-guard list |
+| `pressure.reanchor_required` | clear after reanchor pass |
+| `pressure.pre_compact_recommended` | clear after L2 + user notified |
+| `pressure.last_l2_flush_at` | on L2 flush |
+| `verification.last_verified_at` | after memory-reference Phase 0 |
+| `verification.last_nav_brief_at` | on Loop2 |
+| `verification.chat_vs_file_delta` | reanchor or mismatch |
+
+Lightweight turn: at minimum `updated`, `turn_estimate`, optional mini `next_actions`.

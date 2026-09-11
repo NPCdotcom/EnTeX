@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "preCompact": [
+      {
+        "command": "python .agents/hooks/pre-compact.py"
+      }
+    ],
+    "stop": [
+      {
+        "command": "python .agents/hooks/stop-reanchor.py",
+        "loop_limit": 3
+      }
+    ]
+  }
+}

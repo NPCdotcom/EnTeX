@@ -1,0 +1,36 @@
+# Example — copy to nav.yaml (local, not committed)
+# cp .agents/memory/state/nav.yaml.example .agents/memory/state/nav.yaml
+# Kit workspace: set session.intent to "kit-maintenance". Never leave project leftovers here.
+
+version: 1
+updated: ""
+scope: project
+
+session:
+  intent: "kit-maintenance"
+  turn_estimate: 0
+  chat_id_hint: ""
+
+navigation:
+  active_thread_id: ""
+  active_plan: ""
+  next_actions: []
+  blockers: []
+
+alignment:
+  project_state_path: docs/project-state.yaml
+  phase: P0
+  scope_level: H0
+  gate_status: pending
+
+pressure:
+  level: low
+  signals: []
+  last_l2_flush_at: ""
+  reanchor_required: false
+  pre_compact_recommended: false
+
+verification:
+  last_verified_at: ""
+  last_nav_brief_at: ""
+  chat_vs_file_delta: none

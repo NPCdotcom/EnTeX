@@ -1,0 +1,34 @@
+# Turn evaluation — write to .agents/memory/evaluations/YYYY-MM-DD-{slug}.yaml
+
+turn_id: ""
+date: ""
+brief_goal: ""
+
+scores:
+  task_progress: 0.0
+  process_compliance: 0.0
+  nav_alignment: 0.0      # mini mode 必須
+  memory_grounding: 0.0
+  verifiable_pass: 0.0
+  turn_reward: 0.0
+  evaluate_mode: full | mini | skip
+
+weights:
+  task_progress: 0.35
+  process_compliance: 0.25
+  memory_grounding: 0.25
+  verifiable_pass: 0.15
+
+trajectory:
+  skills_executed: []
+  tools: []
+  files_touched: []
+  divergence: ""   # brief vs actual, one line
+
+verifiable_checks:
+  - name: ""
+    result: pass | fail | skip
+
+critique: ""       # 1-3 sentences, Reflexion-style
+blockers: []
+proposed_flush: L1 | L2

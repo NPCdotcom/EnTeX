@@ -1,0 +1,23 @@
+---
+description: {{STACK_LABEL}} review lens (project-local)
+globs: "{{GLOB_PATTERN}}"
+alwaysApply: false
+---
+
+# {{STACK_LABEL}} review lens
+
+Use with `review-conduct`. Project principles: **AGENTS.md**.
+
+## Stack documentation
+
+- Primary: {{PRIMARY_DOC_URL_OR_PATH}}
+
+## Review focus
+
+- 
+- 
+
+## Flag as spec gap
+
+- Behavior not backed by `docs/design/`
+- Scope beyond plan acceptance criteria

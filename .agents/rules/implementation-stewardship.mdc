@@ -1,0 +1,40 @@
+---
+description: P5—Cursor role builder—PDCA Do and TDD in plan scope; not main PM
+alwaysApply: false
+---
+
+# Implementation stewardship（builder）
+
+**Do** = application source per **AGENTS.md**, bounded by `.agents/plans/`.
+
+## When to use
+
+- Plan exists with clear **Scope** and **Acceptance criteria**
+- User asks to **implement**, **build**, **code**, **add feature**
+- Multi-file / multi-criterion Do within plan **Scope**
+- After `plan_slicer`; before `reviewer` **Check**
+
+**Not here**（→ **`hotfixer`**）: post-Do bugfix, tiny tweak within patch caps.
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| Context | `implement-reference` |
+| Build | `implement-conduct` |
+| PDCA Do log | `implement-record` |
+| Role | **`builder`** |
+
+## Hand off
+
+| Next | Role |
+|------|------|
+| Check | `reviewer` |
+| Plan change | `plan_slicer` |
+| Spec gap | `spec_designer` |
+| Progress review | `evaluator` |
+| Small post-Do fix | `hotfixer` |
+
+## vs PM
+
+PM does not patch source inline. Use **`builder`** for plan-bound Do; **`hotfixer`** for small fixes. **Subagent 禁止.**

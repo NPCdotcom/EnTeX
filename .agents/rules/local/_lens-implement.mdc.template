@@ -1,0 +1,28 @@
+---
+description: {{STACK_LABEL}} implementation lens (project-local)
+globs: "{{GLOB_PATTERN}}"
+alwaysApply: false
+---
+
+# {{STACK_LABEL}} implementation lens
+
+Use with `implement-conduct`. Principles: **AGENTS.md**.
+
+## Stack documentation
+
+- Primary: {{PRIMARY_DOC_URL_OR_PATH}}
+- Optional: {{SECONDARY_DOC_URL_OR_PATH}}
+
+## Conventions
+
+- 
+- 
+
+## Diff discipline
+
+- Touch only files required by plan Scope
+- No unrelated formatting or renames
+
+## Before handoff
+
+- 

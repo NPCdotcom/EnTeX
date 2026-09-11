@@ -1,0 +1,36 @@
+# Session navigation control plane — copy to .agents/memory/state/nav.yaml
+# Updated every standard turn via memory-record. NOT committed (git 外).
+# Team canonical (P/H/gate): docs/project-state.yaml — nav mirrors + next_actions only.
+
+version: 1
+updated: ""                    # ISO-8601 · memory-record が毎ターン更新
+
+session:
+  intent: ""                   # 1行 · Session Intent（Zylos 型）
+  turn_estimate: 0             # PM 推定 · 同一チャット内ターン数（+1/ターン）
+  chat_id_hint: ""             # 任意 · 会話識別（ユーザーが付けたラベル可）
+
+navigation:
+  active_thread_id: ""         # project index entry id · recall: every_turn
+  active_plan: ""              # e.g. .agents/plans/algorithms/foo.md or ""
+  next_actions:                # 最大 3 · ファイル正本（brief はここを引用）
+    - ""
+  blockers: []                 # 短期ブロッカ（team open_blockers への mirror 可）
+
+alignment:
+  project_state_path: docs/project-state.yaml
+  phase: ""                    # nav-brief / Loop2 で project-state と同期
+  scope_level: ""              # H0–H5
+  gate_status: ""              # pending | passed | conditional | ...
+
+pressure:
+  level: low                   # low | medium | high | pre_compact
+  signals: []                  # e.g. turn_estimate>=8, heavy_turn, nav_mismatch
+  last_l2_flush_at: ""         # ISO-8601
+  reanchor_required: false     # true → Loop2 + Re-anchor プロトコル
+  pre_compact_recommended: false  # true → ターン終端 L2 + 新チャット提案
+
+verification:
+  last_verified_at: ""         # ISO-8601 · memory-reference Phase 0 通過時
+  last_nav_brief_at: ""        # Loop2 実行時
+  chat_vs_file_delta: ""       # 不一致1行 or "none"

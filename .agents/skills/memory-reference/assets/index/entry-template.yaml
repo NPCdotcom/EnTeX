@@ -1,0 +1,11 @@
+id: "{slug}"
+scope: project
+tier: index
+granularity: anchor | thread | archive
+path: ".agents/memory/index/{slug}.md"
+summary: "{one_line}"
+tags: []
+recall: every_turn | next_turn | on_demand
+linked:
+  - project-state
+supersedes:

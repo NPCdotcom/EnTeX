@@ -1,0 +1,4 @@
+phase: P?
+gate_status: pending
+
+# Copy changed fields only when flush proposes project-state delta

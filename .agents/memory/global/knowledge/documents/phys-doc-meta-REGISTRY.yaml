@@ -1,0 +1,35 @@
+# PHYS_DOC_REGISTRY v1
+
+{
+  "version": 1,
+  "topic": "physics",
+  "flat": true,
+  "self_contained": true,
+  "files": [
+    {"file": "phys-doc-physics-overview.md", "id": "phys.topic.overview", "tags": ["overview"]},
+    {"file": "phys-doc-classical-mechanics.md", "id": "phys.topic.classical_mechanics", "tags": ["mechanics", "newton"]},
+    {"file": "phys-doc-waves-oscillations.md", "id": "phys.topic.waves_oscillations", "tags": ["waves", "interference"]},
+    {"file": "phys-doc-thermodynamics-statistical-mechanics.md", "id": "phys.topic.thermo_stat_mech", "tags": ["thermodynamics", "boltzmann"]},
+    {"file": "phys-doc-electromagnetism.md", "id": "phys.topic.electromagnetism", "tags": ["maxwell", "em"]},
+    {"file": "phys-doc-optics.md", "id": "phys.topic.optics", "tags": ["optics", "diffraction"]},
+    {"file": "phys-doc-quantum-mechanics.md", "id": "phys.topic.quantum_mechanics", "tags": ["schrodinger", "quantum"]},
+    {"file": "phys-doc-relativity-gravitation.md", "id": "phys.topic.relativity_gravitation", "tags": ["lorentz", "gr"]},
+    {"file": "phys-doc-computational-physics.md", "id": "phys.topic.computational_physics", "tags": ["numerical", "cfd", "cfl"]},
+    {"file": "phys-doc-applied-mathematical-physics.md", "id": "phys.topic.applied_math_physics", "tags": ["dimensional-analysis", "similarity"]},
+    {"file": "phys-doc-gravitational-wave-astronomy.md", "id": "phys.topic.gw_astronomy", "tags": ["ligo", "gwtc", "sgwb"]},
+    {"file": "phys-doc-pulsar-timing-arrays.md", "id": "phys.topic.pulsar_timing", "tags": ["ipta", "pta", "gwb"]},
+    {"file": "phys-doc-cosmological-observations.md", "id": "phys.topic.cosmological_observations", "tags": ["desi", "bao", "cmb-s4"]},
+    {"file": "phys-doc-mhd-black-hole-imaging.md", "id": "phys.topic.mhd_eht", "tags": ["mhd", "eht", "ngeht"]},
+    {"file": "phys-doc-astrophysics-neutron-stars.md", "id": "phys.topic.neutron_stars", "tags": ["neutron-star", "eos"]},
+    {"file": "phys-doc-radiative-transfer-astrophysics.md", "id": "phys.topic.radiative_transfer", "tags": ["rt", "mcrt", "fld"]},
+    {"file": "phys-doc-cosmic-rays-acceleration.md", "id": "phys.topic.cosmic_rays", "tags": ["cosmic-rays", "pevatron"]},
+    {"file": "phys-doc-fusion-plasma-heating.md", "id": "phys.topic.fusion_heating", "tags": ["sparc", "demo", "tokamak"]},
+    {"file": "phys-doc-plasma-physics-diagnostics.md", "id": "phys.topic.plasma_diagnostics", "tags": ["plasma", "thomson", "mse"]},
+    {"file": "phys-doc-exoplanet-atmospheres.md", "id": "phys.topic.exoplanet_atmospheres", "tags": ["exoplanet", "ariel", "hwo"]},
+    {"file": "phys-doc-quantum-optomechanics.md", "id": "phys.topic.optomechanics", "tags": ["optomechanics", "cavity"]},
+    {"file": "phys-doc-quantum-information-metrology.md", "id": "phys.topic.quantum_metrology", "tags": ["metrology", "squeezing"]},
+    {"file": "phys-doc-condensed-matter-quantum-transport.md", "id": "phys.topic.condensed_matter", "tags": ["condensed-matter", "kondo"]},
+    {"file": "phys-doc-particle-nuclear-physics.md", "id": "phys.topic.particle_nuclear", "tags": ["particle", "nuclear"]},
+    {"file": "phys-doc-lattice-qcd-gauge-theory.md", "id": "phys.topic.lattice_qcd", "tags": ["lattice-qcd", "gauge-theory"]}
+  ]
+}

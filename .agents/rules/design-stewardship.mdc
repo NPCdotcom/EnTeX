@@ -1,0 +1,49 @@
+---
+description: P0-P3—Cursor role spec_designer—specs and deliberation in docs/design/ and requirements/; not main PM
+alwaysApply: false
+---
+
+# Design stewardship（spec_designer）
+
+**Requirements**: `docs/requirements/<slug>/`（P1–P2）  
+**Specs**: `docs/design/`（H0–H5）  
+**ADR & glossary**: `docs/adr/`, `docs/glossary/`  
+**Plans**: `.agents/plans/` → **`plan_slicer`**
+
+## When to use
+
+- Unclear requirements or architecture choices
+- Spec / system design authoring
+- Tradeoff comparison before planning
+- ADR or glossary updates
+- **Any P0–P3 work that names 要求/要件/設計 terms** — run **`terminology-research`** first (Cursor: WebSearch + browser)
+
+## Mandatory web research（P0–P3）
+
+Before `design-record` or new `docs/requirements/` content:
+
+1. Skill **`terminology-research`**（PM executes WebSearch + browser MCP）
+2. Attach **Terminology alignment** block to deliberation or record draft
+3. User confirms definitions when terms are disputed
+
+Policy: `docs/TERMINOLOGY_RESEARCH_POLICY.md`
+
+## Skills
+
+| Purpose | Use |
+|---------|-----|
+| **Terminology** | **`terminology-research`**（Cursor 側・必須 P0–P3） |
+| Deliberate | `design-deliberate` |
+| Reference | `design-reference` |
+| Record design | `design-record` |
+| Record ADR/glossary | `doc-record` |
+| Role | **`spec_designer`** |
+
+## vs plan_slicer
+
+| Phase | Role | Artifact |
+|-------|------|----------|
+| Deliberation & design | `spec_designer` | `docs/design/` |
+| Implementation plan | `plan_slicer` | `.agents/plans/` |
+
+Do not store deliberation in `.agents/plans/`.

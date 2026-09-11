@@ -1,0 +1,55 @@
+---
+description: P0-P3—Markdown conventions for docs/ (design, requirements, adr, glossary)
+globs: docs/**/*
+alwaysApply: false
+---
+
+# docs/ content conventions
+
+## Language
+
+- Prose: per **AGENTS.md**（e.g. Japanese）
+- Filenames & slugs: **English** kebab-case
+
+## Layout
+
+| Path | Purpose |
+|------|---------|
+| `docs/PROJECT_LIFECYCLE.md` | Phases P0–P6, scope H0–H5 |
+| `docs/project-state.yaml` | Current phase / gates |
+| `docs/requirements/<slug>/` | `要求.md`（P1）, `要件.md`（P2） |
+| `docs/design/` | H0–H5 paths（see `docs/design/README.md`） |
+| `docs/adr/` | Architecture Decision Records |
+| `docs/glossary/` | Terms |
+
+Implementation plans: `.agents/plans/` only（PDCA 主: `programs/`, `algorithms/`）.
+
+## User thinking blocks
+
+Use Markdown `>` lines for draft user notes; agents promote confirmed text into body sections.
+
+## Frontmatter（required）
+
+```yaml
+---
+title: Human-readable title
+kind: deliberation | design   # optional on design docs
+status: draft | agreed | superseded
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
+```
+
+## Body sections（recommended）
+
+- `## Facts` / `## Assumptions` / `## Open questions`
+
+## Links
+
+- Plans: `../../.agents/plans/foo.md`
+- Update `docs/README.md` when adding documents
+
+## Do not
+
+- Put implementation plans under `docs/`
+- Set `agreed` without explicit user confirmation

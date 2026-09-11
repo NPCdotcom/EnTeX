@@ -1,0 +1,3 @@
+# Agent kit tooling only — NOT project application dependencies.
+# Hooks (hooks/*.py) remain stdlib-only and do not use this venv.
+pyyaml>=6.0.2,<7

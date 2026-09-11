@@ -1,0 +1,48 @@
+---
+description: Learning sandbox—unverified research and experiments under learning/** only. Assumption tier; no direct docs/lessons promotion.
+globs: learning/**,.agents/learning/**
+alwaysApply: false
+---
+
+# Learning sandbox
+
+正本: **`docs/LEARNING_SANDBOX.md`**
+
+## 適用
+
+`learning/**` または `.agents/learning/**` 内のファイルを編集・参照するとき。
+
+## IF-THEN
+
+```
+IF  ユーザーが learning/<topic> を明示、または作業パスが learning/**
+THEN
+  - 書込先: 当該 topic の notes/ · experiments/ · sources/ のみ
+  - 調査: landscape-research → notes/
+  - 実験: experiments/（プロジェクト本番コード・キット skills/rules は触らない）
+  - nav.session_intent に learning:<topic> を記録（memory-record）
+  - Loop2 / lifecycle-reference は skip 可
+  - project-state.yaml · docs/ 正本は更新しない
+BEFORE lesson 昇格 · docs 昇格
+  - trace + memory-critique 必須
+  - memory-flush → lessons（global/project）経由のみ
+```
+
+## 実行環境
+
+| 用途 | 環境 |
+|------|------|
+| キット script | `env/bin/agents-run.py` |
+| トピック実験 | `learning/<topic>/.venv` 等 |
+| アプリ build/test | プロジェクト venv（学習ターンでは原則禁止） |
+
+## 禁止
+
+- learning 内未検証メモを Fact / lesson として扱う
+- critique 無し lesson · docs 昇格
+- `skills/` · `rules/` · `env/` の学習ターン中の変更
+- `sources/` 内のライセンス不明素材の再配布
+
+## 新トピック
+
+`learning/_template` を `learning/<topic>` にコピー · `manifest.yaml` 更新。

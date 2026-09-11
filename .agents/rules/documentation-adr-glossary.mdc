@@ -1,0 +1,18 @@
+---
+description: P0-P3—When writing docs/adr or docs/glossary—spec_designer doc-record scope
+alwaysApply: false
+---
+
+# ADR & glossary
+
+**Deliberation & product/system specs**: `design-stewardship` / **`spec_designer`**  
+**Implementation plans**: `planning` / **`plan_slicer`**
+
+## Scope of this rule
+
+| Path | Record skill |
+|------|----------------|
+| `docs/adr/` | `doc-record` |
+| `docs/glossary/` | `doc-record` |
+
+Reference via `design-reference`. Format: `docs-content`.

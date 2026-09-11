@@ -1,0 +1,27 @@
+# Memory critique report
+
+turn_id: ""
+date: ""
+
+self_rag:
+  IsRel: pass | fail
+  IsSup: pass | fail
+  IsUse: pass | fail
+  IsStale: pass | fail
+  IsConflict: pass | fail
+
+memory_grounding: 0.0
+confabulation_risk: low | medium | high
+feedback_granularity: low | medium | high
+
+cited_memory_ids: []
+unsupported_claims: []    # → Assumption only
+conflicts:
+  - topic: ""
+    winner: project | global | team
+
+competency_gaps: []       # accurate_retrieval | test_time_learning | long_range | selective_forgetting
+refine_needed: yes | no
+proposed_actions:
+  - action: archive | supersedes | reject_lesson | hold
+    target_id: ""

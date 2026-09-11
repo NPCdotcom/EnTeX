@@ -1,0 +1,11 @@
+---
+description: Project phase P0-P6 pointer. Canonical docs/PROJECT_LIFECYCLE.md.
+alwaysApply: false
+---
+
+# Project lifecycle
+
+**Canonical**: `docs/PROJECT_LIFECYCLE.md`  
+State: `docs/project-state.yaml` · Session: `.agents/memory/state/nav.yaml`  
+Skill: `lifecycle-reference` (**Loop2 only**)  
+Gate Keeper = user. Do not duplicate gate tables here.

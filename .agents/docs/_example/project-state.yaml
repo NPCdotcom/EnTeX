@@ -1,0 +1,46 @@
+# Example only — copy to docs/project-state.yaml and replace paths/slugs.
+
+current_phase: P0
+phase_note: "Example state — replace before real work"
+
+scope_focus:
+  level: H0
+  path: docs/design/product/charter.md
+
+active_pdca:
+  plan_path: ""
+  scope_level: ""
+  pdca_class: ""
+
+gate_status:
+  current: pending
+  proposal: ""
+  last_decision: ""
+  last_decided_at: ""
+  conditions: []
+  gate_keeper: user
+
+last_gate_passed: ""
+allowed_actions:
+  - design-deliberate
+  - design-record
+
+open_blockers:
+  - "Replace example charter and requirement slugs with your project names"
+
+lifecycle_plan:
+  profile: full
+  brownfield: false
+  last_planned_at: "2026-06-22"
+  executed_phases: [P0, P1, P2, P3, P4, P5, P6]
+  skipped_phases: []
+  skipped_stages: []
+  recommended_cursor_mode: "Ask→Plan→Agent"
+  requirements_depth: comprehensive
+  unit_scope: docs/design/programs/example.md
+  notes: "Greenfield example — adaptive-lifecycle-plan Go 後に更新"
+
+linear_sync:
+  issue_state: ""
+  issue_id: ""
+  map_doc: docs/LINEAR_PHASE_MAP.md

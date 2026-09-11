@@ -1,0 +1,36 @@
+﻿# EnTeX session nav — shared control plane (committed for collaborator sync)
+version: 1
+updated: "2026-09-11"
+scope: project
+
+session:
+  intent: "bootstrap-complete — await product charter"
+  turn_estimate: 1
+  chat_id_hint: "entex-bootstrap"
+
+navigation:
+  active_thread_id: "bootstrap"
+  active_plan: ""
+  next_actions:
+    - "Invite collaborator astel_isk if not yet added on GitHub"
+    - "Draft docs/design/product/charter.md (P0)"
+    - "Confirm WSL Ubuntu runtime toolchain"
+  blockers: []
+
+alignment:
+  project_state_path: docs/project-state.yaml
+  phase: P0
+  scope_level: H0
+  gate_status: pending
+
+pressure:
+  level: low
+  signals: []
+  last_l2_flush_at: ""
+  reanchor_required: false
+  pre_compact_recommended: false
+
+verification:
+  last_verified_at: "2026-09-11"
+  last_nav_brief_at: ""
+  chat_vs_file_delta: none
