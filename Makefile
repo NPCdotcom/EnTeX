@@ -3,7 +3,7 @@ PY ?= python3
 VENV ?= .venv
 COMPOSE ?= docker compose
 
-.PHONY: help setup test lint fmt docker-build docker-shell docker-doctor docker-test tex-smoke clean
+.PHONY: help setup hooks test lint fmt docker-build docker-shell docker-doctor docker-test tex-smoke clean
 
 help: ## Show targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -13,6 +13,11 @@ help: ## Show targets
 setup: ## Create local venv and install package (lint/tests without TeX)
 	$(PY) -m venv $(VENV)
 	$(VENV)/bin/pip install -e ".[dev]"
+	$(MAKE) hooks
+
+hooks: ## Enable the repo git hooks (branch name / commit prefix / no main commits)
+	git config core.hooksPath .githooks
+	@echo "core.hooksPath -> .githooks"
 
 test: ## Run pytest on host (TeX tests are skipped)
 	$(VENV)/bin/pytest

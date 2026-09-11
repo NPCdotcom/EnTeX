@@ -94,6 +94,9 @@ User chat: **Japanese** · Kit canon: **English** — [LANGUAGE_POLICY.md](.agen
   - scaffold 期の履歴（`docs: ...` 形式）は書き換えない。今後のコミットから適用する
 - PR タイトルも同じ接頭辞を付け、末尾に issue 番号を添える（例: `feat:CLIでJSONからPDFを出す(#7)`）
 - 開発フロー: `main` を最新化 → 作業ブランチ作成 → 実装 → commit → `git push origin <ブランチ名>` → GitHub で PR → main へマージ
+- 上の3つ（main で作業しない / ブランチ名 / コミットの接頭辞）は `.githooks/` の hook が機械検査する。**クローンしたら一度 `make hooks` を実行する**（`make setup` からも呼ばれる）
+  - git には「ブランチ作成」の hook が無いため、ブランチ名が落ちるのは `checkout -b` の瞬間ではなく最初の push である
+  - 規則の正はこの節であり、hook はその機械検査にすぎない。規則を変えたら `.githooks/` も同じ PR で直す
 - 改行コードは LF 固定（`.gitattributes`）。ローカルが CRLF になっていて改行コードだけの差分が出たファイルは `git checkout --` で戻し、コミットに含めない
 
 ## 設計前提に反しそうな場合
@@ -161,3 +164,4 @@ make tex-smoke     # 日本語組版が通るか — テンプレート・スタ
 | `.claude/settings.local.json` | ローカルの権限許可 |
 | `.github/workflows/ci.yml` | lint / test（ホスト）と TeX スモーク（Docker） |
 | `.github/pull_request_template.md` | PR の定型（関連 issue・ローカル検査・設計前提の確認） |
+| `.githooks/` | Git 運用の機械検査（`commit-msg` 接頭辞 / `pre-commit` main 直コミット / `pre-push` main への push とブランチ名）。`make hooks` で有効化 |

@@ -1,0 +1,58 @@
+#!/bin/sh
+# main への push と、規約に合わないブランチ名の push を拒否する。
+# 規則の正は AGENTS.md「Git 運用」。導入: make hooks
+#
+# git には「ブランチ作成」の hook が無いため、ブランチ名の検査はここが最初の機会になる。
+# set -e は使わない。`[ ... ] && continue` の形が偽のときシェル全体が終了し、
+# 正常な push まで拒否されるため。
+
+branch_re='^[0-9]+/(aster|npc)/[A-Za-z0-9_-]+$'
+fail=0
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ -z "$remote_ref" ]; then
+    continue
+  fi
+
+  # ブランチの削除（local_sha が全て 0）は検査しない
+  case "$local_sha" in
+    *[!0]*) : ;;
+    *) continue ;;
+  esac
+
+  # ブランチ以外（タグなど）は対象外
+  case "$remote_ref" in
+    refs/heads/*) name=${remote_ref#refs/heads/} ;;
+    *) continue ;;
+  esac
+
+  case "$name" in
+    main|master)
+      cat >&2 <<MSG
+[git hook] $name へ直接 push してはいけない。
+
+作業ブランチを push し、GitHub で PR を作って main へマージする。
+規則の正は AGENTS.md「Git 運用」。
+MSG
+      fail=1
+      continue
+      ;;
+  esac
+
+  if printf '%s' "$name" | grep -Eq "$branch_re"; then
+    :
+  else
+    cat >&2 <<MSG
+[git hook] ブランチ名 $name が規約の形式に合わない。
+
+形式: issue番号/担当者/やること （担当者は aster / npc）
+例: 7/aster/cli_render_json
+既に作ってしまった場合: git branch -m <新しい名前>
+
+規則の正は AGENTS.md「Git 運用」。
+MSG
+    fail=1
+  fi
+done
+
+exit $fail
