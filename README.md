@@ -79,7 +79,10 @@ entex doctor         # コンテナ内で実行
 | `schemas/` | yes | 共有スキーマ（IR 等） |
 | `design/` | yes | デザイン成果物（図・モック） |
 | `.agents/` | yes | AI キット（skills / rules / plans / memory 骨格） |
-| `AGENTS.md` | yes | プロジェクト固有エージェント案内 |
+| `AGENTS.md` · `CLAUDE.md` | yes | AI エージェント向けの前提。`CLAUDE.md` は `AGENTS.md` へ転送するだけ |
+| `.claude/` | yes | Claude Code 用のスキル・権限（`docs-sync-check` など） |
+| `.github/` | yes | CI（lint/test と TeX スモーク）・PR テンプレート |
+| `.coderabbit.yaml` | yes | CodeRabbit レビュー設定（日本語） |
 | `out/` · `.venv/` · `.env` · `.cursor` junctions | no | 生成物・秘密情報（`.gitignore`） |
 
 `.gitignore` に **独自 AI アセットは載せません**。共同者がドキュメント・スキーマ・デザイン・エージェント資産を同じリポジトリで共有できるようにしています。
@@ -100,6 +103,16 @@ cd EnTeX
 # Windows: .\.agents\env\bin\setup.ps1
 # Unix:    ./.agents/env/bin/setup.sh
 ```
+
+## Contributing
+
+運用ルールの正本は [AGENTS.md](AGENTS.md)（「プロジェクト運用」節）。要点だけ:
+
+- **`main` で直接作業しない。** 作業ブランチ → PR → `main`
+- ブランチ名: `issue番号/担当者/やること`（例: `7/aster/cli_render_json`）
+- コミット: `接頭辞:やったこと`（コロンの後に空白なし。`feat` / `fix` / `docs` / `refact` / `chore` など）
+- PR を出す前に `make lint` と `make test` を通す（TeX を触ったときは `make docker-test` と `make tex-smoke` も）
+- レビューが要るときは PR に `@coderabbitai review` をコメントする
 
 ## Docs entry
 
