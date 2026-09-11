@@ -1,31 +1,30 @@
-﻿# Copy to docs/project-state.yaml in consumer repos. Update on gate pass / phase change.
-# Session navigation (every turn): .agents/memory/state/nav.yaml 窶・see docs/PM_ROUTING.md
-# Filled neutral example: docs/_example/project-state.yaml (do not use example slugs in production).
-# Guide: docs/FIRST_PROJECT_START.md ﾂｷ Gate: docs/ROLES_AND_GOVERNANCE.md
+# EnTeX project state. Update on gate pass / phase change.
+# Session navigation (every turn): .agents/memory/state/nav.yaml — see .agents/docs/PM_ROUTING.md
+# Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P0   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "New project EnTeX — repo bootstrap; defining product charter"    # e.g. "P5 done; returning to P2 for new requirement auth-v2"
+phase_note: "Charter drafted by NPC+Aster (2026-09-12, 案B adopted). Dev environment scaffolded (Docker + LuaLaTeX + Python pkg). Awaiting user Go on P0."
 
 scope_focus:      # which H level we are clarifying now
   level: H0       # H0|H1|H2|H3|H4|H5
-  path: "docs/design/product/charter.md"        # e.g. docs/design/product/charter.md
+  path: "docs/design/product/charter.md"
 
-active_pdca:      # primary S1 cycle (program or algorithm)
-  plan_path: "docs/design/product/charter.md"   # e.g. .agents/plans/algorithms/sort-stable.md
-  scope_level: algorithm
-  pdca_class: S1
+active_pdca:      # primary S1 cycle (program or algorithm) — none until a plan exists
+  plan_path: ""
+  scope_level: ""
+  pdca_class: ""
 
-# Stage-gate status (Gate Keeper = user). See docs/ROLES_AND_GOVERNANCE.md
+# Stage-gate status (Gate Keeper = user)
 gate_status:
   current: pending        # pending | passed | conditional | recycled | hold | killed
-  proposal: ""            # router/PM suggestion: Go | Conditional Go | Recycle | Hold | Kill | ""
-  last_decision: ""       # e.g. P4-plan-sort-stable-go, P2-req-auth-conditional
-  last_decided_at: ""     # ISO-8601 date optional, e.g. 2026-06-17
-  conditions: []          # strings 窶・required before Conditional Go advances
+  proposal: "Go"          # PM proposal for P0 → P1: charter is complete enough to write 要求 for the first doc-type
+  last_decision: ""
+  last_decided_at: ""
+  conditions: []
   gate_keeper: user       # fixed; PM proposes, user decides
 
-last_gate_passed: ""   # legacy shorthand; mirror last_decision when passed
-allowed_actions:       # router uses for gate hints
+last_gate_passed: ""
+allowed_actions:
   - design-deliberate
   - design-record
   # - plan-record          # uncomment when P3+H4/H5 ready
@@ -33,22 +32,21 @@ allowed_actions:       # router uses for gate hints
 
 open_blockers: []
 
-# Adaptive lifecycle (skill: adaptive-lifecycle-plan) 窶・AI-DLC Workflow Planning 逶ｸ蠖・
+# Adaptive lifecycle (skill: adaptive-lifecycle-plan)
 lifecycle_plan:
-  profile: "standard"              # hotfix | spike | standard | full | doc_only | custom
+  profile: "standard"      # hotfix | spike | standard | full | doc_only | custom
   brownfield: false
-  last_planned_at: ""      # ISO-8601
-  executed_phases: []      # e.g. [P1, P2, P4]
-  skipped_phases: []       # e.g. [P0]
-  skipped_stages: []       # optional AI-DLC stage labels for audit
-  recommended_cursor_mode: ""  # Ask | Plan | Agent | Debug | chain e.g. "Ask竊単lan竊但gent"
-  requirements_depth: ""   # minimal | standard | comprehensive 窶・H-P4 ﾂｷ adaptive-lifecycle-plan
-  unit_scope: ""           # e.g. docs/design/programs/example.md (H4/H5 unit)
-  notes: ""
+  last_planned_at: "2026-09-12"
+  executed_phases: [P0]
+  skipped_phases: []
+  skipped_stages: []
+  recommended_cursor_mode: "Plan→Agent"
+  requirements_depth: "standard"
+  unit_scope: ""           # first candidate: roadmap step 1 — CLI JSON → PDF for one doc-type
+  notes: "Roadmap fixed in charter §11: 1 CLI → 2 API → 3 second doc-type (gate) → 4 UI → 5 CSV batch."
 
-# Optional 窶・Linear・・ocs/LINEAR_PHASE_MAP.md・・
+# Optional — Linear
 linear_sync:
-  issue_state: ""   # design-draft | plan-agreed | do-running | ...
+  issue_state: ""
   issue_id: ""
   map_doc: docs/LINEAR_PHASE_MAP.md
-

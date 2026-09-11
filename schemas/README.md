@@ -1,3 +1,10 @@
-﻿# Schemas
+# Schemas
 
-共有スキーマ置き場。フォーマット（JSON Schema / OpenAPI / Protobuf 等）はプロジェクト決定後にここに置く。
+共有スキーマ置き場。
+
+| 予定 | 内容 |
+|------|------|
+| `ir/` | IR（中間表現）の共通部分。文書種ごとの入力スキーマは `packages/<slug>/schema.json` 側 |
+| `api/` | API の入出力（着手順 2 で OpenAPI を生成して置く） |
+
+IR は「見た目を含まない中身」だけを表す（charter §10）。体裁の情報はここに入れない。

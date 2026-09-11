@@ -27,11 +27,27 @@ coverage/
 # Python
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .venv/
 venv/
+
+# TeX intermediates (generated PDFs live under out/, never committed)
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.out
+*.lof
+*.lot
+*.bbl
+*.blg
+*.xdv
+*.dvi
+/out/
 
 # Agent runtime (generated only — kit assets under .agents/ ARE tracked)
 .agents/env/python/.venv/

@@ -1,0 +1,16 @@
+services:
+  dev:
+    build: .
+    image: entex-dev
+    # Keep the container idle; run commands with `docker compose run --rm dev <cmd>`
+    # or `make docker-shell`.
+    command: ["sleep", "infinity"]
+    working_dir: /app
+    volumes:
+      # Charter §7: clone under the WSL filesystem (~/EnTeX), not /mnt/c — TeX writes
+      # many intermediate files and bind mounts from Windows are slow.
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      ENTEX_ENV: dev

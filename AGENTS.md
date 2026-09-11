@@ -23,17 +23,25 @@ User chat: **Japanese** · Kit canon: **English** — [LANGUAGE_POLICY.md](.agen
 | Field | Value |
 |-------|-------|
 | Name | **EnTeX** |
-| Description | Collaborative project (GitHub). Docs, schemas, and design shared in-repo. |
-| Stack | TBD · runtime target: **WSL Ubuntu** |
+| Description | Form input → fixed-format PDF via LaTeX, for people who do not write TeX. Charter: [docs/design/product/charter.md](docs/design/product/charter.md) |
+| Stack | Python 3.12+ · FastAPI · pydantic · Jinja2 · Typer · LuaLaTeX+luatexja (container only) · React (later) |
+| Dev env | WSL2 Ubuntu + Docker single image `entex-dev` · clone under WSL FS (`~/EnTeX`), not `/mnt/c` |
 | Members | NPC (`NPCdotcom`) · Aster (`astel_isk`) |
 
 ## Stack docs
 
 | Topic | Link |
 |-------|------|
-| Language / runtime | TBD (WSL Ubuntu) |
-| Framework | TBD |
-| Style | TBD |
+| Language / runtime | Python 3.13 in image (`python:3.13-slim`) · `pyproject.toml` · run TeX-dependent code via `make docker-*` |
+| Framework | FastAPI (API, roadmap step 2) · Typer CLI (`src/entex/cli.py`, step 1) · Jinja2 → `.tex` · latexmk `-lualatex` |
+| Style | Ruff (`line-length 100`, `E F I B UP`) · LF endings (`.gitattributes`) · `.editorconfig` |
+
+## Design invariants (from charter)
+
+- `renderer` must not know where the IR came from (`data-import` stays separable).
+- Adding a doc-package must require **zero** changes under `src/entex/` — judged when the 2nd doc-package lands.
+- Users never see TeX, including error logs.
+- "テンプレート" = the `.tex.j2` file only; the whole bundle is a "パッケージ".
 
 ## Lifecycle
 

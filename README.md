@@ -1,6 +1,7 @@
 ﻿# EnTeX
 
-GitHub 共同開発プロジェクト。
+TeX を知らない人が、フォームに入力するだけで、決められた書式どおりの PDF を崩さずに出力できる Web アプリケーション。  
+概要の正本: [docs/design/product/charter.md](docs/design/product/charter.md)
 
 ## Members
 
@@ -15,26 +16,71 @@ GitHub 共同開発プロジェクト。
 - SSH: `git@github.com:NPCdotcom/EnTeX.git`
 - Default branch: `main`
 
-## Runtime
+## Stack
 
-想定実行環境: **WSL (Ubuntu)**。
+| 層 | 選定（charter §7） |
+|----|--------------------|
+| バックエンド | Python 3.12+ · FastAPI · pydantic · Jinja2 · Typer(CLI) |
+| 組版 | LuaLaTeX + luatexja（latexmk 経由）— **コンテナ内のみ** |
+| フロント | React（着手順 4 で追加。まだ無い） |
+| 開発環境 | WSL2 Ubuntu + Docker（単一イメージ `entex-dev`） |
+
+## Development
+
+### 1. WSL 側にクローンする（重要）
+
+TeX は中間ファイルを大量に書くため、`/mnt/c` 配下（Windows ディレクトリのバインドマウント）だとコンパイルが大幅に遅くなります。**開発コードは WSL のファイルシステムに置く**（charter §7）。
 
 ```bash
-# 例: Ubuntu ディストリを起動してリポジトリへ
 wsl -d Ubuntu
-cd /mnt/c/Users/<you>/Documents/GitHub/EnTeX
+git clone git@github.com:NPCdotcom/EnTeX.git ~/EnTeX
+cd ~/EnTeX
 ```
+
+Windows 側のクローン（Cursor で開いているもの）はドキュメント編集用に残して構いません。両方で `git pull` してください。
+
+### 2. コンテナ（Python + TeX）
+
+```bash
+make docker-build    # 初回のみ。TeX Live を apt で入れるので数分かかる
+make docker-doctor   # lualatex / latexmk / luatexja が見えるか
+make tex-smoke       # tests/fixtures/smoke.tex → out/smoke/smoke.pdf（日本語組版の確認）
+make docker-test     # pytest（TeX を使うテスト込み）
+make docker-shell    # 中に入って作業
+```
+
+### 3. ホスト側だけ（TeX 不要の lint / 単体テスト）
+
+```bash
+make setup           # .venv 作成 + `pip install -e ".[dev]"`
+make lint
+make test            # TeX 依存テストは自動 skip
+```
+
+### CLI
+
+```bash
+entex version
+entex doctor         # コンテナ内で実行
+```
+
+`entex render <json>` は着手順 1（`JSON → PDF`）で最初の doc-package と一緒に入ります。
 
 ## Layout
 
 | Path | Shared? | Notes |
 |------|:-------:|-------|
-| `docs/` | yes | 要求・設計・ADR・用語 |
-| `schemas/` | yes | 共有スキーマ |
-| `design/` | yes | デザイン成果物 |
+| `src/entex/` | yes | アプリ本体（renderer / job-runner / API / CLI） |
+| `packages/` | yes | 文書種パッケージ（doc-package）— 本体を変えずに増やす |
+| `tests/` | yes | pytest。`fixtures/smoke.tex` は組版スモーク |
+| `scripts/` | yes | 開発補助シェル |
+| `Dockerfile` / `compose.yaml` / `Makefile` | yes | 開発環境定義 |
+| `docs/` | yes | 概要・要求・設計・ADR・用語 |
+| `schemas/` | yes | 共有スキーマ（IR 等） |
+| `design/` | yes | デザイン成果物（図・モック） |
 | `.agents/` | yes | AI キット（skills / rules / plans / memory 骨格） |
 | `AGENTS.md` | yes | プロジェクト固有エージェント案内 |
-| `.env` / venv / `.cursor` junctions | no | 生成物・秘密情報（`.gitignore`） |
+| `out/` · `.venv/` · `.env` · `.cursor` junctions | no | 生成物・秘密情報（`.gitignore`） |
 
 `.gitignore` に **独自 AI アセットは載せません**。共同者がドキュメント・スキーマ・デザイン・エージェント資産を同じリポジトリで共有できるようにしています。
 
