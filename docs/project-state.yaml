@@ -3,11 +3,11 @@
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P6   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "P0ゲート Go 済み（2026-09-12）。要求(P1)→要件(P2)→renderer基本設計(P3)→plan-record(P4: algorithms/ir-validate-and-derive, programs/render-and-cli)→実装(P5、PR #8 を main へマージ)→P6 Check pass（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順1（CLI で1本通す）完了。Act 候補: W1/W2 小パッチ・renderer.md IF 追従。次は着手順2（API化）の P3 設計（docs/design/systems/api.md、draft）。"
+phase_note: "P0ゲート Go 済み（2026-09-12）。要求(P1)→要件(P2)→renderer基本設計(P3)→plan-record(P4: algorithms/ir-validate-and-derive, programs/render-and-cli)→実装(P5、PR #8 を main へマージ)→P6 Check pass（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順1（CLI で1本通す）完了。Act 候補: W1/W2 小パッチ・renderer.md IF 追従。着手順2（API化）の P3 設計を docs/design/programs/api.md（draft）に起こした。ユーザー確認で agreed → P4 plan-record。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
-  path: "docs/design/programs/renderer.md"
+  path: "docs/design/programs/api.md"
 
 active_pdca:      # primary S1 cycle (program or algorithm)
   plan_path: ".agents/plans/programs/render-and-cli.md"
@@ -17,7 +17,7 @@ active_pdca:      # primary S1 cycle (program or algorithm)
 # Stage-gate status (Gate Keeper = user)
 gate_status:
   current: pending        # pending | passed | conditional | recycled | hold | killed
-  proposal: "P6 Act → 着手順2 の P3 ゲート: (1) レビュー W1（latexmk ジョブ名の正規化）/ W2（template 欠落を PackageError に）を小パッチで入れる (2) renderer.md IF 表を実装に追従 (3) docs/design/systems/api.md（API化 + 共通パイプライン関数）を agreed にして P4 plan-record へ。ユーザーの Go 待ち"
+  proposal: "P6 Act → 着手順2 の P3 ゲート: (1) レビュー W1（latexmk ジョブ名の正規化）/ W2（template 欠落を PackageError に）を小パッチで入れる (2) renderer.md IF 表を実装に追従 (3) docs/design/programs/api.md（API化 + 共通パイプライン関数。W1/W2 は pipeline plan に含める案）を agreed にして P4 plan-record（pipeline-and-cli / api-render）へ。ユーザーの Go 待ち"
   last_decision: "Go"
   last_decided_at: "2026-09-12"
   conditions: []
