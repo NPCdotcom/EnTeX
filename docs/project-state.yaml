@@ -2,12 +2,12 @@
 # Session navigation (every turn): .agents/memory/state/nav.yaml — see .agents/docs/PM_ROUTING.md
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
-current_phase: P1   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "P0ゲート Go 済み（2026-09-12、ユーザー承認）。着手順（charter §11）はrenderer優先で確認済み: ir-schema型語彙とdoc-package(circle-monthly-report)のscaffoldは済み、renderer本体（pydanticローダー→envelope→expr→escape→template.tex.j2→latexmk）が次。実装(implement-conduct)に進む前にP1要求→P2要件→P3基本設計→P4 planを通す。"
+current_phase: P2   # P0|P1|P2|P3|P4|P5|P6
+phase_note: "P0ゲート Go 済み（2026-09-12）。要求.md(P1)から要件.md(P2、FR1-FR8/NFR1-2)を起票。次はP3基本設計 docs/design/programs/renderer.md（H4）→ plan-record（P4）。実装(implement-conduct)はまだ未解禁。"
 
 scope_focus:      # which H level we are clarifying now
   level: H1       # H0|H1|H2|H3|H4|H5
-  path: "docs/requirements/circle-monthly-report/"
+  path: "docs/requirements/circle-monthly-report/要件.md"
 
 active_pdca:      # primary S1 cycle (program or algorithm) — none until a plan exists
   plan_path: ""
@@ -17,7 +17,7 @@ active_pdca:      # primary S1 cycle (program or algorithm) — none until a pla
 # Stage-gate status (Gate Keeper = user)
 gate_status:
   current: passed         # pending | passed | conditional | recycled | hold | killed
-  proposal: "P1→P2: サークル月次報告書の要求(要求.md)から検証可能な要件(要件.md)へ"
+  proposal: "P2→P3: 要件.md(FR1-FR8/NFR1-2)を基にrendererの基本設計(H4)を書く"
   last_decision: "Go"
   last_decided_at: "2026-09-12"
   conditions: []

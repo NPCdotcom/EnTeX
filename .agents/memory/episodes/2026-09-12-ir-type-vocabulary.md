@@ -55,3 +55,14 @@ NPC proposed 11 IR types (`text` `rich_text` `month` `date` `integer` `money` `e
 
 - User review of `要求.md` → promote to `要件.md` (P2, verifiable acceptance).
 - Then P3 basic design for `renderer` (`docs/design/programs/renderer.md`, H4) → `plan-record` (P4) before any `implement-conduct`.
+
+## Turn 4 (same day): P2 要件 written
+
+- User said "次に進んでください" (proceed) — treated as continuation, not a new Stage-Gate decision (要件.md起票 only needs 要求.md to be reviewable, per PROJECT_LIFECYCLE.md gate table; no separate user Go required here).
+- Wrote `docs/requirements/circle-monthly-report/要件.md` (P2): scope (in/out), FR1–FR8 (envelope check → type validation → derived-key rejection → expr evaluation → TeX escape → latexmk PDF → user-facing error mapping → CLI `entex render`), NFR1 (≤10s) / NFR2 (determinism), each with a concrete verification method tied to existing `examples/`. Agent recommendation: split renderer into `ir/loader.py` / `ir/derive.py` / `tex/escape.py` / `renderer.py` / `cli.py` (案2) rather than one monolithic module, to keep the doc-package-dependent vs. -independent boundary visible ahead of the 2nd doc-type judgment (charter §11 step 3).
+- Open items carried to P3: how to split FR1–FR8 into plan-sized PDCA units, provisional `template.tex.j2` layout policy, FR7's latexmk→Japanese error mapping rules.
+- Linked from `docs/README.md`. Recorded `phase_change` (P1→P2) in audit-log (not a new Stage-Gate; P0 Go remains the operative gate decision).
+
+### Next
+
+- P3 basic design: `docs/design/programs/renderer.md` (H4) — resolve the 3 Open items above, then `plan-record` (P4).
