@@ -15,7 +15,7 @@ authors:
 
 `ir-schema`（charter §8）が扱う **値の種類（型）** を決める。文書種パッケージの `schema.json` は、この語彙に含まれる型だけを使ってフィールドを宣言する。題材は最初の文書種「サークルの月次報告書」（charter §5、**2026-09-12以前**）。
 
-> **2026-09-12 注記（[issue #11](https://github.com/NPCdotcom/EnTeX/issues/11) / [ADR-0001](../../adr/0001-first-doc-type-pivot-to-meeting-log.md)）**: 月次報告書を学生課へ提出する運用自体が存在しないと判明し、最初の文書種はサークル内の部会ログのフォーマット化に差し替えた。ここで決めた型の語彙（§1、11型）自体は文書種に依存しない設計で、そのまま使える見込み。ただし月次報告書を題材にした前提の上に立つ Assumptions（特に §7「語彙に入れなかったもの」）は、部会ログの実物が判明した時点で再判定する。
+> **2026-09-12 注記（[issue #11](https://github.com/NPCdotcom/EnTeX/issues/11) / [ADR-0001](../../adr/0001-first-doc-type-pivot-to-meeting-log.md)）**: 月次報告書を学生課へ提出する運用自体が存在しないと判明し、最初の文書種はサークル内の部会ログのフォーマット化に差し替えた。ここで決めた型の語彙（§1）自体は文書種に依存しない設計で、そのまま使える見込み。実際、部会ログで足りなかったのは本文を表す `document` だけだった（§2.8）。ただし月次報告書を題材にした前提の上に立つ Assumptions（特に §7「語彙に入れなかったもの」）は、部会ログの実物が判明した時点で再判定する。
 
 > NPC の原案（2026/9/12）は §1 の表の出発点。以下は原案を精査した結果で、変更点は §2 に理由つきで書いた。
 
@@ -31,6 +31,7 @@ authors:
 |---|---|---|---|---|
 | `text` | 1行の短い文字列 | string | 改行・制御文字を含まない。NFC 正規化 | 団体名・氏名・役職・場所 |
 | `rich_text` | 段落と箇条書きだけを持つ長文 | object（§2.2） | ブロックは `paragraph` / `list` の2種。入れ子なし。行内装飾なし | 活動概要・所感 |
+| `document` | 節に分かれた本文（見出し・段落・箇条書き・引用・コード・画像） | object（§2.8） | 節は `sections` で宣言し、宣言順に出す。使える block は `blocks` で宣言。行内はリンクのみ | 部会ログの本文 |
 | `month` | 年月 | string `"2026-08"` | `^\d{4}-(0[1-9]\|1[0-2])$` | 報告対象月 |
 | `date` | 日付 | string `"2026-08-03"` | ISO 8601 の日付部のみ。実在する日付 | 開催日・提出日 |
 | `integer` | 個数・人数 | integer | 既定で `minimum: 0`（フィールド側で上書き可） | 参加人数・在籍数 |
@@ -41,7 +42,7 @@ authors:
 | `row_list` | 同じ形の行の並び（＝表） | array\<object\> | 行の子は **スカラーのみ**（`object` / `row_list` / `rich_text` / `list` 不可）。順序は入力どおり | 活動実績・会計明細 |
 | `list` | 値の並び（＝箇条書き） | array\<scalar\> | 要素の型は `text` / `enum` / `date` / `integer` のいずれか1つ | 次月の予定・活動区分（複数選択） |
 
-スカラー = `text` `month` `date` `integer` `money` `enum` `boolean`。それ以外（`rich_text` `object` `row_list` `list`）は複合。
+スカラー = `text` `month` `date` `integer` `money` `enum` `boolean`。それ以外（`rich_text` `document` `object` `row_list` `list`）は複合。
 
 ## 2. 原案からの変更点と理由
 
@@ -103,6 +104,85 @@ authors:
 
 人数・個数に負はないので既定 `minimum: 0`。負を許すフィールド（差分・増減）はフィールド側で `minimum` を外す。
 
+### 2.8 `document`（節に分かれた本文）
+
+> **2026-09-12 追加（[issue #21](https://github.com/NPCdotcom/EnTeX/issues/21)）。** 原案にも §2.2 の精査にも無い型で、部会ログの実物47本（[issue #14](https://github.com/NPCdotcom/EnTeX/issues/14)）で必要になった。**設計のみで、実装はまだ無い**（`src/entex/ir/schema.py` の `FieldType` に `document` は入っていない）。
+
+`rich_text`（§2.2）は `paragraph` と `list` の2種しか持てず、見出しを持てない。部会ログは節（`## 活動報告`）と下位見出し（`### イベント名`）が本体なので、`rich_text` では表せない。charter §5.1 が本文の入力形式について決めた3点（見出しレベルは正規化する・宣言した節の順序は固定・宣言外の節は後ろに回す）を、この型の属性で表す。
+
+#### IR の形
+
+```json
+{
+  "sections": {
+    "activity_report": {
+      "blocks": [
+        { "type": "heading", "level": 1, "text": "LT大会" },
+        { "type": "paragraph", "spans": [
+          { "text": "発表は3本。資料は " },
+          { "text": "共有フォルダ", "href": "https://example.com/slides" },
+          { "text": " に置いた。" }
+        ] },
+        { "type": "list", "items": [
+          { "spans": [{ "text": "発表者の募集" }],
+            "items": [{ "spans": [{ "text": "締切は次回まで" }] }] }
+        ] },
+        { "type": "image", "src": "47-01.png", "alt": "LT大会の様子" }
+      ]
+    },
+    "announcement": { "blocks": [] }
+  },
+  "extra_sections": [
+    { "heading": "部費回収", "blocks": [] }
+  ]
+}
+```
+
+- `sections` のキーは `schema.json` の `sections[].key`。**出力の順序はスキーマの宣言順**で、IR のキーの並びは見ない
+- 任意の節（`required: false`）が空なら **キーごと出さない**。§3 の `required` と同じ規則で、`null` も空配列も使わない
+- `extra_sections` は宣言外の節。入力の順序を保ち、宣言節の後ろに置く。`extra_sections: "forbid"` のパッケージでは、非空なら検証で落とす
+
+#### block の種類
+
+| block | 中身 | 備考 |
+|---|---|---|
+| `heading` | `level`（整数）+ `text`（string） | `level` は **節の中の相対値**。1 が節の直下。入力の `#` の数は見ない |
+| `paragraph` | `spans` | |
+| `list` | `items` | 各 item は `spans` と、任意の `items`（子）。入れ子は深さ3まで |
+| `quote` | `spans` | |
+| `code` | `text`（string）+ 任意の `lang` | **エスケープしない**唯一の block |
+| `image` | `src`（string）+ 任意の `alt` | 下記 |
+
+実物47本の集計で **表は0件**だったので、表の block は持たない。表が要る文書種は `row_list` フィールドで持つ（§2.3）。
+
+`list` の入れ子を深さ3までにするのは、LaTeX の `itemize` が4段までで5段目が `Too deeply nested` になるためである。テンプレートが全体をもう1段包んでも壊れない余地を残す。
+
+パッケージが実際にどの block を使うかは `blocks` 属性で宣言する（§3）。ここは語彙の上限であって、全部を使う必要はない。
+
+#### 行内に持つのはリンクだけ（`spans`）
+
+実物にインラインリンクがある。文字列を1本の string にすると、リンクの文言か URL のどちらかが落ちる。そこで文字列を持つ block は `spans`（`{ "text": ... }` の並び）で持ち、`href` が付いた span だけがリンクになる。
+
+太字・下線・色は持たない（charter §10「見た目を含まない」）。**行内の構造はリンクだけ**である。`src/entex/` は各 span の `text` をエスケープするだけで、リンクをどう見せるか（下線を引く・URL を脚注に出す）はテンプレートが決める（§5）。
+
+`rich_text` が `text`（string）のままなのは、`circle-monthly-report` にリンクが無いためである。`document` の `spans` を `rich_text` に遡って適用はしない。
+
+#### 決めたこと 2 つ
+
+**空の節を PDF から落とすのは、テンプレートの責務にする。** 実物では次回予告が47本中4本にしかなく、空の見出しが並ぶと体裁が崩れる。ただし「見出しごと落とすか、`特になし` と書くか」は体裁の判断であり、§5 の分担ではパッケージ側にある。`src/entex/` は **空の節をキーごと出さない**ことだけを保証し、テンプレートが `{% if "next_notice" in body.sections %}` で分ける。`omit_when_empty` のような属性は足さない。
+
+**`rich_text` は残す。** 表現力では `document` が `rich_text` を包むので統合はできるが、`circle-monthly-report` の `schema.json` と IR 例12件を書き換えることになり、型の変更なので `schema_version` も上げる（§6.1）。得られるのは型が1つ減ることだけで、割に合わない。新しい文書種では `document` を使い、統合するかは2つ目の実物（着手順3b）で再判定する。
+
+#### `image` — 語彙には入れる。保存の方式は未決
+
+§7 は `image` を「初期版の範囲外」にしていたが、実物では直近の回ほど画像が主役で、最新の第47回は本文がほぼ画像だけ（最大20枚）である。現役の回を通すには要るので、**`document` の block として語彙に入れる**。
+
+独立したフィールド型（「活動写真」欄）にはしない。101枚すべてが本文中のスクリーンショットで、フィールドとしての出現は0だったためである。
+
+`src` が何を指すか（アップロード済みファイルの ID か、入力と同じディレクトリからの相対パスか）、保存先・保存期間・生成履歴との紐づけは **未決**である。アーキテクチャに効くので、着手順3aの後半で別に決める（charter §11 Open）。IR の形としては string 1つで足りるので、決まっても語彙は変わらない。
+
+MVP は画像なしの過去ログ（47本中37本が画像0枚）で切ってよい（charter §5）。
+
 ## 3. 型とは別の軸: フィールド属性
 
 原案の表には無いが、`schema.json` を書くと必ず要るもの。型ではなく **フィールド** に付く。
@@ -121,6 +201,11 @@ authors:
 | `items` | 要素の型 | `list` で必須 |
 | `fields` | 子の定義 | `object` `row_list` で必須 |
 | `options` | `{ value, label }` の並び | `enum` で必須 |
+| `sections` | 節の宣言（`{ key, heading, required }` の並び） | `document` で必須。**この並びが出力の順序**になる |
+| `extra_sections` | 宣言外の節を受けるか（`"allow"` / `"forbid"`） | `document`。既定 `"forbid"` |
+| `blocks` | その本文で使える block の並び | `document` で必須。§2.8 の block 語彙の部分集合 |
+| `max_heading_level` | 節の中の下位見出しの深さの上限 | `document`。既定 2（節の直下が 1） |
+| `source` | 値の取り出し元（`{ "notion_property": "開催日" }`） | `data-import` が読む。日本語のプロパティ名を `src/entex/` に入れないため（charter §5.2） |
 
 ## 4. 導出値（合計・残高）をどう持つか
 
@@ -159,6 +244,7 @@ authors:
 |---|---|---|
 | `text` | TeX 特殊文字のエスケープ（必ず通す。AGENTS.md） | フォント・折り返し |
 | `rich_text` | 各 block の文字列をエスケープ | `paragraph` → 段落、`list` → `itemize` 等への展開 |
+| `document` | 節の順序の固定、宣言外の節の後置、見出しレベルの正規化、宣言外 block の拒否、各 span のエスケープ（`code` は除く） | 節見出しの出し方、空の節を落とすか、`list` の記号、`quote` の体裁、`image` の大きさと配置、リンクの見せ方（下線 / 脚注） |
 | `month` `date` | 妥当性検証のみ | 和暦・西暦、区切り記号（`2026年8月` / `R8.8`） |
 | `integer` `money` | 妥当性検証のみ | 3桁区切り、`¥` の有無、負数の表し方（`△` / `-`） |
 | `enum` | `value` の検証 | `label` の表示 |
@@ -262,10 +348,10 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 | `number`（小数） | 活動時間 2.5h、率 | 題材に無い。金額を小数にしないため、あえて無い方が安全 |
 | `year` / 年度 | 決算書・予算書（学生団体の会計） | 月次報告書には無い。`integer` + `minimum` で足りる可能性もある |
 | `url` / `email` / `phone` | 連絡先 | 題材に無い。入れるなら `text` + `pattern` で足りるか先に検討 |
-| `image` / `attachment` | 活動写真 | **アーキテクチャに効く**（アップロード・保存・参照）。IR に入れるならファイル参照になる。charter の非目的ではないが、初期版の範囲外として扱う |
+| `attachment` | 配布資料の添付 | 実物に無い。画像は §2.8 の `image` block として語彙に入れたが、添付ファイルはまだ用途が無い |
 | `person` | 役職 + 氏名 | `object` で表せる。専用型にする利得が無い |
 
-> **2026-09-12 注記**: 最初の文書種を部会ログのフォーマット化に差し替えたことで（ADR-0001）、`time` / `time_range`（開催時刻・開始〜終了）は再判定の優先度が上がる可能性がある（部会ログは会議の開催時刻を記録する運用が一般的なため）。ユーザー提示の実物様式を見て、2つ目の文書種を待たずに前倒しで判断してよいか検討する。
+> **2026-09-12 注記（[issue #21](https://github.com/NPCdotcom/EnTeX/issues/21) で決着）**: 部会ログへの差し替え（ADR-0001）を受けて `time` / `time_range` の前倒しを検討したが、実物47本の集計で **開催時刻の記載は0件**だった（小数・表も0件）。**据え置きでよい。** 前倒しが要ったのは `image` だけで、こちらは §2.8 の block として語彙に入れた。
 
 ## 8. `schema.json` の書き方（決定: 案1）
 
@@ -280,7 +366,7 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 
 | 実装 | 案1であることの根拠 |
 |---|---|
-| [`src/entex/ir/schema.py`](../../../src/entex/ir/schema.py) | 冒頭の docstring が「doc-package の `schema.json`（案1 形式）を表す pydantic モデル」と書いている。`FieldType` は §1 の 11 型そのもの、`FieldDef` の属性は §3 の表そのもの |
+| [`src/entex/ir/schema.py`](../../../src/entex/ir/schema.py) | 冒頭の docstring が「doc-package の `schema.json`（案1 形式）を表す pydantic モデル」と書いている。`FieldType` は §1 の型そのもの（`document` を除く11型。`document` は §2.8 のとおり設計のみで実装は未）、`FieldDef` の属性は §3 の表そのもの |
 | [`packages/circle-monthly-report/schema.json`](../../../packages/circle-monthly-report/schema.json) | 案1の形で書かれている。当初は「仮に」だったが、これが唯一の実例になった |
 | CLI・API・テスト | この読み込みの上に乗っている。`GET /v1/doc-types` が返す `schema_version` も `Schema` モデルの値 |
 
@@ -305,7 +391,7 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 - 活動実績・会計明細の行数は 1 ページに収まる程度（数十行以下）
 - 導出値は加算とフィルタで足りる（掛け算・割合は要らない）
 - 月次報告書の項目構成（団体情報・会員数・活動実績・会計・次月予定・特記事項）は一般的なサークル報告書の形に沿っている（**実物未確認**。`packages/circle-monthly-report/` はこの仮定で書いた）
-- `rich_text` の入れ子箇条書き・行内装飾は要らない
+- `rich_text` の入れ子箇条書き・行内装飾は要らない（`document` には入れ子の箇条書きとリンクがある。§2.8。`rich_text` を使う `circle-monthly-report` の側では引き続き要らない）
 
 ## Open
 

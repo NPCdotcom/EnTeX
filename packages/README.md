@@ -23,7 +23,7 @@ packages/<doc-type-slug>/
 
 ## `schema.json` の書き方と版
 
-書き方は **EnTeX 独自の簡潔な形式（案1）** が正本である（[型の語彙 §8](../docs/design/elements/ir-type-vocabulary.md#8-schemajson-の書き方決定-案1)）。JSON Schema では書かない。読み込む pydantic モデルは [`src/entex/ir/schema.py`](../src/entex/ir/schema.py) で、使える型は 11 種、フィールド属性は同 §3 の表に限る。
+書き方は **EnTeX 独自の簡潔な形式（案1）** が正本である（[型の語彙 §8](../docs/design/elements/ir-type-vocabulary.md#8-schemajson-の書き方決定-案1)）。JSON Schema では書かない。読み込む pydantic モデルは [`src/entex/ir/schema.py`](../src/entex/ir/schema.py) で、使える型は [§1 の語彙](../docs/design/elements/ir-type-vocabulary.md#1-語彙精査後)、フィールド属性は同 §3 の表に限る。
 
 `schema_version` を上げるかどうかは、**「それまで通っていた IR が通らなくなるか」** の一軸で決める。
 
