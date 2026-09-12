@@ -34,8 +34,25 @@ class Envelope(BaseModel):
         str,
         Field(pattern=SLUG_RE.pattern, description="パッケージのスラッグ。packages/<slug>/ と一致"),
     ]
-    schema_version: Annotated[int, Field(ge=1, description="パッケージの schema.json の版")]
-    content: dict[str, Any] = Field(description="中身。schema.json の fields に従う")
+    schema_version: Annotated[
+        int,
+        Field(
+            ge=1,
+            description=(
+                "パッケージの schema.json の版。ここで見るのは 1 以上の整数であることだけで、"
+                "packages/<doc_type>/schema.json の版と一致するかは読み込み時に照合する。"
+                "一致しない版は content を見る前に拒否する"
+                "（ir-type-vocabulary.md §6.1。版を上げる基準も同節）"
+            ),
+        ),
+    ]
+    content: dict[str, Any] = Field(
+        description=(
+            "中身。schema.json の fields に従う。ここで見るのはオブジェクトであることだけで、"
+            "未知のキーと導出フィールドのキーの拒否は packages/<doc_type>/schema.json の層が行う"
+            "（ir-type-vocabulary.md §6.1）"
+        )
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -110,11 +127,25 @@ def _split_envelope(raw: Any) -> tuple[str, int, Any]:
     return doc_type, schema_version, raw["content"]
 
 
+#: 単独のファイルとして配るときの識別子。`$schema` / `$id` はモデルではなく **ファイル** の属性
+#: なので、`model_config` ではなくここで足す。モデル側に置くと openapi.json の
+#: components.schemas.Envelope にも出てしまい、OpenAPI の $ref 解決を乱す。
+ENVELOPE_SCHEMA_DIALECT = "https://json-schema.org/draft/2020-12/schema"
+ENVELOPE_SCHEMA_ID = (
+    "https://raw.githubusercontent.com/NPCdotcom/EnTeX/main/schemas/ir/envelope.schema.json"
+)
+
+
 def envelope_json_schema_text() -> str:
     """`schemas/ir/envelope.schema.json` の中身。pydantic モデルが正本（AGENTS.md 規約）。"""
     import json
 
-    return json.dumps(Envelope.model_json_schema(), ensure_ascii=False, indent=2) + "\n"
+    document = {
+        "$schema": ENVELOPE_SCHEMA_DIALECT,
+        "$id": ENVELOPE_SCHEMA_ID,
+        **Envelope.model_json_schema(),
+    }
+    return json.dumps(document, ensure_ascii=False, indent=2) + "\n"
 
 
 if __name__ == "__main__":  # pragma: no cover - 手動再生成用

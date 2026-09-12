@@ -7,7 +7,7 @@
 | [project-state.yaml](project-state.yaml) | Current phase / scope focus / gates |
 | [TEAM.md](TEAM.md) | Members (NPC / Aster) |
 | [design/](design/) | H0–H5 design。製品の正本は [design/product/charter.md](design/product/charter.md) |
-| [design/elements/ir-type-vocabulary.md](design/elements/ir-type-vocabulary.md) | IR の型の語彙（月次報告書を題材に精査。[ADR-0001](adr/0001-first-doc-type-pivot-to-meeting-log.md)によりAssumptionsは要再判定） |
+| [design/elements/ir-type-vocabulary.md](design/elements/ir-type-vocabulary.md) | IR の型の語彙（12型。§1〜§5 は月次報告書、§2.8 の `document` と §7 は部会ログの実物47本に基づく）。`schema.json` の形式と `schema_version` を上げる基準もここ |
 | [requirements/circle-monthly-report/要求.md](requirements/circle-monthly-report/要求.md) | P1 要求 — サークル月次活動報告書。**参考資料**（[ADR-0001](adr/0001-first-doc-type-pivot-to-meeting-log.md)で最初の文書種を部会ログのフォーマット化へ差し替え済み） |
 | [requirements/circle-monthly-report/要件.md](requirements/circle-monthly-report/要件.md) | P2 要件 — 同上、検証可能な機能・非機能要件。**参考資料**（同上） |
 | [adr/0001-first-doc-type-pivot-to-meeting-log.md](adr/0001-first-doc-type-pivot-to-meeting-log.md) | 最初の文書種をサークル月次報告書から部会ログのフォーマット化へ差し替えた決定（issue #11） |
