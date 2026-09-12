@@ -3,7 +3,7 @@ title: api — IR を POST すると PDF が返る（着手順 2）
 kind: design
 phase: P3
 scope_level: program
-status: draft   # ユーザー確認後に agreed。P4 plan-record はその後
+status: agreed   # 2026-09-12 ユーザー確認「api.md を agreed にしてよいです」
 created: 2026-09-12
 updated: 2026-09-12
 parent_element: docs/design/elements/ir-type-vocabulary.md
@@ -261,9 +261,10 @@ charter §7 で FastAPI は確定済み。新規選定なし。
 
 ## ユーザー思考
 
->
+> 2026-09-12: 「1. api.md を agreed にしてよいです。2. Go（P4 の 2 分割）3. 承知（ブランチ名 feature/npc の規約不一致）4. 承認（pydantic 下限を >=2.9 に）」
 
 ## 次
 
-- [ ] P3 ゲート → ユーザー確認で `status: agreed` → `.agents/plans/programs/pipeline-and-cli.md`・`.agents/plans/programs/api-render.md`（**PM ユーザー確認**）
-- [ ] `docs/project-state.yaml` の `scope_focus.path` をこの文書へ
+- [x] P3 ゲート → `status: agreed`（2026-09-12）→ [`.agents/plans/programs/pipeline-and-cli.md`](../../../.agents/plans/programs/pipeline-and-cli.md)・[`.agents/plans/programs/api-render.md`](../../../.agents/plans/programs/api-render.md)
+- [x] `docs/project-state.yaml` の `scope_focus.path` をこの文書へ
+- [ ] §9 Open のうち plan 側で決めるもの: 認証トークン（`api-render` の Out of scope に置き、別 plan）、`RenderTimeoutError`（`api-render` で `type` を分けるかを判断）
