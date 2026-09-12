@@ -1,0 +1,63 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-10-07",
+    "session_no_total": 5,
+    "fiscal_year": 2025,
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "ステッカーの費用負担"
+            },
+            {
+              "type": "code",
+              "text": "部が負担\n・費用から発注まで部が請け負う\n・売れ残りは部が保管\n・赤字でも個人に影響なし\n\n個人が負担\n・費用や発注は個人で行う\n・赤字の場合は個人が背負う\n・利益は個人（純利益の10%は場所代）"
+            },
+            {
+              "type": "quote",
+              "spans": [
+                {
+                  "text": "正方形だと安く発注できます。"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "2名が個人負担で出す予定です。"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "展示方法"
+            },
+            {
+              "type": "quote",
+              "spans": [
+                {
+                  "text": "B21教室のPCを借りて展示する。詳細は "
+                },
+                {
+                  "text": "案内ページ",
+                  "href": "https://example.com/guide"
+                },
+                {
+                  "text": " を参照。"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

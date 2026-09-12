@@ -1,0 +1,78 @@
+%% club-meeting-log — 部会ログの体裁（余白・見出し・箇条書き・引用・コード・画像）。
+%% 体裁に関わる値は src/entex/ ではなくここに置く（AGENTS.md）。
+%% 団体名も入力ではなくここの定数である（charter §5.2「団体名 = パッケージ側の定数」）。
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{club-meeting-log}[2026/09/12 EnTeX club-meeting-log style]
+
+\RequirePackage[a4paper,top=20mm,bottom=20mm,left=18mm,right=18mm]{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{fancyvrb}
+\RequirePackage{xcolor}
+\RequirePackage[hidelinks]{hyperref}
+
+% 団体名。入力に持たせない（charter §5.2）
+\newcommand{\clubName}{情報技術研究部}
+
+% 段落の字下げなし、段落間をやや開ける
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+% --- 表題 -------------------------------------------------------------------
+% #1 = 開催日（曜日つき）、#2 = 回次の語（`第47回部会` など。通算回次が無ければ `部会`）、
+% #3 = 年度の語（`2026年度`。年度が無ければ空）
+\newcommand{\logTitle}[3]{%
+  \noindent{\small \clubName}\hfill{\small #3}\par\vspace{0.2em}%
+  \begin{center}{\LARGE\bfseries #1\quad #2}\end{center}%
+  \vspace{0.2em}\hrule\vspace{1.0em}}
+
+% --- 節（schema.json の sections / extra_sections）---------------------------
+\newcommand{\logSection}[1]{%
+  \vspace{1.1em}\par\noindent{\large\bfseries #1}\par\nobreak\vspace{0.2em}%
+  \hrule height 0.4pt\vspace{0.4em}}
+
+% --- 節の中の下位見出し（document の heading block。level は節の中の相対値）----
+% #1 = level（1 が節の直下）、#2 = 見出し文字列
+\newcommand{\logHeading}[2]{%
+  \vspace{0.6em}\par\noindent
+  \ifnum #1=1 {\bfseries #2}\else {\small\bfseries \textbullet~#2}\fi
+  \par\nobreak\vspace{0.15em}}
+
+% --- 箇条書き（list block。入れ子は深さ3まで）--------------------------------
+\newenvironment{logitems}{%
+  \begin{itemize}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}%
+  \setlength{\topsep}{0.2em}\setlength{\partopsep}{0pt}}%
+  {\end{itemize}}
+
+% --- 引用（quote block）------------------------------------------------------
+\definecolor{logquotemark}{gray}{0.45}
+\newenvironment{logquote}{%
+  \par\vspace{0.3em}%
+  \begin{list}{}{\leftmargin=1.4em \rightmargin=0.4em \listparindent=0pt%
+    \topsep=0pt \parsep=0pt \itemsep=0pt}%
+  \item[]\textcolor{logquotemark}{\textbar}\hspace{0.6em}\ignorespaces}%
+  {\end{list}\vspace{0.3em}}
+
+% --- コード（code block。IR の中で唯一エスケープされない）--------------------
+% 書かれたとおりに出す。中に \end{logcode} があると壊れるが、実測6件にそのような例は無い
+\DefineVerbatimEnvironment{logcode}{Verbatim}%
+  {fontsize=\small,xleftmargin=1.0em,frame=leftline,framerule=0.4pt,framesep=4pt}
+
+% --- 画像（image block）------------------------------------------------------
+% #1 = src、#2 = alt（空でよい）。大きさと配置はここで決める（ir-type-vocabulary.md §5）
+\newcommand{\logImage}[2]{%
+  \par\vspace{0.4em}%
+  \begin{center}%
+    \includegraphics[width=0.78\linewidth,keepaspectratio]{#1}%
+    \ifx\relax#2\relax\else\par\vspace{0.2em}{\small #2}\fi
+  \end{center}%
+  \vspace{0.4em}}
+
+% --- 行内リンク（span の href）-----------------------------------------------
+% #1 = 文言（エスケープ済み）、#2 = URL。下線は引かず色も変えない（hidelinks）。
+% 文言と URL の両方を残すため、URL は脚注に出す（要求 R8）
+\newcommand{\logLink}[2]{#1\footnote{\url{#2}}}
+
+% --- 空の節の代わりに出す一文（今は使っていない。R7 で節ごと落とすため）------
+\newcommand{\logEmptyNote}[1]{{\small #1}\par}
+
+\endinput

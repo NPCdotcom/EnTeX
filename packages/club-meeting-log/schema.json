@@ -1,0 +1,41 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "title": "部会ログ",
+  "description": "サークルが部会ごとに書く記録。開催日・通算回次・年度は Notion のページプロパティから取り、本文は節に分かれた document で持つ。回次の見出しは入力に書かず、テンプレートが組み立てる。",
+  "fields": {
+    "meeting_date": {
+      "type": "date",
+      "label": "開催日",
+      "description": "部会を行った日。曜日は入力しない（この値から導く）",
+      "source": { "notion_property": "開催日" }
+    },
+    "session_no_total": {
+      "type": "integer",
+      "label": "通算回次",
+      "description": "第1回からの通し番号。今年度の回次は持たない（両方あると片方が古くなる）",
+      "required": false,
+      "minimum": 1,
+      "source": { "notion_property": "ID" }
+    },
+    "fiscal_year": {
+      "type": "integer",
+      "label": "年度",
+      "description": "4月始まり。開催日からの数式プロパティが出す",
+      "required": false,
+      "source": { "notion_property": "年度" }
+    },
+    "body": {
+      "type": "document",
+      "label": "本文",
+      "sections": [
+        { "key": "activity_report", "heading": "活動報告", "required": false },
+        { "key": "announcement", "heading": "アナウンス", "required": false },
+        { "key": "next_notice", "heading": "次回予告", "required": false }
+      ],
+      "extra_sections": "allow",
+      "blocks": ["heading", "paragraph", "list", "quote", "code", "image"],
+      "max_heading_level": 2
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-10-21",
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "学園祭"
+            },
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "打ち上げ"
+            },
+            {
+              "type": "heading",
+              "level": 3,
+              "text": "会場候補"
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

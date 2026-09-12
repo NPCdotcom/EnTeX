@@ -1,0 +1,68 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2026-01-22",
+    "session_no_total": 36,
+    "fiscal_year": 2025,
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "予算 & 会計（100% 確定）"
+            },
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "集計用の式は #{total} ~ $amount で、"
+                },
+                {
+                  "text": "詳細は <共有シート>",
+                  "href": "https://example.com/sheet?a=1&b=2"
+                },
+                {
+                  "text": " の C_1 列にあります。"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "バックスラッシュ \\ とチルダ ~ を含む名前"
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "波括弧 { } と山括弧 < > を含む名前"
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "引用符 ' \" ` とパイプ | を含む名前"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "code",
+              "text": "# ここはエスケープしない\nprintf '%s\\n' \"${HOME}\" | tr a-z A-Z"
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

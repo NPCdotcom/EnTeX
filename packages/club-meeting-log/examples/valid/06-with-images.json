@@ -1,0 +1,61 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2026-07-10",
+    "session_no_total": 47,
+    "fiscal_year": 2026,
+    "body": {
+      "sections": {
+        "activity_report": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "LT大会"
+            },
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "発表は3本でした。"
+                }
+              ]
+            },
+            {
+              "type": "image",
+              "src": "47-01.png",
+              "alt": "会場の様子"
+            },
+            {
+              "type": "image",
+              "src": "47-02.png",
+              "alt": "発表スライド"
+            }
+          ]
+        },
+        "announcement": {
+          "blocks": [
+            {
+              "type": "image",
+              "src": "47-03.png"
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "次回は7/17"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

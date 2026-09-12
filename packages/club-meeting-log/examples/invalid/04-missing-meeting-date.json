@@ -1,0 +1,25 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "session_no_total": 7,
+    "fiscal_year": 2025,
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "開催日が無い。"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-11-11",
+    "session_no_total": 9,
+    "fiscal_year": 2025,
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "学園祭の片付けは今週中に終わらせます"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "next_notice": {
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "11/18 LT大会"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": [
+        {
+          "heading": "成果物発表会",
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "3回目"
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "シューティング1本"
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "パズル2本"
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "3Dモデル1点"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "部費回収",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "5名から回収済みです。未納の人は会計まで。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
