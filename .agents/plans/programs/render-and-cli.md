@@ -1,7 +1,7 @@
 ---
 title: render-and-cli — エスケープ・テンプレ組み立て・latexmk・CLI
 kind: plan
-status: agreed   # Do 完了（2026-09-12）。P6 review 待ち
+status: agreed   # Do・Check 完了（2026-09-12、pass）。Act 候補: W1 / W2 の小パッチ、S1 の設計追従
 scope_level: program
 pdca_class: S1
 pdca_eligible: true
@@ -99,6 +99,7 @@ parent_hierarchy:
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。`ir-validate-and-derive` 完了後に着手 |
 | 2026-09-12 | on_track | Do 完了。AC1–AC5 テストで担保。残: Docker での `make docker-test` 実行（CI）、P6 レビュー、実物様式に合わせたレイアウト調整 |
+| 2026-09-12 | done | P6 Check pass。CI tex job（Docker、pytest 込み）も success。Act 候補は W1 / W2（小パッチ）と S1（設計追従）。レイアウト調整は実物入手後 |
 
 ## PDCA log
 
@@ -106,3 +107,4 @@ parent_hierarchy:
 |------|-------|------|
 | 2026-09-12 | Plan | renderer.md の分割案どおり起票。区切りは案2 |
 | 2026-09-12 | Do | 実装: `src/entex/tex/escape.py`・`renderer.py`（`build_tex` / `render`、フィルタ 3 種、`\VAR{}` `\BLOCK{}` `%#` 区切り、`StrictUndefined`）・`cli.py render`（`--out` / `--packages-dir` / `--tex-only`、終了コード 0/1/2/3）、`packages/circle-monthly-report/template.tex.j2` と `style/circle-monthly-report.sty`。設計からの差分: エスケープは `renderer.build_tex` の内部で必ず通す（呼び出し側が忘れられない形）。テンプレートへ渡す dict は `SimpleNamespace` に変換（Jinja2 で `x.items` が dict のメソッドに解決される罠を避ける）。生成 PDF は目視確認（1〜2 ページ、特殊文字が正しく出る、負の残高は △ 表記） |
+| 2026-09-12 | Check | **pass** — FR5–FR8・NFR1–2 の AC1–AC5 すべて根拠あり（UT/IT/ST/UAT。レイアウトの UAT は実物様式の入手待ち）。Critical なし。Warning 2 件: W1 JSON ファイル名が latexmk のジョブ名に素通し（`-` 始まり・`%` `#` 入りで生成失敗）、W2 `template.tex.j2` 欠落が exit 2（plan は 3）。Suggestion: renderer.md IF 表の追従（S1）、`TEXINPUTS` 末尾区切り（S3）、共通パイプライン関数（S4、API 設計で扱う）。詳細: [docs/reviews/2026-09-12-renderer-cli-p6-review.md](../../../docs/reviews/2026-09-12-renderer-cli-p6-review.md) |

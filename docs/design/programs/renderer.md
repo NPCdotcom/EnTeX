@@ -129,4 +129,5 @@ charter §7 で既に確定済みのため、この設計で新規のフレー�
 ## 次
 
 - [x] P3 ゲート → [`.agents/plans/algorithms/ir-validate-and-derive.md`](../../../.agents/plans/algorithms/ir-validate-and-derive.md) と [`.agents/plans/programs/render-and-cli.md`](../../../.agents/plans/programs/render-and-cli.md)（2026-09-12、ユーザー指示「P3の設計に従って実装に入ってください」を PM 確認として記録）
-- [ ] P6 レビュー（`review-conduct`）→ 実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す
+- [x] P6 レビュー（`review-conduct`）→ [docs/reviews/2026-09-12-renderer-cli-p6-review.md](../../reviews/2026-09-12-renderer-cli-p6-review.md)（pass。Warning W1/W2 と本表の IF 追従 S1 は Act で扱う）
+- [ ] 実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す
