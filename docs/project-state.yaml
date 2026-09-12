@@ -3,21 +3,21 @@
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P5   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。pipeline-and-cli の P5 Do 完了（2026-09-12、AC1–AC5 検証済み、168 tests）。W1/W2/S1/S3 解消済み。次は pipeline-and-cli の P6 Check（review-conduct）または api-render の P5 実装（ユーザー指示で着手）。"
+phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。両 plan の P5 Do 完了（2026-09-12、AC すべて検証済み、217 tests、ホスト uvicorn + curl で PDF 取得）。ユーザー判断「2で進みましょう」により Check は 2 plan まとめて 1 回。次は P6 review-conduct（PR #10 の src/ 差分 = commits d5675ab..3506a38）。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
   path: "docs/design/programs/api.md"
 
 active_pdca:      # primary S1 cycle (program or algorithm)
-  plan_path: ".agents/plans/programs/pipeline-and-cli.md"
+  plan_path: ".agents/plans/programs/api-render.md"   # pipeline-and-cli と合わせて Check
   scope_level: program
   pdca_class: S1
 
 # Stage-gate status (Gate Keeper = user)
 gate_status:
   current: passed         # pending | passed | conditional | recycled | hold | killed
-  proposal: "P5→P6: plan pipeline-and-cli の Check（review-conduct、PR #10 の差分）。あるいは Check を api-render 完了後にまとめて 1 回にするか、ユーザー判断"
+  proposal: "P5→P6: plan pipeline-and-cli + api-render の Check（review-conduct、PR #10 の src/ 差分）。Check pass 後に PR #10 を main へ（ユーザー）"
   last_decision: "Go"
   last_decided_at: "2026-09-12"
   conditions: []

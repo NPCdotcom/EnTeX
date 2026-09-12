@@ -194,3 +194,26 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 設計との差 1 点: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落として `pct-hash.tex` にした（`JOB_NAME_RE` は満たす）。次のゲート判断（Check を今やるか api-render 後にまとめるか）はユーザー。
 
 ---
+## 2026-09-12T03:10:00+00:00 | phase | p5-api-render-do
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `user` → `agent` |
+| **decision** | 「2で進みましょう。」= pipeline-and-cli の Check を先にせず api-render の P5 へ。Check は 2 plan まとめて 1 回 |
+| **phase** | P5（plan `api-render`）Do 完了 |
+| **summary** | TDD で `src/entex/api/`（settings / problems / routes / app）を新設。`POST /v1/render` → `application/pdf`、失敗は RFC 9457 Problem Details（13 種）、同期 `def` + `BoundedSemaphore`、リクエストごとの一時ディレクトリ、`X-Request-ID`。`RenderTimeoutError` を追加。`schemas/api/{problem.schema.json,openapi.json}` を生成し同期テスト。Dockerfile `CMD` uvicorn、`make docker-serve` / `make schemas`、README §API。`make lint` / `make test` 217 passed（TeX ありホスト）。ホストで uvicorn + curl → PDF 61 KB / 2.1 秒 |
+| **reason** | project-state `allowed_actions` に implement-conduct。plan `api-render` は agreed、依存 `pipeline-and-cli` は Do 完了 |
+
+### Refs
+
+- plan: `.agents/plans/programs/api-render.md`（AC1–AC5 ✓、Do 行、Open 解消）
+- design: `docs/design/programs/api.md`（§3.3 表に render-timeout / 415 / 404 / internal-error、§3.4 に async 依存の注記、§9 Open 3 件解消。status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p5-api-render.md`
+- team: `docs/project-state.yaml`（current_phase: P5、active_pdca → api-render、proposal: P6 Check ×2 plan）
+
+### Detail（任意）
+
+設計との差: 本文読み取りだけ `async def` 依存（`await request.body()` が要る）。`X-Request-ID` は UUID のみ採用。`/v1/doc-types` は壊れたパッケージを一覧から外す（警告ログ）。Docker がこの環境に無いため `make docker-test` は未実行、CI の tex ジョブで代替。
+
+---

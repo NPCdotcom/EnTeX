@@ -151,10 +151,10 @@ entries:
     tier: knowledge
     granularity: thread
     path: .agents/plans/programs/api-render.md
-    summary: "P4 plan (H4, agreed) — FastAPI POST /v1/render → PDF, /v1/health, /v1/doc-types*, RFC 9457 problems, settings, schemas/api, Dockerfile CMD. Depends on pipeline-and-cli. Auth out of scope"
-    tags: [plan, P4, H4, api]
+    summary: "P4 plan (H4, agreed; P5 Do done 2026-09-12, AC1–AC5 verified, Check pending together with pipeline-and-cli) — FastAPI POST /v1/render → PDF, /v1/health, /v1/doc-types*, RFC 9457 problems, settings, schemas/api, Dockerfile CMD. Auth out of scope"
+    tags: [plan, P4, P5, H4, api]
     recall: on_demand
-    linked: [design-api, plan-pipeline-and-cli, project-state]
+    linked: [design-api, plan-pipeline-and-cli, project-state, ep-p5-api-render]
 
   - id: ep-p6-review-and-api-design
     scope: project
@@ -175,6 +175,16 @@ entries:
     tags: [implement, P5, pipeline, cli]
     recall: on_demand
     linked: [plan-pipeline-and-cli, design-api, design-renderer]
+
+  - id: ep-p5-api-render
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-p5-api-render.md
+    summary: "P5 Do of api-render on feature/npc (PR #10): entex.api (FastAPI, RFC 9457 Problem Details, semaphore, temp dirs), RenderTimeoutError, schemas/api, Dockerfile CMD uvicorn; 217 tests; uvicorn+curl manual check. User chose to Check both plans together"
+    tags: [implement, P5, api, fastapi]
+    recall: on_demand
+    linked: [plan-api-render, plan-pipeline-and-cli, design-api]
 
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
