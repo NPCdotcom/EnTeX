@@ -157,8 +157,8 @@ def test_missing_template_is_a_render_error(tmp_path: Path, packages_dir: Path) 
 
 FAKE_LATEXMK_OUTPUT = """Latexmk: This is Latexmk, John Collins, 7 Jan. 2023. Version 4.79.
 ./document.tex:12: Undefined control sequence.
-l.12 \\undefinedcommand
-! LaTeX Error: Something's wrong--perhaps a missing \\item.
+l.12 undefinedcommand
+! LaTeX Error: Something's wrong--perhaps a missing item.
 ! Emergency stop.
 Latexmk: Errors, so I did not complete making targets
 """
@@ -169,11 +169,10 @@ def fake_latexmk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     bin_dir = tmp_path / "fakebin"
     bin_dir.mkdir()
     script = bin_dir / "latexmk"
+    # 外部コマンドに頼らない（printf / echo はシェル組み込み）ので PATH が空でも動く
+    lines = " ".join(f'"{line}"' for line in FAKE_LATEXMK_OUTPUT.splitlines())
     script.write_text(
-        "#!/bin/sh\n"
-        f"cat <<'EOF'\n{FAKE_LATEXMK_OUTPUT}EOF\n"
-        "echo 'stderr noise: ! LaTeX Error' >&2\n"
-        "exit 12\n",
+        f"#!/bin/sh\nprintf '%s\\n' {lines}\necho 'stderr noise: ! LaTeX Error' >&2\nexit 12\n",
         encoding="utf-8",
     )
     script.chmod(script.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
