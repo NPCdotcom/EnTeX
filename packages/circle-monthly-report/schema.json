@@ -1,0 +1,177 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "title": "サークル月次活動報告書",
+  "description": "大学サークルが学生課へ毎月提出する活動報告書。団体情報・会員数・活動実績・会計・次月予定・特記事項を持つ。",
+  "fields": {
+    "organization": {
+      "type": "text",
+      "label": "団体名",
+      "max_length": 40
+    },
+    "report_month": {
+      "type": "month",
+      "label": "報告対象月"
+    },
+    "submitted_on": {
+      "type": "date",
+      "label": "提出日"
+    },
+    "representative": {
+      "type": "object",
+      "label": "代表者",
+      "fields": {
+        "name": { "type": "text", "label": "氏名", "max_length": 30 },
+        "student_id": { "type": "text", "label": "学籍番号", "max_length": 12, "pattern": "^[A-Z0-9]+$" }
+      }
+    },
+    "author": {
+      "type": "object",
+      "label": "作成者",
+      "description": "報告書を書いた役員。代表者と同一でよい",
+      "fields": {
+        "role": { "type": "text", "label": "役職", "max_length": 20 },
+        "name": { "type": "text", "label": "氏名", "max_length": 30 }
+      }
+    },
+    "advisor": {
+      "type": "text",
+      "label": "顧問",
+      "required": false,
+      "max_length": 30
+    },
+    "members": {
+      "type": "object",
+      "label": "会員数",
+      "fields": {
+        "enrolled": { "type": "integer", "label": "在籍（月末時点）" },
+        "joined": { "type": "integer", "label": "当月入会", "required": false, "default": 0 },
+        "left": { "type": "integer", "label": "当月退会", "required": false, "default": 0 }
+      }
+    },
+    "facilities_used": {
+      "type": "list",
+      "label": "当月に使用した学内施設",
+      "required": false,
+      "max_items": 5,
+      "items": {
+        "type": "enum",
+        "options": [
+          { "value": "gym", "label": "体育館" },
+          { "value": "music_room", "label": "音楽練習室" },
+          { "value": "meeting_room", "label": "会議室" },
+          { "value": "ground", "label": "グラウンド" },
+          { "value": "none", "label": "使用なし" }
+        ]
+      }
+    },
+    "summary": {
+      "type": "rich_text",
+      "label": "活動概要"
+    },
+    "activities": {
+      "type": "row_list",
+      "label": "活動実績",
+      "description": "当月に行った活動。無い月は空の配列",
+      "min_items": 0,
+      "max_items": 10,
+      "fields": {
+        "date": { "type": "date", "label": "日付" },
+        "category": {
+          "type": "enum",
+          "label": "区分",
+          "options": [
+            { "value": "regular", "label": "定例活動" },
+            { "value": "event", "label": "イベント" },
+            { "value": "camp", "label": "合宿" },
+            { "value": "meeting", "label": "会議" },
+            { "value": "other", "label": "その他" }
+          ]
+        },
+        "title": { "type": "text", "label": "内容", "max_length": 30 },
+        "place": { "type": "text", "label": "場所", "max_length": 20 },
+        "participants": { "type": "integer", "label": "参加人数" }
+      }
+    },
+    "activity_count": {
+      "type": "integer",
+      "label": "活動回数",
+      "derived": true,
+      "expr": { "count": "activities" }
+    },
+    "participants_total": {
+      "type": "integer",
+      "label": "延べ参加人数",
+      "derived": true,
+      "expr": { "sum": "activities.participants" }
+    },
+    "balance_carried": {
+      "type": "money",
+      "label": "前月繰越",
+      "description": "赤字なら負の値"
+    },
+    "finance": {
+      "type": "row_list",
+      "label": "会計明細",
+      "min_items": 0,
+      "max_items": 20,
+      "fields": {
+        "date": { "type": "date", "label": "日付" },
+        "category": {
+          "type": "enum",
+          "label": "区分",
+          "options": [
+            { "value": "income", "label": "収入" },
+            { "value": "expense", "label": "支出" }
+          ]
+        },
+        "item": { "type": "text", "label": "項目", "max_length": 30 },
+        "amount": { "type": "money", "label": "金額", "minimum": 0 }
+      }
+    },
+    "income_total": {
+      "type": "money",
+      "label": "収入合計",
+      "derived": true,
+      "expr": { "sum": "finance.amount", "where": { "category": "income" } }
+    },
+    "expense_total": {
+      "type": "money",
+      "label": "支出合計",
+      "derived": true,
+      "expr": { "sum": "finance.amount", "where": { "category": "expense" } }
+    },
+    "balance": {
+      "type": "money",
+      "label": "残高（次月繰越）",
+      "derived": true,
+      "expr": { "sub": [ { "add": ["balance_carried", "income_total"] }, "expense_total" ] }
+    },
+    "next_month_plan": {
+      "type": "list",
+      "label": "次月の予定",
+      "min_items": 1,
+      "max_items": 8,
+      "items": { "type": "text", "max_length": 40 }
+    },
+    "incident": {
+      "type": "enum",
+      "label": "事故・トラブル",
+      "description": "3 値なので boolean ではなく enum",
+      "options": [
+        { "value": "none", "label": "なし" },
+        { "value": "minor", "label": "軽微（団体内で対処済み）" },
+        { "value": "reported", "label": "あり（学生課へ別途報告）" }
+      ]
+    },
+    "remarks": {
+      "type": "rich_text",
+      "label": "特記事項・所感",
+      "required": false
+    },
+    "audited": {
+      "type": "boolean",
+      "label": "会計監査済み"
+    }
+  }
+}

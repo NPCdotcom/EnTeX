@@ -1,0 +1,19 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学\n軽音楽サークル",
+    "report_month": "2026-08",
+    "submitted_on": "2026-09-05",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "members": { "enrolled": 24 },
+    "summary": { "blocks": [ { "type": "paragraph", "text": "省略" } ] },
+    "activities": [],
+    "balance_carried": 0,
+    "finance": [],
+    "next_month_plan": ["省略"],
+    "incident": "none",
+    "audited": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-04",
+    "submitted_on": "2026-05-01",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "advisor": "田中 一郎",
+    "members": { "enrolled": 20, "joined": 0, "left": 3 },
+    "facilities_used": ["none"],
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "新年度の役員体制に移行した。卒業により3名が退会。学内施設の予約が開始前のため、当月は学外の貸しスタジオで練習した。" }
+      ]
+    },
+    "activities": [
+      { "date": "2026-04-05", "category": "meeting", "title": "新年度 総会", "place": "学生会館ロビー", "participants": 20 },
+      { "date": "2026-04-19", "category": "regular", "title": "定例練習", "place": "スタジオ・ノイズ（学外）", "participants": 14 }
+    ],
+    "balance_carried": 0,
+    "finance": [
+      { "date": "2026-04-05", "category": "income", "item": "前年度からの引継金", "amount": 31500 },
+      { "date": "2026-04-05", "category": "income", "item": "部費（4月分）", "amount": 40000 },
+      { "date": "2026-04-19", "category": "expense", "item": "貸しスタジオ料", "amount": 8800 }
+    ],
+    "next_month_plan": ["新歓活動の企画", "学内施設の年間予約"],
+    "incident": "none",
+    "remarks": {
+      "blocks": [
+        { "type": "paragraph", "text": "前年度の残高は引継金として当月の収入に計上し、前月繰越は0とした（会計年度の切替）。" }
+      ]
+    },
+    "audited": true
+  }
+}

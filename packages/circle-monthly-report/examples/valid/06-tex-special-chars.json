@@ -1,0 +1,28 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 R&B研究会 #2",
+    "report_month": "2026-06",
+    "submitted_on": "2026-07-01",
+    "representative": { "name": "O'Brien 花子", "student_id": "B2205678" },
+    "author": { "role": "副代表 & 会計", "name": "鈴木 次郎" },
+    "members": { "enrolled": 12 },
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "予算消化率は約 85% で、目標の $10,000 相当（円換算）を下回った。" },
+        { "type": "list", "items": ["曲目: 「A_B」「C^D」「{E}」の3曲", "備考: \\ や ~ を含む文字列も崩れないこと"] }
+      ]
+    },
+    "activities": [
+      { "date": "2026-06-14", "category": "regular", "title": "セッション #12（Tom & Jerry 編）", "place": "練習室 <B>", "participants": 10 }
+    ],
+    "balance_carried": 1000,
+    "finance": [
+      { "date": "2026-06-14", "category": "expense", "item": "楽譜代（50%割引）", "amount": 1250 }
+    ],
+    "next_month_plan": ["7月: 100%出席を目標に"],
+    "incident": "none",
+    "audited": false
+  }
+}

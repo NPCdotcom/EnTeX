@@ -1,0 +1,23 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-02",
+    "submitted_on": "2026-03-02",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "代表", "name": "佐藤 美咲" },
+    "members": { "enrolled": 23 },
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "試験期間のため活動を休止した。" }
+      ]
+    },
+    "activities": [],
+    "balance_carried": 5400,
+    "finance": [],
+    "next_month_plan": ["3月末に新年度の役員を選出"],
+    "incident": "none",
+    "audited": false
+  }
+}

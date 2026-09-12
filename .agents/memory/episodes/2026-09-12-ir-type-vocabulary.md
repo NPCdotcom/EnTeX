@@ -30,8 +30,15 @@ NPC proposed 11 IR types (`text` `rich_text` `month` `date` `integer` `money` `e
 - Deferred: `time`, `number`, `year`, `url/email/phone`, `image` — re-judge at 2nd doc-type.
 - `schema.json` format: recommend EnTeX compact form as source, JSON Schema generated; decision can wait until 2nd doc-type.
 
+## Turn 2 (same day): A decided, package scaffolded
+
+- Aster agreed on **A** (derived values computed at generation time). Doc §4 now records the decision, a structured JSON `expr` (sum/where, count, add/sub, nesting), and "derived key in input → reject".
+- Added §6.1 envelope `{doc_type, schema_version, content}`; unknown keys rejected; schema lives in `schemas/ir/` side.
+- `packages/circle-monthly-report/`: `schema.json` (案1 compact form, provisional; uses all 11 types + attributes), `examples/valid/` ×6 (typical, minimal, deficit, max-rows, fiscal-year-start, tex-special-chars), `examples/invalid/` ×6, README with expected errors and derived totals.
+- Verified with a throwaway checker (deleted): all valid pass; invalid ones fail exactly as documented (06 → 6 content errors when envelope is ignored).
+
 ## Open
 
-- Need the real Word monthly report to fix §6 fields (marked as the first Open item).
-- Derived-value approach A vs B; `expr` grammar.
+- Need the real Word monthly report to fix schema fields (first Open item).
+- `schema_version` bump policy; `expr` vocabulary sufficiency — confirm against real form.
 - Enum labels live in schema, not IR — API (step 2) must expose the schema too.
