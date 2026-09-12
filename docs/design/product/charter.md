@@ -7,7 +7,7 @@ status: draft
 updated: 2026-09-12
 authors:
   - NPC (NPCdotcom)
-  - Aster (astel_isk)
+  - Aster (Astel-isk)
 ---
 
 # EnTeX — プロジェクト概要
@@ -20,7 +20,7 @@ authors:
 | 通称・略称 | EnTeX, エンテフ |
 | 一言ジャンル | ツール（Webアプリケーション） |
 | 想定リポジトリ | https://github.com/NPCdotcom/EnTeX |
-| 共同者 | NPC (`NPCdotcom`) · Aster (`astel_isk`) |
+| 共同者 | NPC (`NPCdotcom`) · Aster (`Astel-isk`) |
 | 開発環境 | WSL2 Ubuntu + Docker |
 | 配布形態 | Webアプリ。利用者はブラウザのみ（2026/9/12決定） |
 
@@ -112,7 +112,7 @@ TeXを知らない人が、決められた項目を埋めて本文をMarkdownで
 |------|------|
 | 利用者から見える形 | 最終形はブラウザで、文書種を選ぶ → 入力 → プレビュー → PDFを保存、の3ステップ。入力は front matter + Markdown の本文（§5.1）か、フォーム（着手順4）。部会ログは当面、Notionで書いたものをエクスポートして渡す（§5.2） |
 | 主な入出力 | 入力: 当面は front matter + Markdown のファイル（着手順3）。部会ログではこれをNotionのエクスポートから機械で作る（§5.2）。フォームの値は着手順4、CSVは着手順5、DBはさらに後 / 出力: PDF（および生成に使った .tex） |
-| 「動いた」と言える最小状態（MVP） | 文書種1つ（サークルの部会ログ、`club-meeting-log`）で、Notionのエクスポートから front matter + Markdown を作り、PDFのダウンロードまで通る。まず画像なしの過去ログで通し、画像は次に足す。文書種の追加はまだ手作業でよい |
+| 「動いた」と言える最小状態（MVP） | 文書種1つ（サークルの部会ログ、`club-meeting-log`）で、Notionのエクスポートを`notion-export`アダプタ（§8）で中間表現にし、PDFのダウンロードまで通る。まず画像なしの過去ログで通し、画像は次に足す。文書種の追加はまだ手作業でよい |
 
 画面は3つを想定している。文書種の管理（我々のみ）、作成、生成履歴。
 
@@ -297,7 +297,7 @@ Notionのプロパティ名（`開催日`）は`src/entex/`に持ち込まない
 着手順（各段で動くものが残る形にしてある）:
 
 1. CLIで1本通す。`JSON → PDF`。ここでスタイル・テンプレート・TeXのエスケープ・latexmk呼び出しを固める（済、PR #8）
-2. API化する。中間表現をPOSTするとPDFが返る
+2. API化する。中間表現をPOSTするとPDFが返る（済、PR #10・#12。P6 Check pass は[2026-09-12-api-and-pipeline-p6-review.md](../../reviews/2026-09-12-api-and-pipeline-p6-review.md)）
 3. 文書種を実物に基づくものにし、2つに増やす。**ここでパッケージ構造の妥当性が判明するので、2つ目を作るまで先へ進まない**
    - 3a. 1つ目を`club-meeting-log`に差し替える。`document`型・Notionエクスポートの取り込み・blockのTeX展開をここで固める。まず画像なしの過去ログで`エクスポート → PDF`を通し、次に`image`を足す
    - 3b. 実物に基づく2つ目の文書種を足し、§6の合否判定を行う
