@@ -101,6 +101,7 @@ parent_hierarchy:
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。P5 着手はユーザー指示待ち |
 | 2026-09-12 | on_track | Do 完了。AC1–AC5 すべて検証済み（168 tests, lint pass）。Check（P6 レビュー）待ち |
+| 2026-09-12 | done | Check pass（`api-render` とまとめて 1 回）。前回レビューの W1 / W2 / S1 / S3 / S4 は解消を確認。残件は S4（`is_valid_slug` の `fullmatch` 化、前回 S2 と同時）のみで別 PR |
 
 ## PDCA log
 
@@ -108,3 +109,4 @@ parent_hierarchy:
 |------|-------|------|
 | 2026-09-12 | Plan | api.md §5 の分割案どおり起票。W1 / W2 / S1 / S3 を Act としてここに吸収 |
 | 2026-09-12 | Do | TDD（Red: `tests/test_pipeline.py` → Green → Refactor）。`src/entex/pipeline.py` 新規（`JOB_NAME_RE` / `DEFAULT_JOB_NAME` / `normalize_job_name` / `PreparedIR` / `RenderResult` / `prepare` / `render_ir`）。`cli.py` は `pipeline` 経由のみ（ジョブ名は `normalize_job_name(stem)`、出力ディレクトリは元の stem）。`packages.load_package()` に `template.tex.j2` 存在検査（W2）。`renderer.render()` は latexmk 引数を `./<job>.tex`、`TEXINPUTS` を必ず区切りで終端（W1 / S3）。`build_tex` の欠落検査は安全網として残す（`test_build_tex_still_guards_against_a_vanished_template`）。設計との差: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落とし `pct-hash.tex` に（規則 `JOB_NAME_RE` は満たすので許容範囲と判断）。renderer.md の図・IF 表・エラー分類表と README の CLI 節を追従。— files: src/entex/pipeline.py, src/entex/cli.py, src/entex/packages.py, src/entex/renderer.py, tests/test_pipeline.py, tests/test_cli.py, tests/test_renderer.py, docs/design/programs/renderer.md, README.md（commits d5675ab / 9f596ff / 8da1fd8 / 4fd5944 / 644edb0） |
+| 2026-09-12 | Check | pass — [docs/reviews/2026-09-12-api-and-pipeline-p6-review.md](../../../docs/reviews/2026-09-12-api-and-pipeline-p6-review.md)（`api-render` と合同）。AC1–AC5 すべて自動テストに根拠あり（RTM 表）。Critical / Warning なし（Warning W1 は API 側）。Suggestion: S2（`RenderResult` に `title` を持たせ API の `load_package` 二重呼びを消す）、S4（`is_valid_slug` を `fullmatch` に。前回 S2 と同じ PR で）。main にマージ済み（PR #10） |

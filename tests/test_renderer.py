@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from entex.errors import PackageError, RenderError
+from entex.errors import PackageError, RenderError, RenderTimeoutError
 from entex.ir.derive import apply_derived
 from entex.ir.loader import load_and_validate
 from entex.packages import DocPackage, load_package
@@ -272,6 +272,26 @@ def test_tex_filename_is_passed_with_dot_slash(
         render(content, package, tmp_path / "out", job_name="job-1")
     argv = recording_latexmk.read_text("utf-8").splitlines()
     assert argv[-2] == "./job-1.tex"  # 最後の行は TEXINPUTS= の記録
+
+
+def test_latexmk_timeout_is_a_render_timeout_error(
+    tmp_path: Path, packages_dir: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """時間切れは組版失敗と区別できる（api-render で type を分けるため）。TeX 語彙は漏らさない。"""
+    bin_dir = tmp_path / "slowbin"
+    bin_dir.mkdir()
+    script = bin_dir / "latexmk"
+    script.write_text("#!/bin/sh\nsleep 5\nexit 0\n", encoding="utf-8")
+    script.chmod(script.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}")
+    content, package = _content("02-minimal.json", packages_dir)
+    with pytest.raises(RenderTimeoutError) as ei:
+        render(content, package, tmp_path / "out", timeout=0.3)
+    assert isinstance(ei.value, RenderError)
+    assert ei.value.user_message == RenderTimeoutError.GENERIC_MESSAGE
+    assert ei.value.user_message != RenderError.GENERIC_MESSAGE
+    assert_no_tex_vocabulary(ei.value.user_message)
+    assert ei.value.log_path is not None and "timed out" in ei.value.log_path.read_text("utf-8")
 
 
 def test_missing_latexmk_is_a_render_error(
