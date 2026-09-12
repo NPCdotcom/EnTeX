@@ -3,7 +3,7 @@
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P6   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）→ P5 Do 完了 → P6 Check pass（2026-09-12、docs/reviews/2026-09-12-api-and-pipeline-p6-review.md: Critical 0 / Warning 1 / Suggestion 6、217 tests、CI green）。pipeline-and-cli は PR #10 で main にマージ済み、api-render は PR #12（ready for review、マージはユーザー）。Warning W1（chunked 本文の 413 を stream 化）は公開配置（認証 plan）の前に入れる小パッチ。次は着手順3（2 文書種目 = charter §6 の合否判定）の P3 設計。\n【2026-09-12追記・issue #11、main で先行反映済み】最初の文書種の題材を「サークル月次報告書」から「サークル部会ログのフォーマット化」に差し替え（charter §5/§11、ADR-0001）。月次報告書は運用自体が存在しないと判明したため。renderer/pipeline/CLI/API本体（H4）は文書種非依存の設計のため作り直し不要。影響は docs/requirements/circle-monthly-report/・packages/circle-monthly-report/ に閉じる（H1、要P1やり直し）。着手順2（API化、H4）の current_phase / scope_focus はこの差し替えの影響を受けない。具体的な様式はユーザー提示情報を待って着手する。"
+phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）→ P5 Do 完了 → P6 Check pass（2026-09-12、docs/reviews/2026-09-12-api-and-pipeline-p6-review.md: Critical 0 / Warning 1 / Suggestion 6、217 tests、CI green）。pipeline-and-cli は PR #10、api-render は PR #12 で main にマージ済み。Warning W1（chunked 本文の 413 を stream 化）は公開配置（認証 plan）の前に入れる小パッチ。次は着手順3a（club-meeting-log）の P1 要求 → P3 設計。\n【2026-09-12追記・issue #11、main で先行反映済み】最初の文書種の題材を「サークル月次報告書」から「サークル部会ログのフォーマット化」に差し替え（charter §5/§11、ADR-0001）。月次報告書は運用自体が存在しないと判明したため。renderer/pipeline/CLI/API本体（H4）は文書種非依存の設計のため作り直し不要。影響は docs/requirements/circle-monthly-report/・packages/circle-monthly-report/ に閉じる（H1、要P1やり直し）。着手順2（API化、H4）の current_phase / scope_focus はこの差し替えの影響を受けない。\n【2026-09-12追記・issue #14、PR #17】部会ログの実物47本の集計が出た。charter を改訂し、入力形式を front matter + Markdown（節はパッケージが宣言）、1つ目の文書種は新規 `club-meeting-log`、着手順3を 3a（club-meeting-log・document型・Markdown取り込み・image）/ 3b（実物に基づく2つ目 + §6判定）に分けた。ir-type-vocabulary.md（document型・image前倒し）・ADR-0001の Open 消し込み・TEAM.md の分担・club-meeting-log の P1 要求は後続。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
@@ -31,8 +31,7 @@ allowed_actions:
   - patch-conduct        # W1 / S1 の小パッチ
   - review-record
 
-open_blockers:
-  - "部会ログの具体的な様式（頻度・欄構成・行数の上限など）待ち。ユーザー提示後にdocs/requirements/配下でP1要求定義をやり直す（issue #11・ADR-0001）"
+open_blockers: []   # 部会ログの様式待ちは issue #14 の実測で解消（2026-09-12）。次は club-meeting-log の P1 要求定義
 
 # Adaptive lifecycle (skill: adaptive-lifecycle-plan)
 lifecycle_plan:

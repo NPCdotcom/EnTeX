@@ -216,6 +216,16 @@ entries:
     recall: on_demand
     linked: [review-api-and-pipeline-p6, plan-api-render, plan-pipeline-and-cli]
 
+  - id: ep-charter-markdown-input-issue-14
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-charter-markdown-input-issue-14.md
+    summary: "Charter revised for issue #14: 47 real 部会ログ census → input = front matter + Markdown with package-declared sections (§5.1), §6 体裁上同一 criteria, data-import first path, club-meeting-log new package replaces 1st doc-type, 着手順3 → 3a/3b. Follow-ups: ir-type-vocabulary document/image, ADR-0001 closure, TEAM.md split"
+    tags: [charter, P0, H0, doc-type, markdown, issue-14]
+    recall: on_demand
+    linked: [adr-0001-meeting-log-pivot, ep-ir-type-vocabulary, project-state]
+
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
   #   scope: project
