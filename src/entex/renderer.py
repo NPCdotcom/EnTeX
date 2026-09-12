@@ -178,13 +178,18 @@ def render(
         "-halt-on-error",
         "-file-line-error",
         f"-output-directory={out_dir.resolve()}",
-        tex_path.name,
+        # `./` を前置し、ファイル名がオプションと誤認されないようにする（job_name の規則は
+        # pipeline 側が守るが、ここでも二重に安全側へ寄せる）
+        f"./{tex_path.name}",
     ]
     env = dict(os.environ)
-    # style/ 配下の .sty を TeX に見つけさせる。末尾の区切りで既定の探索パスを残す
+    # style/ 配下の .sty を TeX に見つけさせる。TEXINPUTS は末尾が区切りで終わると既定の
+    # 探索パスを続けて見る。既存の値が区切りで終わっていなくても、こちらで必ず終端する
+    inherited = env.get("TEXINPUTS", "")
+    if inherited and not inherited.endswith(os.pathsep):
+        inherited += os.pathsep
     env["TEXINPUTS"] = (
-        f"{package.style_dir.resolve()}{os.pathsep}{package.dir.resolve()}{os.pathsep}"
-        + env.get("TEXINPUTS", "")
+        f"{package.style_dir.resolve()}{os.pathsep}{package.dir.resolve()}{os.pathsep}{inherited}"
     )
     try:
         proc = subprocess.run(
