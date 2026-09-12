@@ -8,12 +8,14 @@ created: 2026-09-12
 updated: 2026-09-12
 parent_element: docs/design/elements/ir-type-vocabulary.md
 parent_system: ""
-related_requirements: docs/requirements/circle-monthly-report/要件.md
+related_requirements:
+  - docs/requirements/circle-monthly-report/要件.md  # ADR-0001で参考資料。FR1–FR8の番号はここから
+  - docs/requirements/club-meeting-log/要求.md
 ---
 
 # renderer（H4）
 
-親: [要件.md](../../requirements/circle-monthly-report/要件.md) / [ir-type-vocabulary.md](../elements/ir-type-vocabulary.md)
+親: [要件.md](../../requirements/circle-monthly-report/要件.md)（ADR-0001で参考資料。FR1–FR8の番号はここから） / [要求.md](../../requirements/club-meeting-log/要求.md) / [ir-type-vocabulary.md](../elements/ir-type-vocabulary.md)
 
 ## 目的（どの H1/H2 のためか）
 
@@ -45,7 +47,7 @@ charter §8 の主要要素のうち `renderer` を対象にする。IR（検証
 [ cli.py ]        結果（PDFパス／日本語エラー）を出力、終了コードに写す
 ```
 
-`ir/loader.py` と `ir/derive.py` は **doc-packageの中身に依存するが、特定の文書種を知らない**（`schema.json` の内容だけを見る）。`tex/escape.py` は `schema.json` の型（text / rich_text か）だけを見て値をエスケープする純粋関数。`renderer.py` は `template.tex.j2` の存在とJinja2の呼び出し規約にのみ依存する。`pipeline.py` は 3 段の並びとジョブ名の規則だけを持ち、IR の出どころを知らない（[api.md](api.md) §2。P6 レビュー S4 の解消として 2026-09-12 に追加）。
+`ir/loader.py` と `ir/derive.py` は **doc-packageの中身に依存するが、特定の文書種を知らない**（`schema.json` の内容だけを見る）。`tex/escape.py` は `schema.json` の型（text / rich_text / document か）だけを見て値をエスケープする純粋関数（`document` は span の `text` を `escape_text`、`href` を `escape_href` で処理し、`code` block の `text` は書かれたとおり出すため触らない）。`renderer.py` は `template.tex.j2` の存在とJinja2の呼び出し規約にのみ依存する。`pipeline.py` は 3 段の並びとジョブ名の規則だけを持ち、IR の出どころを知らない（[api.md](api.md) §2。P6 レビュー S4 の解消として 2026-09-12 に追加）。
 
 ## 公開インターフェース / API
 
@@ -58,8 +60,8 @@ charter §8 の主要要素のうち `renderer` を対象にする。IR（検証
 | `entex.ir.loader` | `load_and_validate(raw: Any, packages_dir: Path) -> ValidatedIR` | envelope込みの生JSON（dict化済み） | 検証済み・正規化済み `content` を持つ `ValidatedIR(doc_type, schema_version, package, content)`。封筒の誤りは `EnvelopeError`、中身の問題は `IRValidationError(issues)` にまとめて（FR1, FR2, FR3） |
 | `entex.ir.validate` | `validate_content(content: Any, schema: Schema) -> tuple[dict, list[FieldIssue]]` | 中身と `Schema` | 正規化済み dict と問題一覧（0 件なら合格）。loader から呼ぶ |
 | `entex.ir.derive` | `apply_derived(content: dict, schema: Schema) -> dict` | 検証済み content、schema.json の expr 定義 | 導出フィールドを埋めた content（FR4）。循環・参照誤りは `DerivationError` |
-| `entex.tex.escape` | `escape_text(s: str) -> str` / `escape_content(content: dict, schema: Schema) -> dict` | 生の文字列／content 全体 | TeX安全な文字列／content（FR5）。`renderer.build_context` から呼ぶ |
-| `entex.renderer` | `build_tex(content: dict, package: DocPackage) -> str` / `render(content: dict, package: DocPackage, out_dir: Path, *, job_name: str = "document", timeout: float = 180) -> Path` | 導出値込みの content と `DocPackage` | `.tex` 文字列／生成された PDF のパス。失敗は利用者向け汎用文と `log_path`・`detail` を持つ `RenderError`（FR6, FR7）。latexmk への引数は `./<job_name>.tex` |
+| `entex.tex.escape` | `escape_text(s: str) -> str` / `escape_href(url: str) -> str` / `escape_content(content: dict, schema: Schema) -> dict` | 生の文字列／URL文字列／content 全体 | TeX安全な文字列／URL の意味を変えずに TeX の引数へ置ける形（`% # &` は `\` 前置、他はパーセントエンコード）／TeX安全な content（FR5）。`renderer.build_context` から呼ぶ |
+| `entex.renderer` | `build_context(content: dict, schema: Schema) -> dict` / `shape_documents(content: dict, schema: Schema) -> dict` / `build_tex(content: dict, package: DocPackage) -> str` / `render(content: dict, package: DocPackage, out_dir: Path, *, job_name: str = "document", timeout: float = 180) -> Path` | 導出値込みの content と `Schema`（または `DocPackage`） | テンプレートに渡すコンテキスト dict（`build_context`）／`document` 型の節をスキーマの宣言順に並べ、宣言外の節を後置した配列にした content（`shape_documents`。ir-type-vocabulary.md §5 の `src/entex/` 側の責務）／`.tex` 文字列／生成された PDF のパス。失敗は利用者向け汎用文と `log_path`・`detail` を持つ `RenderError`（FR6, FR7）。latexmk への引数は `./<job_name>.tex`。Jinja2 フィルタ `group_digits` / `ja_month` / `ja_date(with_year=True, with_weekday=False)` も `make_environment` が登録する |
 | `entex.pipeline` | `prepare(raw, packages_dir) -> PreparedIR` / `render_ir(raw, packages_dir, out_dir, *, job_name="document", tex_only=False, timeout=None) -> RenderResult` | 生 JSON（dict）・出力先・ジョブ名 | 上 3 段を順に呼ぶ共通入口。`job_name` は `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$` に限定し外れたら `ValueError`。`normalize_job_name(stem)` で任意文字列をこの規則へ寄せる（[api.md](api.md) §3.1） |
 | `entex.cli` | `render(json_path, --out, --packages-dir, --tex-only)`（Typerコマンド） | JSONファイルパス | 標準出力にPDF（または .tex）のパス、標準エラーに日本語エラー、終了コード 0/1/2/3（FR8）。ジョブ名はファイル名の stem を `normalize_job_name` した値、出力先の既定は `out/render/<stem>/` |
 
@@ -80,7 +82,9 @@ charter §8 の主要要素のうち `renderer` を対象にする。IR（検証
 
 `IRValidationError` と `EnvelopeError` はスキーマ検証の時点で原因が特定できるため日本語文言を機械的に組み立てられるが、`RenderError` はlatexmkの出力を解析して原因別メッセージに分岐させる価値が低い（TeXのエラーは組版の詳細に依存し尽くせない）ため、当面は汎用メッセージ1種に留める。原因別メッセージが必要になった時点で拡張する。
 
-## 仮レイアウト方針（`template.tex.j2` が実物入手前でも書ける根拠）
+## 仮レイアウト方針（月次報告書 `circle-monthly-report` 向け・参考）
+
+部会ログ（`club-meeting-log`）の体裁は `packages/club-meeting-log/style/` と `template.tex.j2` にあり、この節の対象ではない。
 
 要件.md Open questionsの1つ「仮レイアウトの方針」を解消する。
 
@@ -135,4 +139,4 @@ charter §7 で既に確定済みのため、この設計で新規のフレー�
 
 - [x] P3 ゲート → [`.agents/plans/algorithms/ir-validate-and-derive.md`](../../../.agents/plans/algorithms/ir-validate-and-derive.md) と [`.agents/plans/programs/render-and-cli.md`](../../../.agents/plans/programs/render-and-cli.md)（2026-09-12、ユーザー指示「P3の設計に従って実装に入ってください」を PM 確認として記録）
 - [x] P6 レビュー（`review-conduct`）→ [docs/reviews/2026-09-12-renderer-cli-p6-review.md](../../reviews/2026-09-12-renderer-cli-p6-review.md)（pass。Warning W1/W2 と本表の IF 追従 S1 は Act で扱う）
-- [x] ~~実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す~~ → **不要になった**（2026-09-12、issue #11）。月次報告書を学生課へ提出する運用自体が存在しないと判明し、最初の文書種を「サークル部会ログのフォーマット化」に差し替えた（[ADR-0001](../../adr/0001-first-doc-type-pivot-to-meeting-log.md)）。この renderer 設計・実装（モジュール分割・IF・エラー方針）は文書種の中身に依存しないため変更不要。次は部会ログの実物様式が提示され次第、`docs/requirements/`配下でP1からやり直し、必要ならこの設計に照合する
+- [x] ~~実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す~~ → **不要になった**（2026-09-12、issue #11）。月次報告書を学生課へ提出する運用自体が存在しないと判明し、最初の文書種を「サークル部会ログのフォーマット化」に差し替えた（[ADR-0001](../../adr/0001-first-doc-type-pivot-to-meeting-log.md)）。この renderer 設計・実装（モジュール分割・IF・エラー方針）は文書種の中身に依存しないため変更不要。→ P1 要求（#22）・`packages/club-meeting-log/`（#22）・`document` 型の実装（#30、PR #32）まで済んだ。本表の IF 追従は #34
