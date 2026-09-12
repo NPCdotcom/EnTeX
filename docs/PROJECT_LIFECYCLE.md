@@ -14,7 +14,7 @@ Layers are independent. Example: phase **P5 (Do)** while scope is **H5 (algorith
 
 ## A. Project phases (P0–P6)
 
-Industry alignment: [ROLES_AND_GOVERNANCE.md](./ROLES_AND_GOVERNANCE.md) (PM/PL/PO · Stage-Gate · V-model · Discovery/Delivery)
+Industry alignment: [ROLES_AND_GOVERNANCE.md](../.agents/docs/ROLES_AND_GOVERNANCE.md) (PM/PL/PO · Stage-Gate · V-model · Discovery/Delivery)
 
 | ID | Name | Primary Cursor role | Main artifacts | Gate (next) |
 |----|------|---------------------|----------------|-------------|
@@ -116,7 +116,7 @@ Markdown **leading `>`** = scratch · thinking memo area.
 
 ## Gate table (router · PM · user)
 
-**Gate Keeper is the user (steering)**. PM assembles evidence and **proposes** decision. Vocabulary: **Go / Conditional Go / Recycle / Hold / Kill** ([ROLES_AND_GOVERNANCE.md](./ROLES_AND_GOVERNANCE.md)).
+**Gate Keeper is the user (steering)**. PM assembles evidence and **proposes** decision. Vocabulary: **Go / Conditional Go / Recycle / Hold / Kill** ([ROLES_AND_GOVERNANCE.md](../.agents/docs/ROLES_AND_GOVERNANCE.md)).
 
 | Action | Min phase | Min scope fixed | Other |
 |--------|-----------|-----------------|-------|
@@ -148,7 +148,7 @@ Skill: `lifecycle-reference` · **`adaptive-lifecycle-plan`** (entry · Workflow
 
 ### Adaptive lifecycle (`adaptive-lifecycle-plan`)
 
-From intent · brownfield · complexity, recommend **which P0–P6 / S0–S1** to run; after user **Go**, record in `docs/project-state.yaml` → `lifecycle_plan`. Kit translation of AI-DLC Workflow Planning. 13-stage map: [**AIDLC_KIT_MAP.md**](./AIDLC_KIT_MAP.md) · procedure: skill `adaptive-lifecycle-plan`.
+From intent · brownfield · complexity, recommend **which P0–P6 / S0–S1** to run; after user **Go**, record in `docs/project-state.yaml` → `lifecycle_plan`. Kit translation of AI-DLC Workflow Planning. 13-stage map: [**AIDLC_KIT_MAP.md**](../.agents/docs/AIDLC_KIT_MAP.md) · procedure: skill `adaptive-lifecycle-plan`.
 
 ### Brownfield reverse engineering (Reverse Engineering equivalent)
 
@@ -168,4 +168,4 @@ Append-only record of gate decisions · phase transitions · lifecycle Go · que
 
 ## Linear integration (optional)
 
-[LINEAR_PHASE_MAP.md](./LINEAR_PHASE_MAP.md) — issue state vs P/H mapping. Align via `linear_sync` in `docs/project-state.yaml`.
+[LINEAR_PHASE_MAP.md](../.agents/docs/LINEAR_PHASE_MAP.md) — issue state vs P/H mapping. Align via `linear_sync` in `docs/project-state.yaml`.

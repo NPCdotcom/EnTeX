@@ -85,6 +85,6 @@ cp .agents/memory/state/nav.yaml.example .agents/memory/state/nav.yaml
 ## 参照
 
 - [PROJECT_LIFECYCLE.md](./PROJECT_LIFECYCLE.md)
-- [requirements/README.md](./requirements/README.md)
-- [requirements/_template/](./requirements/_template/)
-- [_example/README.md](./_example/README.md)
+- [requirements/README.md](../.agents/docs/requirements/README.md)
+- [requirements/_template/](../.agents/docs/requirements/_template/)
+- [_example/README.md](../.agents/docs/_example/README.md)
