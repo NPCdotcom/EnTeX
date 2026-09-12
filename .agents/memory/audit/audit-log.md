@@ -267,3 +267,20 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 次アクション: ユーザーが部会ログの実物様式（頻度・欄構成など）を提示した時点で、`docs/requirements/`配下に新しいP1要求（`要求.md`）を起票する。`packages/circle-monthly-report/`を改修するか新規パッケージを起こすかはその時点で決める（ADR-0001 Open questions）。
 
 ---
+## 2026-09-12T04:24:00+00:00 | patch | resolve-pr12-conflict-with-main
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `patch` |
+| **actor** | `user` → `agent` |
+| **decision** | ユーザー指示「PR #12 のコンフリクトを解消して下さい」。`origin/main`（PR #13、issue #11 の文書種ピボット）を `feature/npc` へマージ |
+| **phase** | P6（変更なし。着手順2 API 化のマージ前コンフリクト解消） |
+| **summary** | コンフリクトは `docs/project-state.yaml` / `.agents/memory/state/nav.yaml` / `.agents/memory/audit/audit-log.md` の3ファイル（進行メモのみ）。両ブランチの記録を両方残す形で解消（`current_phase: P6` を維持しつつ issue #11 のピボット注記を追記）。`src/` / `tests/` / `schemas/` は無衝突。マージ後のツリーで `ruff check` 通過・`pytest` 217 passed を再確認。CI（run 34673073103）lint/test 3.12・3.13・tex smoke すべて pass。`gh pr view` で `mergeStateStatus: CLEAN` |
+| **reason** | ユーザー明示指示。マージ判断そのもの（PR #12 → main）はユーザーの担当のまま |
+
+### Refs
+
+- commit: `33cc554`（merge commit, feature/npc）
+- PR: https://github.com/NPCdotcom/EnTeX/pull/12（コメントで解消内容を記録、`@coderabbitai review` 再投稿）
+
+---
