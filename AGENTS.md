@@ -149,11 +149,11 @@ make docker-test   # pytest（TeX 込み）— renderer や Dockerfile を触っ
 make tex-smoke     # 日本語組版が通るか — テンプレート・スタイルを触ったとき
 ```
 
-## レビュー（CodeRabbit）
+## レビュー
 
-- 設定は [.coderabbit.yaml](.coderabbit.yaml)（日本語レビュー）
-- スター数の少ないリポジトリは自動レビューが走らないことがある。**PR を出すたび・修正を push するたびに、PR コメントへ `@coderabbitai review` を明示投稿する**
-- 無料枠で `Review rate limited` になることがある。レビューが来ない前提で進め、来たら拾う
+- **CodeRabbit は導入しない**（2026/9/12 決定）。GitHub App が未インストールのため、`@coderabbitai review` を投稿しても何も起きない。投稿しないこと
+- レビューはもう一方が行う。誰がどこを見るかは [docs/TEAM.md](docs/TEAM.md)「担当領域」
+- 自動レビューが無い分、PR を出す前のローカル検査（上節）が唯一の機械的な検査になる。CI の緑を検査の代わりにしない
 
 ## ハーネス（AI エージェント側の設定）
 
