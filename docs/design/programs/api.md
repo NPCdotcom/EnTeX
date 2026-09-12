@@ -31,8 +31,8 @@ charter §11 着手順 2「API化する。中間表現を POST すると PDF が
 
 | ID | 要件 | 検証方法 |
 |----|------|----------|
-| FR-A1 | `POST /v1/render` に IR（封筒込み JSON）を送ると、`200` と `application/pdf` の本文で PDF が返る | `examples/valid/` 6 件を POST し、本文が `%PDF-` で始まり、`Content-Type: application/pdf` であること（TeX 環境） |
-| FR-A2 | 封筒不一致・中身の検証エラーは `422` と RFC 9457 Problem Details（`application/problem+json`）で返り、`detail` は日本語、`issues` に件ごとの `path` / `message` が入る（FR1–FR3 と同じ内容） | `examples/invalid/` 6 件を POST。`06-envelope-mismatch` は `issues` 無しの封筒エラー 1 件、`03-…` は `issues` 2 件 |
+| FR-A1 | `POST /v1/render` に IR（封筒込み JSON）を送ると、`200` と `application/pdf` の本文で PDF が返る | `packages/circle-monthly-report/examples/valid/` 6 件を POST し、本文が `%PDF-` で始まり、`Content-Type: application/pdf` であること（TeX 環境） |
+| FR-A2 | 封筒不一致・中身の検証エラーは `422` と RFC 9457 Problem Details（`application/problem+json`）で返り、`detail` は日本語、`issues` に件ごとの `path` / `message` が入る（FR1–FR3 と同じ内容） | `packages/circle-monthly-report/examples/invalid/` 6 件を POST。`06-envelope-mismatch` は `issues` 無しの封筒エラー 1 件、`03-…` は `issues` 2 件（`club-meeting-log` の各6件は `tests/test_ir_document.py` 側で検証し、API のテストには使っていない） |
 | FR-A3 | JSON として読めない本文・オブジェクトでない本文は `400` の Problem Details で返る | 壊れた JSON / 配列 / 文字列を POST |
 | FR-A4 | 組版失敗（`RenderError`）は `500` の Problem Details で、`detail` は `RenderError.GENERIC_MESSAGE`。**応答本文・ヘッダのどこにも TeX の語彙が出ない**。原文（latexmk のログ）はサーバ側ログにだけ残る | 偽 `latexmk` を PATH に置いて POST し、応答全文に `tests/test_renderer.py::TEX_VOCABULARY` が無いこと。サーバ側ログに `LaTeX Error` があること |
 | FR-A5 | パッケージ不備（`PackageError` / `DerivationError`）は `500` の Problem Details。`detail` は汎用文で、パッケージ作者向けの詳細はサーバ側ログにだけ出す | 壊れた `schema.json` の `packages_dir` を設定して POST |
@@ -101,7 +101,7 @@ def render_ir(
 ```
 
 - `job_name` は `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$` に **限定** し、外れたら `ValueError`（呼び出し側のプログラムミス）。CLI は JSON のファイル名の stem をこの規則に **正規化**（合わなければ `document`）して渡す。latexmk への引数は `./<job>.tex` と前置する。→ P6 レビュー W1 の解消をここに置く
-- 例外は既存の `EnTeXError` 階層をそのまま上げる（新しい例外型は増やさない）。`template.tex.j2` の欠落は `load_package()` で `PackageError` にする → W2 の解消
+- 例外は既存の `EnTeXError` 階層をそのまま上げる（`RenderTimeoutError`（`RenderError` の派生、§3.3 / §9）以外は増やさない。P6 レビュー S1 で追従）。`template.tex.j2` の欠落は `load_package()` で `PackageError` にする → W2 の解消
 - `prepare()` を分けるのは、着手順 4 の UI が「検証だけ」（プレビュー前のエラー表示）を呼べるようにするため。今回は `render_ir()` の内部で使うだけでよい
 
 ### 3.2 HTTP
