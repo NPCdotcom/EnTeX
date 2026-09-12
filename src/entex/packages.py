@@ -1,7 +1,7 @@
 """doc-package（`packages/<slug>/`）の場所の解決と読み込み。
 
 `src/entex/` は特定の文書種を知らない。ここが読むのは `schema.json` の中身と
-`template.tex.j2` / `style/` の **存在** だけである。
+`template.tex.j2` の **存在** だけである（`style/` は任意。無ければ TeX の既定探索に任せる）。
 """
 
 from __future__ import annotations
@@ -89,6 +89,9 @@ def load_package(packages_dir: Path, slug: str) -> DocPackage:
             f"文書種パッケージ '{slug}' の doc_type（{schema.doc_type}）が"
             "ディレクトリ名と一致しません。"
         )
+    # テンプレートの欠落はパッケージの不備なので、組版（RenderError）ではなくここで弾く
+    if not (pkg_dir / TEMPLATE_FILENAME).is_file():
+        raise PackageError(f"文書種パッケージ '{slug}' に {TEMPLATE_FILENAME} がありません。")
     return DocPackage(slug=slug, dir=pkg_dir, schema=schema)
 
 
