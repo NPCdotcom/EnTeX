@@ -18,6 +18,7 @@ RUN apt-get update \
       latexmk \
       fonts-noto-cjk \
       make \
+      git \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
