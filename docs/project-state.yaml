@@ -3,7 +3,7 @@
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P5   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。pipeline-and-cli の P5 Do 完了（2026-09-12、AC1–AC5 検証済み、168 tests）。W1/W2/S1/S3 解消済み。次は pipeline-and-cli の P6 Check（review-conduct）または api-render の P5 実装（ユーザー指示で着手）。この current_phase / scope_focus は着手順2（API化、H4）に対するもので影響を受けない。\n【2026-09-12追記・issue #11】最初の文書種の題材を「サークル月次報告書」から「サークル部会ログのフォーマット化」に差し替え（charter §5/§11、ADR-0001）。月次報告書は運用自体が存在しないと判明したため。renderer/pipeline/CLI/API本体（H4）は文書種非依存の設計のため作り直し不要。影響は docs/requirements/circle-monthly-report/・packages/circle-monthly-report/ に閉じる（H1、要P1やり直し）。具体的な様式はユーザー提示情報を待って着手する。"
+phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。pipeline-and-cli の P5 Do 完了（2026-09-12、AC1–AC5 検証済み、168 tests）。W1/W2/S1/S3 解消済み。次は pipeline-and-cli の P6 Check（review-conduct）または api-render の P5 実装（ユーザー指示で着手）。この current_phase / scope_focus は着手順2（API化、H4）に対するもので影響を受けない。\n【2026-09-12追記・issue #11】最初の文書種の題材を「サークル月次報告書」から「サークル部会ログのフォーマット化」に差し替え（charter §5/§11、ADR-0001）。月次報告書は運用自体が存在しないと判明したため。renderer/pipeline/CLI/API本体（H4）は文書種非依存の設計のため作り直し不要。影響は docs/requirements/circle-monthly-report/・packages/circle-monthly-report/ に閉じる（H1、要P1やり直し）。具体的な様式はユーザー提示情報を待って着手する。\n【2026-09-12追記・issue #14】部会ログの実物47本の集計が出た。charter を改訂し、入力形式を front matter + Markdown（節はパッケージが宣言）、1つ目の文書種は新規 `club-meeting-log`、着手順3を 3a（club-meeting-log・document型・Markdown取り込み・image）/ 3b（実物に基づく2つ目 + §6判定）に分けた。ir-type-vocabulary.md（document型・image前倒し）・ADR-0001の Open 消し込み・TEAM.md の分担・club-meeting-log の P1 要求は後続。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
@@ -31,8 +31,7 @@ allowed_actions:
   - implement-conduct    # pipeline-and-cli → api-render の順
   - review-conduct
 
-open_blockers:
-  - "部会ログの具体的な様式（頻度・欄構成・行数の上限など）待ち。ユーザー提示後にdocs/requirements/配下でP1要求定義をやり直す（issue #11・ADR-0001）"
+open_blockers: []   # 部会ログの様式待ちは issue #14 の実測で解消（2026-09-12）。次は club-meeting-log の P1 要求定義
 
 # Adaptive lifecycle (skill: adaptive-lifecycle-plan)
 lifecycle_plan:
