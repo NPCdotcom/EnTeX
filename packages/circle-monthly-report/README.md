@@ -1,6 +1,10 @@
 # circle-monthly-report — サークル月次活動報告書
 
-最初の文書種（charter §5 の MVP）。大学サークルが学生課へ毎月出す活動報告書を題材にしている。
+> **2026-09-12 方針変更（[issue #11](https://github.com/NPCdotcom/EnTeX/issues/11) / [ADR-0001](../../docs/adr/0001-first-doc-type-pivot-to-meeting-log.md)）**
+> 実物の様式を確認する過程で、情報技術研究部には月次報告書を学生課へ提出する運用自体が存在しないことが判明した。charter §5 の MVP はサークル内の**部会ログのフォーマット化**に差し替えている。
+> 本パッケージは新規の文書種としては開発を継続しないが、renderer実装の検証に使った参考実装として残す（IR型語彙11型を一通り使う構成など）。以降の記述は差し替え前の状態のスナップショットとして読むこと。
+
+最初の文書種（charter §5 の MVP、**2026-09-12以前**）。大学サークルが学生課へ毎月出す活動報告書を題材にしている。
 
 **状態: スキーマ・IR 例・仮レイアウトのテンプレートとスタイルが揃い、`entex render` で PDF が出る（着手順 1）。**
 実物の Word 版報告書はまだ確認していないので、項目構成もレイアウトも一般的なサークル報告書の形に沿った **仮定** である（[ir-type-vocabulary.md](../../docs/design/elements/ir-type-vocabulary.md) の Assumptions、[renderer.md](../../docs/design/programs/renderer.md) の仮レイアウト方針）。
