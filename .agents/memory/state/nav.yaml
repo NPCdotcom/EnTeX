@@ -4,30 +4,31 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User (2026-09-12): '2で進みましょう' = skip the separate Check of pipeline-and-cli, do P5 of api-render, then Check both together. Done on feature/npc (PR #12; PR #10 with pipeline-and-cli was merged to main at 02:47 before this turn): entex.api (FastAPI, RFC 9457), RenderTimeoutError, schemas/api, Dockerfile CMD uvicorn, README §API. 217 tests pass on TeX host; uvicorn+curl manual check OK. Next gate: P6 review-conduct for both plans."
+  intent: "User (2026-09-12): '2で進みましょう' = api-render P5 first, then one combined P6 Check. Both done on feature/npc. Check verdict pass (docs/reviews/2026-09-12-api-and-pipeline-p6-review.md): 0 Critical / 1 Warning (W1 chunked-body 413 buffering) / 6 Suggestions. project-state → P6. PR #12 marked ready for review; merge is the user's call. Roadmap step 2 (API) is complete pending merge."
   turn_estimate: 1
-  chat_id_hint: "entex-p5-api-render"
+  chat_id_hint: "entex-p6-review-api-pipeline"
 
 navigation:
   active_thread_id: "api-pipeline"
-  active_plan: ".agents/plans/programs/api-render.md"
+  active_plan: ""   # both plans Check pass; next plan is created at roadmap step 3 P3/P4
   next_actions:
-    - "P6 review-conduct on pipeline-and-cli (merged in PR #10, main@b561475) + api-render (PR #12, commits 7caeaa2..65157fd): V-model RTM api.md FR-A1..A8/NFR-A1..A4 + pipeline-and-cli AC1..5 ↔ tests/test_api.py, tests/test_pipeline.py. Read review-reference first; do not drive-by refactor. Write docs/reviews/2026-09-12-api-and-pipeline-p6-review.md, Check rows in both plans, project-state → P6"
-    - "Wait for CI on PR #12 (tex job runs pytest in Docker incl. API tests). `@coderabbitai review` posted on #12; repost after each push"
-    - "Known follow-ups not in any plan: S2 pattern search vs fullmatch (1 line in ir-type-vocabulary.md); auth (Bearer) before public deploy; `type` URI real domain; Starlette TestClient httpx→httpx2 deprecation; measure NFR-A1 with 4 concurrent renders"
-    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged"
+    - "User: merge PR #12 (feature/npc → main). After merge, run `make docker-serve` once in the user's Docker env to eyeball the container start (only UAT item not exercised here — no Docker on this host)"
+    - "Roadmap step 3 (second doc-type = charter §6 pass/fail 'zero changes under src/entex/'): P3 design-deliberate/design-record. Fold in review S2 (RenderResult.title so the API stops calling load_package twice) and use GET /v1/doc-types as the judgment signal"
+    - "Small patches (patch-reference first): W1 stream body in read_ir_body + chunked oversize test (with the auth/public-deploy plan); S1 fix api.md §3.1 sentence '新しい例外型は増やさない' (status untouched); S4 is_valid_slug → fullmatch together with old S2 (pattern fullmatch, 1 line in ir-type-vocabulary.md)"
+    - "Nice-to-have tests: S3 internal-error safety net (TestClient raise_server_exceptions=False), S5 Settings validation; S6 measure NFR-A1 with ENTEX_MAX_CONCURRENT_RENDERS=4 in Docker; Starlette httpx→httpx2 only if CI turns warnings into errors"
+    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. Next work should start a fresh branch from main after PR #12 merges"
     - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/ only (layout UAT still pending)"
   blockers: []
 
 alignment:
   project_state_path: docs/project-state.yaml
-  phase: P5
+  phase: P6
   scope_level: H4
   gate_status: passed
 
 pressure:
   level: low
-  signals: ["context summarized once earlier in this session; re-anchored from nav + plans + source"]
+  signals: ["context summarized once earlier in this session; re-anchored from nav + plans + source before the review"]
   last_l2_flush_at: "2026-09-12"
   reanchor_required: false
   pre_compact_recommended: false

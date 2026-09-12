@@ -217,3 +217,27 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 設計との差: 本文読み取りだけ `async def` 依存（`await request.body()` が要る）。`X-Request-ID` は UUID のみ採用。`/v1/doc-types` は壊れたパッケージを一覧から外す（警告ログ）。Docker がこの環境に無いため `make docker-test` は未実行、CI の tex ジョブで代替。
 
 ---
+## 2026-09-12T04:10:00+00:00 | phase | p6-review-api-and-pipeline
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `agent`（reviewer） |
+| **decision** | P6 Check を `pipeline-and-cli` + `api-render` の 2 plan 合同で実施（ユーザー判断「2で進みましょう」の後段）。判定 **pass** |
+| **phase** | P5 → P6（両 plan Check pass） |
+| **summary** | V-model RTM: api.md FR-A1〜A8 / NFR-A1〜A4 と両 plan の AC 計 10 件がすべて自動テスト（file:line）に辿れる。`ruff` / `pytest` 217 passed（TeX ありホスト）、CI（PR #12）green。設計前提 4 項目違反なし。Critical 0 / Warning 1（W1: chunked 本文を全文読んでから 413。`request.stream()` で打ち切りへ、公開配置前）/ Suggestion 6（api.md §3.1 文言、`RenderResult.title`、`internal-error` テスト、`is_valid_slug` fullmatch、`Settings` テスト、同時 4 件計測 + httpx2）。前回レビュー W1 / W2 / S1 / S3 / S4 の解消を確認 |
+| **reason** | project-state `allowed_actions` に review-conduct。両 plan Do 完了、PR #10 マージ済み・PR #12 CI green |
+
+### Refs
+
+- review: `docs/reviews/2026-09-12-api-and-pipeline-p6-review.md`
+- plans: `.agents/plans/programs/pipeline-and-cli.md` / `api-render.md`（Check 行・Progress `done`）· `.agents/plans/README.md`（Check pass）
+- design: `docs/design/programs/api.md`（「次」の P6 Check にチェック。status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p6-review-api-and-pipeline.md`
+- team: `docs/project-state.yaml`（current_phase: P6、proposal: PR #12 マージ（ユーザー）→ 着手順3 P3）
+
+### Detail（任意）
+
+レビュー中の drive-by 修正なし。W1 はレビュー時に `TestClient` の chunked 送信で「413 は返る（機能は満たす）が全文バッファ後」であることを実機確認し、`uvicorn --help` に本文上限オプションが無いことも確認した。
+
+---
