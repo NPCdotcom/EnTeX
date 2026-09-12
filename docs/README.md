@@ -18,9 +18,13 @@
 | [../schemas/](../schemas/) | Shared schemas（IR / API） |
 | [../design/](../design/) | Design artifacts（図・モック） |
 
+P4 実装計画（renderer.md「次」の分割案どおり）:
+
+- [.agents/plans/algorithms/ir-validate-and-derive.md](../.agents/plans/algorithms/ir-validate-and-derive.md) — FR1–FR4（H5。TeX 非依存）
+- [.agents/plans/programs/render-and-cli.md](../.agents/plans/programs/render-and-cli.md) — FR5–FR8・NFR1–2（H4）
+
 未作成（必要になった段階で作る）:
 
-- `.agents/plans/programs/ir-validate-and-derive.md` / `render-and-cli.md` — P4 実装計画（renderer.md「次」参照。別エージェントへの引き継ぎ待ち）
 - `LINEAR_PHASE_MAP.md` — Linear states ↔ P/H（optional。`project-state.yaml` の `linear_sync.map_doc` が参照している）
 
 Plans: [.agents/plans/](../.agents/plans/README.md)
