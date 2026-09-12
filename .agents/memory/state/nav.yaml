@@ -4,7 +4,7 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User (2026-09-12): '2で進みましょう' = api-render P5 first, then one combined P6 Check. Both done on feature/npc. Check verdict pass (docs/reviews/2026-09-12-api-and-pipeline-p6-review.md): 0 Critical / 1 Warning (W1 chunked-body 413 buffering) / 6 Suggestions. project-state → P6. PR #12 marked ready for review; merge is the user's call. Roadmap step 2 (API) is complete pending merge."
+  intent: "User (2026-09-12): '2で進みましょう' = api-render P5 first, then one combined P6 Check. Both done on feature/npc. Check verdict pass (docs/reviews/2026-09-12-api-and-pipeline-p6-review.md): 0 Critical / 1 Warning (W1 chunked-body 413 buffering) / 6 Suggestions. project-state → P6. PR #12 marked ready for review; merge is the user's call. Roadmap step 2 (API) is complete pending merge. Meanwhile main (PR #13, issue #11) pivoted the first doc-type from circle-monthly-report to a to-be-specified 部会ログ (meeting log); that pivot is docs-only (charter/ADR-0001/annotations) and does not touch src/entex/ or this branch's diff, so merging origin/main into feature/npc to resolve PR #12's conflict is safe."
   turn_estimate: 1
   chat_id_hint: "entex-p6-review-api-pipeline"
 
@@ -12,13 +12,14 @@ navigation:
   active_thread_id: "api-pipeline"
   active_plan: ""   # both plans Check pass; next plan is created at roadmap step 3 P3/P4
   next_actions:
-    - "User: merge PR #12 (feature/npc → main). After merge, run `make docker-serve` once in the user's Docker env to eyeball the container start (only UAT item not exercised here — no Docker on this host)"
-    - "Roadmap step 3 (second doc-type = charter §6 pass/fail 'zero changes under src/entex/'): P3 design-deliberate/design-record. Fold in review S2 (RenderResult.title so the API stops calling load_package twice) and use GET /v1/doc-types as the judgment signal"
+    - "User: merge PR #12 (feature/npc → main) now that the merge conflict with main (PR #13, issue #11 doc-type pivot) is resolved. After merge, run `make docker-serve` once in the user's Docker env to eyeball the container start (only UAT item not exercised here — no Docker on this host)"
+    - "Roadmap step 3 (second doc-type = charter §6 pass/fail 'zero changes under src/entex/'): P3 design-deliberate/design-record. Fold in review S2 (RenderResult.title so the API stops calling load_package twice) and use GET /v1/doc-types as the judgment signal. NOTE: the 'second doc-type' judgment now uses the pivoted 部会ログ format (issue #11, ADR-0001), not circle-monthly-report — await the user's concrete meeting-log format before drafting 要求.md"
     - "Small patches (patch-reference first): W1 stream body in read_ir_body + chunked oversize test (with the auth/public-deploy plan); S1 fix api.md §3.1 sentence '新しい例外型は増やさない' (status untouched); S4 is_valid_slug → fullmatch together with old S2 (pattern fullmatch, 1 line in ir-type-vocabulary.md)"
     - "Nice-to-have tests: S3 internal-error safety net (TestClient raise_server_exceptions=False), S5 Settings validation; S6 measure NFR-A1 with ENTEX_MAX_CONCURRENT_RENDERS=4 in Docker; Starlette httpx→httpx2 only if CI turns warnings into errors"
     - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. Next work should start a fresh branch from main after PR #12 merges"
-    - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/ only (layout UAT still pending)"
-  blockers: []
+    - "packages/circle-monthly-report/ and docs/requirements/circle-monthly-report/ are now reference-only (annotated by PR #13); the real circle-monthly-report Word form is no longer being sought — superseded by the 部会ログ pivot (issue #11, ADR-0001). Await user's meeting-log format details before a new P1 要求.md"
+  blockers:
+    - "部会ログの実物様式情報待ち（ユーザー提示予定、issue #11・ADR-0001）"
 
 alignment:
   project_state_path: docs/project-state.yaml

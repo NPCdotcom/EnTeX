@@ -135,4 +135,4 @@ charter §7 で既に確定済みのため、この設計で新規のフレー�
 
 - [x] P3 ゲート → [`.agents/plans/algorithms/ir-validate-and-derive.md`](../../../.agents/plans/algorithms/ir-validate-and-derive.md) と [`.agents/plans/programs/render-and-cli.md`](../../../.agents/plans/programs/render-and-cli.md)（2026-09-12、ユーザー指示「P3の設計に従って実装に入ってください」を PM 確認として記録）
 - [x] P6 レビュー（`review-conduct`）→ [docs/reviews/2026-09-12-renderer-cli-p6-review.md](../../reviews/2026-09-12-renderer-cli-p6-review.md)（pass。Warning W1/W2 と本表の IF 追従 S1 は Act で扱う）
-- [ ] 実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す
+- [x] ~~実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す~~ → **不要になった**（2026-09-12、issue #11）。月次報告書を学生課へ提出する運用自体が存在しないと判明し、最初の文書種を「サークル部会ログのフォーマット化」に差し替えた（[ADR-0001](../../adr/0001-first-doc-type-pivot-to-meeting-log.md)）。この renderer 設計・実装（モジュール分割・IF・エラー方針）は文書種の中身に依存しないため変更不要。次は部会ログの実物様式が提示され次第、`docs/requirements/`配下でP1からやり直し、必要ならこの設計に照合する

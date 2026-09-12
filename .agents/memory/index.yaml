@@ -61,20 +61,30 @@ entries:
     tier: knowledge
     granularity: thread
     path: docs/requirements/circle-monthly-report/要求.md
-    summary: "P1 要求 for the first doc-type (サークル月次報告書), grounded in charter §3/§5 and packages/circle-monthly-report/README.md"
-    tags: [requirements, P1, circle-monthly-report]
+    summary: "P1 要求 for the first doc-type (サークル月次報告書), grounded in charter §3/§5 and packages/circle-monthly-report/README.md. SUPERSEDED as production target by ADR-0001 (2026-09-12, issue #11) — kept as reference; new doc-type is 部会ログ"
+    tags: [requirements, P1, circle-monthly-report, superseded]
     recall: on_demand
-    linked: [project-state]
+    linked: [project-state, adr-0001-meeting-log-pivot]
 
   - id: reqspec-circle-monthly-report
     scope: project
     tier: knowledge
     granularity: thread
     path: docs/requirements/circle-monthly-report/要件.md
-    summary: "P2 要件 — FR1-FR8 (envelope/type検証・derived計算・escape・latexmk・CLI) + NFR1-2 (10秒以内・決定性), open items for P3"
-    tags: [requirements, P2, circle-monthly-report, renderer]
+    summary: "P2 要件 — FR1-FR8 (envelope/type検証・derived計算・escape・latexmk・CLI) + NFR1-2 (10秒以内・決定性), open items for P3. Content reference only; doc-type itself superseded by ADR-0001"
+    tags: [requirements, P2, circle-monthly-report, renderer, superseded]
     recall: on_demand
-    linked: [project-state, req-circle-monthly-report]
+    linked: [project-state, req-circle-monthly-report, adr-0001-meeting-log-pivot]
+
+  - id: adr-0001-meeting-log-pivot
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/adr/0001-first-doc-type-pivot-to-meeting-log.md
+    summary: "ADR-0001 (2026-09-12, issue #11): pivot first doc-type from circle-monthly-report (operation doesn't actually exist) to formatting the circle's 部会ログ (meeting log). renderer/pipeline/CLI/API untouched; impact confined to packages/circle-monthly-report/ + its requirements docs. Concrete format pending user input"
+    tags: [adr, decision, doc-type, pivot, issue-11]
+    recall: on_demand
+    linked: [project-state, req-circle-monthly-report, reqspec-circle-monthly-report, design-renderer]
 
   - id: design-renderer
     scope: project

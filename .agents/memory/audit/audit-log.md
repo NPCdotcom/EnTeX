@@ -241,3 +241,29 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 レビュー中の drive-by 修正なし。W1 はレビュー時に `TestClient` の chunked 送信で「413 は返る（機能は満たす）が全文バッファ後」であることを実機確認し、`uvicorn --help` に本文上限オプションが無いことも確認した。
 
 ---
+
+## 2026-09-12T04:10:00+00:00 | gate | recycle-first-doc-type
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `gate` |
+| **actor** | `user` |
+| **decision** | Recycle（最初の文書種の題材を差し替え） |
+| **phase** | P1（`circle-monthly-report`のH1要求）を再着手。着手順2（API化, H4）は影響なく継続 |
+| **summary** | ユーザーが issue #11 を受け「月次報告書の運用自体が存在しないことが発覚した」と報告し、方針をサークル内の部会ログのフォーマット化へ変更する指示。今回のターンでは、まずcharter §3/§5/§11・ADR-0001・project-state.yaml・docs/README.md・関連ドキュメントへの言及を更新し、部会ログの具体的な様式はユーザーからの追加情報を待って次のターンで反映する運びとした |
+| **reason** | PROJECT_LIFECYCLE.md「After P5+, may return to P1·P2·P3 for new needs · spec change」に該当。`renderer`/`entex.pipeline`/CLI/APIは文書種非依存の設計（charter §8）のため作り直し不要と判断し、current_phase・active_pdca（着手順2, H4）は変更せず、`open_blockers`に部会ログ様式待ちを追記するに留めた |
+
+### Refs
+
+- design: `docs/design/product/charter.md`（§3/§5/§11 更新）
+- design: `docs/adr/0001-first-doc-type-pivot-to-meeting-log.md`（新規）
+- team: `docs/project-state.yaml`（`open_blockers` 追加、`phase_note` に追記。`current_phase`/`gate_status.current`は着手順2の状態を維持）
+- requirements: `docs/requirements/circle-monthly-report/{要求,要件}.md`（冒頭に参考資料である旨の注記を追加）
+- packages: `packages/circle-monthly-report/README.md`（同上）
+- trace: `.agents/memory/state/nav.yaml`（session.intent, next_actions 更新）
+
+### Detail（任意）
+
+次アクション: ユーザーが部会ログの実物様式（頻度・欄構成など）を提示した時点で、`docs/requirements/`配下に新しいP1要求（`要求.md`）を起票する。`packages/circle-monthly-report/`を改修するか新規パッケージを起こすかはその時点で決める（ADR-0001 Open questions）。
+
+---
