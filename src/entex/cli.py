@@ -2,8 +2,8 @@
 
 Step 1 of the roadmap (charter §11): `entex render <json>` turns an IR file into a PDF.
 The CLI owns "read the JSON file" and "print the result"; validation, derivation,
-escaping and typesetting live in `entex.ir` / `entex.tex` / `entex.renderer`, which never
-learn where the IR came from (charter §8).
+escaping and typesetting are reached only through `entex.pipeline`, which never
+learns where the IR came from (charter §8, api.md §2).
 """
 
 from __future__ import annotations
@@ -26,11 +26,8 @@ from entex.errors import (
     PackageError,
     RenderError,
 )
-from entex.ir.derive import apply_derived
-from entex.ir.loader import load_and_validate
 from entex.packages import default_packages_dir
-from entex.renderer import build_tex
-from entex.renderer import render as render_pdf
+from entex.pipeline import normalize_job_name, render_ir
 
 app = typer.Typer(help="EnTeX — form input to fixed-format PDF via LaTeX.", no_args_is_help=True)
 
@@ -117,8 +114,10 @@ def render(
     ] = False,
 ) -> None:
     """IR の JSON から PDF を生成し、PDF のパスを標準出力に出す。"""
-    job_name = json_path.stem
-    out_dir = out if out is not None else DEFAULT_OUT_ROOT / job_name
+    # 出力ディレクトリはファイル名そのまま（利用者が探せる）。ジョブ名（.tex / .pdf の名前）は
+    # latexmk に渡るので、安全な文字だけに正規化する（P6 レビュー W1）
+    out_dir = out if out is not None else DEFAULT_OUT_ROOT / json_path.stem
+    job_name = normalize_job_name(json_path.stem)
     pkg_dir = packages_dir if packages_dir is not None else default_packages_dir()
 
     try:
@@ -132,15 +131,7 @@ def render(
         )
 
     try:
-        ir = load_and_validate(raw, pkg_dir)
-        content = apply_derived(ir.content, ir.package.schema)
-        if tex_only:
-            out_dir.mkdir(parents=True, exist_ok=True)
-            tex_path = out_dir / f"{job_name}.tex"
-            tex_path.write_text(build_tex(content, ir.package), encoding="utf-8", newline="\n")
-            typer.echo(str(tex_path))
-            return
-        pdf_path = render_pdf(content, ir.package, out_dir, job_name=job_name)
+        result = render_ir(raw, pkg_dir, out_dir, job_name=job_name, tex_only=tex_only)
     except (EnvelopeError, IRValidationError) as exc:
         _fail(exc.user_message, EXIT_INPUT_ERROR)
     except (PackageError, DerivationError) as exc:
@@ -151,7 +142,7 @@ def render(
     except EnTeXError as exc:  # pragma: no cover - 将来の分類漏れの安全網
         _fail(exc.user_message, EXIT_RENDER_ERROR)
 
-    typer.echo(str(pdf_path))
+    typer.echo(str(result.pdf_path if result.pdf_path is not None else result.tex_path))
 
 
 def _fail(message: str, code: int) -> NoReturn:
