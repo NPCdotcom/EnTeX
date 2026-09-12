@@ -22,9 +22,9 @@ navigation:
 
 alignment:
   project_state_path: docs/project-state.yaml
-  phase: P6
+  phase: P4
   scope_level: H4
-  gate_status: pending
+  gate_status: passed
 
 pressure:
   level: low
