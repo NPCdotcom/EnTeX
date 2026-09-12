@@ -37,7 +37,7 @@ Example（中立・削除可）: [_example/](_example/)
 |------|-------------|--------|---------|
 | [algorithms/ir-validate-and-derive](algorithms/ir-validate-and-derive.md) | H5 algorithm | agreed（Check pass） | 封筒・型検証・導出値計算（FR1–FR4、TeX 非依存） |
 | [programs/render-and-cli](programs/render-and-cli.md) | H4 program | agreed（Check pass） | エスケープ・テンプレ組み立て・latexmk・CLI `render`（FR5–FR8、NFR1–2） |
-| [programs/pipeline-and-cli](programs/pipeline-and-cli.md) | H4 program | agreed（Do 完了・Check 待ち） | `entex.pipeline.render_ir()` を導入し CLI を乗せ替え。P6 レビュー W1 / W2 / S1 / S3 を吸収 |
-| [programs/api-render](programs/api-render.md) | H4 program | agreed（Do 完了・Check 待ち） | `POST /v1/render` → PDF、RFC 9457 Problem Details、health / doc-types（着手順 2） |
+| [programs/pipeline-and-cli](programs/pipeline-and-cli.md) | H4 program | agreed（Check pass） | `entex.pipeline.render_ir()` を導入し CLI を乗せ替え。P6 レビュー W1 / W2 / S1 / S3 を吸収 |
+| [programs/api-render](programs/api-render.md) | H4 program | agreed（Check pass） | `POST /v1/render` → PDF、RFC 9457 Problem Details、health / doc-types（着手順 2） |
 
 Rules: `planning`, `plans-content`, `project-lifecycle`

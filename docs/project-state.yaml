@@ -2,8 +2,8 @@
 # Session navigation (every turn): .agents/memory/state/nav.yaml — see .agents/docs/PM_ROUTING.md
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
-current_phase: P5   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。両 plan の P5 Do 完了（2026-09-12、AC すべて検証済み、217 tests、ホスト uvicorn + curl で PDF 取得）。ユーザー判断「2で進みましょう」により Check は 2 plan まとめて 1 回。pipeline-and-cli は PR #10 で main にマージ済み、api-render は PR #12。次は P6 review-conduct（main の pipeline 差分 + PR #12）。"
+current_phase: P6   # P0|P1|P2|P3|P4|P5|P6
+phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）→ P5 Do 完了 → P6 Check pass（2026-09-12、docs/reviews/2026-09-12-api-and-pipeline-p6-review.md: Critical 0 / Warning 1 / Suggestion 6、217 tests、CI green）。pipeline-and-cli は PR #10 で main にマージ済み、api-render は PR #12（ready for review、マージはユーザー）。Warning W1（chunked 本文の 413 を stream 化）は公開配置（認証 plan）の前に入れる小パッチ。次は着手順3（2 文書種目 = charter §6 の合否判定）の P3 設計。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
@@ -17,19 +17,19 @@ active_pdca:      # primary S1 cycle (program or algorithm)
 # Stage-gate status (Gate Keeper = user)
 gate_status:
   current: passed         # pending | passed | conditional | recycled | hold | killed
-  proposal: "P5→P6: plan pipeline-and-cli（PR #10、マージ済み）+ api-render（PR #12）の Check（review-conduct）。Check pass 後に PR #12 を main へ（ユーザー）"
+  proposal: "P6 Check pass（2 plan 合同）。(1) PR #12 を main へ（ユーザー）。(2) 着手順3（2 文書種目）の P3 設計へ進む — charter §6 の合否判定『src/entex/ を触らずに文書種を足せるか』を /v1/doc-types で確認する。W1 / S1〜S6 はブロッカーではなく、認証 plan または着手順3 のついでに拾う"
   last_decision: "Go"
   last_decided_at: "2026-09-12"
   conditions: []
   gate_keeper: user       # fixed; PM proposes, user decides
 
-last_gate_passed: "P3→P4 (2026-09-12, user: api.md agreed + Go on the 2-plan split + pydantic>=2.9 approved)"
+last_gate_passed: "P3→P4 (2026-09-12, user: api.md agreed + Go on the 2-plan split + pydantic>=2.9 approved). P6 Check pass for both plans recorded 2026-09-12 (agent verdict; merge of PR #12 is the user's call)"
 allowed_actions:
-  - design-deliberate
+  - design-deliberate    # 着手順3（2 文書種目）の P3
   - design-record
   - plan-record
-  - implement-conduct    # pipeline-and-cli → api-render の順
-  - review-conduct
+  - patch-conduct        # W1 / S1 の小パッチ
+  - review-record
 
 open_blockers: []
 

@@ -276,4 +276,4 @@ charter §7 で FastAPI は確定済み。新規選定なし。
 - [x] P3 ゲート → `status: agreed`（2026-09-12）→ [`.agents/plans/programs/pipeline-and-cli.md`](../../../.agents/plans/programs/pipeline-and-cli.md)・[`.agents/plans/programs/api-render.md`](../../../.agents/plans/programs/api-render.md)
 - [x] `docs/project-state.yaml` の `scope_focus.path` をこの文書へ
 - [x] §9 Open のうち plan 側で決めるもの: 認証トークン（`api-render` の Out of scope に置き、別 plan）、`RenderTimeoutError`（`api-render` で分けた）
-- [ ] P6 Check（`pipeline-and-cli` と `api-render` をまとめて。ユーザー判断 2026-09-12「2 で進みましょう」）
+- [x] P6 Check（`pipeline-and-cli` と `api-render` をまとめて。ユーザー判断 2026-09-12「2 で進みましょう」）→ pass: [docs/reviews/2026-09-12-api-and-pipeline-p6-review.md](../../reviews/2026-09-12-api-and-pipeline-p6-review.md)（W1: chunked 本文の 413 を stream 化 — 公開配置前。S1: §3.1「新しい例外型は増やさない」の 1 文が §3.3 / §9 と矛盾）
