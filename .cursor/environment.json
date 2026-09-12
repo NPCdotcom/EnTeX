@@ -1,0 +1,11 @@
+{
+  "name": "EnTeX dev (single image)",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "install": "pip install -e '.[dev]'\nmake hooks",
+  "ports": [
+    { "name": "api", "port": 8000 }
+  ]
+}
