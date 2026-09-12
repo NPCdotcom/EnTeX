@@ -53,7 +53,15 @@ charter §5 のMVPおよび§11の着手順1は、最初の文書種（doc-packa
 
 ## Open questions
 
-- 部会ログの具体的な様式（頻度・欄構成・行数の上限・保管形態・承認/確認のフロー有無）。ユーザーから提示される情報待ち。
-- `packages/circle-monthly-report/` を改修するか、新規パッケージとして追加するか（上記Decision参照）。
-- `docs/design/elements/ir-type-vocabulary.md` §7（時刻・小数・写真など、月次報告書1本では語彙に入れなかった型）を部会ログの実物に照らして再判定する必要があるか。
-- 部会ログのフォーマット化は charter §11 着手順3「文書種を2つに増やす」の2つ目として扱うのか、それとも1つ目を差し替えるのかは、パッケージの扱い（上記Open question）と合わせて決める。
+**すべて解決済み**（2026-09-12）。[issue #14](https://github.com/NPCdotcom/EnTeX/issues/14) の実物47本の全数集計で様式が判明し、残りもそこから決まった。本ADRの Decision そのものは変わっていない。以下は消し込みの記録であり、各項の正本は charter の該当節である。
+
+| 当時の問い | 答え | 正本 |
+|---|---|---|
+| 部会ログの具体的な様式（頻度・欄構成・行数の上限・保管形態・承認フローの有無） | 頻度は週1回程度。メタ情報はNotionのページプロパティ3つ。節は3つ（アナウンス44・活動報告34・次回予告4）に収束。本文主体のため行数の上限は無し。承認・確認のフローは無い | charter §3 のAsterの追記 |
+| `packages/circle-monthly-report/` を改修するか、新規パッケージとして追加するか | **新規 `club-meeting-log` を起こす。** 月次報告書は欄が並ぶ書類、部会ログは本文主体で、共通する欄がほぼ無い。`circle-monthly-report` は型語彙を一通り使う参考資料として上書きせず残す | charter §11 決着済み |
+| `ir-type-vocabulary.md` §7 を再判定する必要があるか | **一部要る。** `image` は前倒しが必要（直近の回ほど画像が主役で、最新の回は本文がほぼ画像だけ）。`time` / 小数 / 表は実測0件のため据え置きでよい。加えて本文用に `document` 型を足す | [issue #21](https://github.com/NPCdotcom/EnTeX/issues/21) |
+| 着手順3の2つ目として扱うか、1つ目を差し替えるか | **1つ目の差し替え。** `circle-monthly-report` は実物に基づかないため charter §6 の合否判定の材料にならない。判定は実物に基づく2つ目（着手順3b）で行う | charter §11 着手順 |
+
+上の Assumptions のうち「`packages/circle-monthly-report/` を土台に改修する方が、ゼロから新規パッケージを作るより手戻りが少ない」は**外れた**。実物の欄構成が想定と重ならず、新設の方が単純だった。同じ項が但し書きで残していた可能性の方が当たったことになる。
+
+様式が判明した後、入力形式そのものも決まっている（Notionのエクスポートを第一の経路にし、メタ情報を人間に書かせない）。本ADRの範囲外だが、`docs/requirements/club-meeting-log/` のP1要求定義はその前提で書く。詳細は charter §5.2 と [issue #20](https://github.com/NPCdotcom/EnTeX/issues/20)。
