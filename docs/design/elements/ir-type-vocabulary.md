@@ -171,7 +171,7 @@ authors:
 
 #### 決めたこと 2 つ
 
-**空の節を PDF から落とすのは、テンプレートの責務にする。** 実物では次回予告が47本中4本にしかなく、空の見出しが並ぶと体裁が崩れる。ただし「見出しごと落とすか、`特になし` と書くか」は体裁の判断であり、§5 の分担ではパッケージ側にある。`src/entex/` は **空の節をキーごと出さない**ことだけを保証し、テンプレートが `{% if "next_notice" in body.sections %}` で分ける。`omit_when_empty` のような属性は足さない。
+**空の節を PDF から落とすのは、テンプレートの責務にする。** 実物では次回予告が47本中4本にしかなく、空の見出しが並ぶと体裁が崩れる。ただし「見出しごと落とすか、`特になし` と書くか」は体裁の判断であり、§5 の分担ではパッケージ側にある。`src/entex/` は空の節を IR に持たせないことだけを保証し、テンプレートへは宣言順に並べた配列（無い節は `blocks` が空）で渡す。落とすかどうかはテンプレートが `\BLOCK{if sec.blocks}` で決める。`omit_when_empty` のような属性は足さない。
 
 **`rich_text` は残す。** 表現力では `document` が `rich_text` を包むので統合はできるが、`circle-monthly-report` の `schema.json` と IR 例12件を書き換えることになり、型の変更なので `schema_version` も上げる（§6.1）。得られるのは型が1つ減ることだけで、割に合わない。新しい文書種では `document` を使い、統合するかは2つ目の実物（着手順3b）で再判定する。
 
@@ -252,6 +252,7 @@ MVP は画像なしの過去ログ（47本中37本が画像0枚）で切って�
 | `enum` | `value` の検証 | `label` の表示 |
 | `boolean` | 妥当性検証のみ | 「済 / 未」「☑ / ☐」 |
 | `row_list` | 行数・各セルの検証とエスケープ | `tabular` の列定義、罫線 |
+| `list` | 要素数・各要素の検証とエスケープ | `itemize` 等への展開、区切り記号 |
 
 日付・金額の整形を `src/entex/` に入れたくなるが、それは体裁の知識である。Jinja2 フィルタとして提供するのは構わないが、**どのフィルタを使うかはテンプレートが選ぶ**。
 
@@ -341,7 +342,7 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 
 ### 6.2 部会ログの IR 例（`document` を使う）
 
-最初の文書種（`club-meeting-log`、charter §5）の例。封筒つきの全体を示す。パッケージ自体は [issue #22](https://github.com/NPCdotcom/EnTeX/issues/22) でこれから作る。
+最初の文書種（`club-meeting-log`、charter §5）の例。封筒つきの全体を示す。パッケージは [issue #22](https://github.com/NPCdotcom/EnTeX/issues/22) で作った（`packages/club-meeting-log/`）。
 
 ```json
 {
@@ -450,7 +451,7 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 
 ## Open
 
-- `packages/club-meeting-log/schema.json` のフィールドを確定する（[issue #22](https://github.com/NPCdotcom/EnTeX/issues/22)）。材料は実物47本の集計で揃っている。**これが先**
+- ~~`packages/club-meeting-log/schema.json` のフィールドを確定する（[issue #22](https://github.com/NPCdotcom/EnTeX/issues/22)）。材料は実物47本の集計で揃っている。**最優先で決めるべき事項**~~ → 決着（#22 で確定。実装は #30）
 - §4 の `expr` の語彙（sum / count / add / sub）が足りるか。部会ログに会計が無いので**当面使われない**。確かめる機会は、会計を持つ文書種（決算書・予算書）が来るまで無い
 - `text` の `max_length` を文書種パッケージが決めるのは正しいか（体裁の知識なので正しいはずだが、フォームの UX とも絡む）
 - `document` の `image` の `src` が何を指すか（アップロード済みファイルの ID か相対パスか）と、その保存方式。着手順3aの後半で決める（§2.8・charter §11 Open）

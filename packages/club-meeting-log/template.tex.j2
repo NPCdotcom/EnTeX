@@ -4,8 +4,7 @@
 %#               schema（title・label など）
 %# 体裁の値（余白・見出し・引用や画像の見せ方・団体名）は style/club-meeting-log.sty に置く
 %#
-%# 【前提】このテンプレートは `document` 型が src/entex/ に実装されたときに通る。
-%# 実装側に求める形は README.md の「テンプレートが前提にしている context」に書いた。
+%# 渡される context の形は README.md の「テンプレートが前提にしている context」が正本（`src/entex/renderer.py` の `shape_documents` が作る）。
 %# --- 行内（spans）。href の付いた span だけがリンクになる ---------------------
 \BLOCK{macro spans(ss)}\BLOCK{for s in ss}\BLOCK{if s.href is defined}\logLink{\VAR{s.text}}{\VAR{s.href}}\BLOCK{else}\VAR{s.text}\BLOCK{endif}\BLOCK{endfor}\BLOCK{endmacro}
 %#
