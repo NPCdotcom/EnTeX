@@ -30,4 +30,5 @@ RUN pip install --no-cache-dir -e ".[dev]"
 COPY . .
 
 EXPOSE 8000
-CMD ["entex", "--help"]
+# API（charter §11 着手順 2）。CLI は `docker compose run --rm dev entex ...` で呼ぶ
+CMD ["uvicorn", "entex.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
