@@ -4,14 +4,16 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "P0 charter filled; dev env scaffolded; harness+git conventions ported from dip; awaiting user Go to P1 / roadmap step 1"
-  turn_estimate: 3
-  chat_id_hint: "entex-env"
+  intent: "IR type vocabulary reviewed and written to docs/design/elements/ir-type-vocabulary.md (draft, branch 5/npc/ir_type_vocabulary, uncommitted); awaiting NPC/Aster review and P0 Go"
+  turn_estimate: 4
+  chat_id_hint: "entex-ir-types"
 
 navigation:
-  active_thread_id: "harness-from-dip"
+  active_thread_id: "ir-type-vocabulary"
   active_plan: ""
   next_actions:
+    - "NPC: create issue for IR type vocabulary; rename branch if number != 5 (`git branch -m`); commit `docs:IRの型の語彙を精査する` and open PR"
+    - "Obtain the real circle monthly report (Word) and fix §6 fields of ir-type-vocabulary.md; decide derived-values A/B (§4)"
     - "User decides P0 gate (proposal: Go). Then 要求 for first doc-type: サークル月次報告書"
     - "Roadmap step 1: `entex render <json>` with first doc-package under packages/ (CLI JSON→PDF)"
     - "WSL clone ~/EnTeX has no GitHub SSH key — add key or use credential helper before pushing from WSL"
