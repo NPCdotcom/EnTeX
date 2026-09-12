@@ -12,7 +12,7 @@ navigation:
   active_thread_id: "club-meeting-log-markdown-input"
   active_plan: ""   # step-2 plans both Check pass; next plan is created at roadmap step 3a (club-meeting-log) P3/P4
   next_actions:
-    - "Await NPC/Aster review+merge of charter PR #17 (issue #14 §5 checkbox (1)). Merge = agreement on §3-(1). `@coderabbitai review` already posted; re-post after each push"
+    - "Await NPC/Aster review+merge of charter PR #17 (issue #14 §5 checkbox (1)). Merge = agreement on §3-(1)."
     - "Follow-up PR (issue #14 §3-(2)(3)): docs/design/elements/ir-type-vocabulary.md — add `document` type (sections/extra_sections/blocks/max_heading_level; blocks heading/paragraph/list/quote/link/image), move `image` §7 → 「次に入れる」, keep time/小数/表 excluded (0 occurrences in 47 logs). Charter §5.1 already points there. Fold in old S2/S4 (pattern / is_valid_slug → fullmatch, 1 line)"
     - "Follow-up: ADR-0001 Open questions are all answered by issue #14 — add a pointer/amendment (or ADR-0002 for the input-format decision). docs/TEAM.md: packages/=aster, src/entex/=npc split (charter §6 now refers to it)"
     - "Roadmap step 3a (charter §11 after PR #17): new P1 要求.md for club-meeting-log under docs/requirements/, then P3 design for document type validation + Markdown → IR importer (data-import) + block TeX expansion (npc) and packages/club-meeting-log/ (aster). Image-less past logs first, `image` next. Open implementation issues per issue #14 §4"
