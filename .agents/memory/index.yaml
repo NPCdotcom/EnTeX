@@ -76,6 +76,16 @@ entries:
     recall: on_demand
     linked: [project-state, req-circle-monthly-report]
 
+  - id: design-renderer
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/design/programs/renderer.md
+    summary: "P3 basic design (H4) for renderer — module split, interfaces, error mapping, provisional template layout policy, P4 plan split recommendation (ir-validate-and-derive / render-and-cli). Session stopped here by explicit user request; implementation deferred to a separate agent."
+    tags: [design, P3, H4, renderer, handoff]
+    recall: on_demand
+    linked: [project-state, reqspec-circle-monthly-report]
+
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
   #   scope: project

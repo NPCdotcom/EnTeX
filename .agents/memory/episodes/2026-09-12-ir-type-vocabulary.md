@@ -66,3 +66,18 @@ NPC proposed 11 IR types (`text` `rich_text` `month` `date` `integer` `money` `e
 ### Next
 
 - P3 basic design: `docs/design/programs/renderer.md` (H4) — resolve the 3 Open items above, then `plan-record` (P4).
+
+## Turn 5 (same day): P3 renderer design, then explicit stop
+
+- User: "次に進んでほしいのですが、実装ではなく設計で止めてください。実装は別のエージェントに行わせたいです。" — proceed to next step (P3), but stop before implementation; a separate agent will implement.
+- Wrote `docs/design/programs/renderer.md` (P3, H4): 5-module split (`ir/loader.py`, `ir/derive.py`, `tex/escape.py`, `renderer.py`, `cli.py`) with a data-flow diagram and an interface table (function signatures as design intent, not code); resolved the 3 要件.md Open items:
+  - Plan split: `ir-validate-and-derive` (H5, FR1-4, TeX-independent, `make test`-able) and `render-and-cli` (H4, FR5-8, needs `make docker-test`)
+  - Error mapping (FR7): 4-way classification (`EnvelopeError`/`ValidationError`/`DerivationError`/`RenderError`), generic Japanese message for latexmk failures with raw log server-side only
+  - Provisional `template.tex.j2` layout: `ltjsarticle`, field order follows `schema.json` declaration order, variable-length `tabular` (not fixed to `max_items`), all styling values live in `packages/circle-monthly-report/` per AGENTS.md
+- **Explicitly stopped here per user instruction.** `docs/project-state.yaml`: `current_phase: P3`, `allowed_actions` still design-only (no `plan-record`/`implement-conduct` uncommented), added `gate_status.conditions` noting the handoff boundary. Audit log entry `phase_change` (p2-to-p3-stop) records the user's explicit "design only" instruction as the reason plan/implementation are deferred.
+- Left explicit handoff notes in both `renderer.md`'s 次 section and `nav.yaml.next_actions` for whichever agent/session picks up `plan-record`.
+
+### Next (for a different, later agent/session)
+
+- `plan-record` (P4) for `ir-validate-and-derive` and `render-and-cli`, with PM user confirmation per PROJECT_LIFECYCLE.md gate table, then `implement-conduct` (P5).
+- This session/agent should not perform those steps unless the user explicitly re-authorizes it here.

@@ -4,7 +4,7 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "P0 gate = Go (user, 2026-09-12). 要求.md (P1) and 要件.md (P2, FR1-FR8/NFR1-2) written for circle-monthly-report. Next: P3 basic design for renderer, then plan-record (P4) before implement-conduct."
+  intent: "P0 gate = Go (user, 2026-09-12). 要求.md(P1) → 要件.md(P2) → renderer.md(P3, H4) all written. User explicitly asked to STOP at design: plan-record(P4) and implement-conduct(P5) are deferred to a separate agent/session."
   turn_estimate: 5
   chat_id_hint: "entex-ir-types"
 
@@ -12,18 +12,18 @@ navigation:
   active_thread_id: "ir-type-vocabulary"
   active_plan: ""
   next_actions:
-    - "docs/requirements/circle-monthly-report/要件.md written (P2) — user review, then P3 basic design docs/design/programs/renderer.md (H4)"
-    - "P3 doc should resolve Open items in 要件.md: split FR1-FR8 into 1-2 plan-sized units (candidates: (a) FR1-FR4 IR検証+導出計算, (b) FR5-FR8 escape+template+latexmk+CLI), decide template.tex.j2 provisional layout policy, decide FR7 latexmk→日本語 error mapping approach"
-    - "Then plan-record (P4) before any implement-conduct; renderer build order once plan agreed: pydantic loader for schema.json (案1) → envelope check → expr evaluator (derived) → TeX escape → template.tex.j2 (provisional layout ok) → latexmk wrapper; target examples/valid/01-typical.json first"
-    - "Obtain the real circle monthly report (Word) to fix packages/circle-monthly-report/schema.json and template.tex.j2 later — does not block P3/P4 above"
+    - "STOP HERE for this agent/session: do not run plan-record or implement-conduct unless the user explicitly re-authorizes it in this session"
+    - "Handoff for the next (implementation) agent: read docs/design/programs/renderer.md 次節— plan-record two plans: `ir-validate-and-derive` (H5, FR1-4, TeX-independent, testable via `make test`) and `render-and-cli` (H4, FR5-8, needs `make docker-test`)"
+    - "Handoff note: plan-record still needs PM user confirmation before status:agreed (PROJECT_LIFECYCLE.md gate table), even though the design condition (H4 parent linkable) is now met"
+    - "Obtain the real circle monthly report (Word) to fix packages/circle-monthly-report/schema.json and template.tex.j2 later — does not block plan-record/implementation"
     - "NPC: open PR for 5/npc/ir_type_vocabulary manually (no gh CLI on this host); post `@coderabbitai review` on new pushes"
     - "WSL clone ~/EnTeX has no GitHub SSH key — add key or use credential helper before pushing from WSL"
   blockers: []
 
 alignment:
   project_state_path: docs/project-state.yaml
-  phase: P2
-  scope_level: H1
+  phase: P3
+  scope_level: H4
   gate_status: passed
 
 pressure:
