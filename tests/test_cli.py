@@ -76,6 +76,20 @@ def test_render_broken_package_is_a_package_error(tmp_path: Path) -> None:
     assert "circle-monthly-report" in result.stderr
 
 
+def test_render_missing_template_is_a_package_error(tmp_path: Path) -> None:
+    """template.tex.j2 の欠落は作者向け（exit 3）。組版失敗（exit 2）にしない（P6 レビュー W2）。"""
+    pkgs = tmp_path / "packages"
+    shutil.copytree(EXAMPLES_DIR.parent, pkgs / "circle-monthly-report")
+    (pkgs / "circle-monthly-report" / "template.tex.j2").unlink()
+    src = EXAMPLES_DIR / "valid" / "01-typical.json"
+    result = runner.invoke(
+        app, ["render", str(src), "--out", str(tmp_path / "out"), "--packages-dir", str(pkgs)]
+    )
+    assert result.exit_code == EXIT_PACKAGE_ERROR
+    assert "template.tex.j2" in result.stderr
+    assert not (tmp_path / "out").exists(), "パッケージ不備なのに出力ディレクトリを作っている"
+
+
 def test_render_tex_only_writes_tex_without_latexmk(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -86,6 +100,47 @@ def test_render_tex_only_writes_tex_without_latexmk(
     tex_path = Path(result.stdout.strip())
     assert tex_path == tmp_path / "01-typical.tex"
     assert "青葉大学 軽音楽サークル" in tex_path.read_text(encoding="utf-8")
+
+
+# --- W1: ファイル名が latexmk に渡せない文字を含んでも落ちない -------------------------------
+
+# (JSON のファイル名, 期待する .tex / .pdf の stem)
+ODD_FILENAMES = [
+    ("-dash.json", "dash"),
+    ("pct%hash#.json", "pct-hash"),
+    ("報告 8月.json", "8"),
+    ("報告書.json", "document"),
+]
+
+
+@pytest.mark.parametrize(("filename", "stem"), ODD_FILENAMES)
+def test_render_tex_only_normalizes_odd_filenames(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, filename: str, stem: str
+) -> None:
+    monkeypatch.setenv("PATH", str(tmp_path / "empty"))
+    src = tmp_path / filename
+    src.write_text(json.dumps(load_example("valid/02-minimal.json")), encoding="utf-8")
+    out_dir = tmp_path / "out"
+    result = runner.invoke(app, ["render", str(src), "--out", str(out_dir), "--tex-only"])
+    assert result.exit_code == 0, result.stderr
+    tex_path = Path(result.stdout.strip())
+    assert tex_path == out_dir / f"{stem}.tex"
+    assert tex_path.is_file()
+
+
+def test_render_default_out_dir_keeps_original_stem(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """出力ディレクトリは元のファイル名のまま（利用者が探せる）。正規化はジョブ名だけ。"""
+    monkeypatch.setenv("PATH", str(tmp_path / "empty"))
+    monkeypatch.chdir(tmp_path)
+    shutil.copytree(EXAMPLES_DIR.parent, tmp_path / "packages" / "circle-monthly-report")
+    src = tmp_path / "報告 8月.json"
+    src.write_text(json.dumps(load_example("valid/02-minimal.json")), encoding="utf-8")
+    result = runner.invoke(app, ["render", str(src), "--tex-only"])
+    assert result.exit_code == 0, result.stderr
+    assert Path(result.stdout.strip()) == Path("out/render/報告 8月/8.tex")
+    assert (tmp_path / "out/render/報告 8月/8.tex").is_file()
 
 
 # --- FR7 at the CLI boundary（偽の latexmk） -------------------------------------------
@@ -127,6 +182,20 @@ def test_render_typical_prints_pdf_path(tmp_path: Path) -> None:
     assert result.exit_code == 0, result.stderr
     pdf = Path(result.stdout.strip())
     assert pdf == tmp_path / "01-typical.pdf"
+    assert pdf.is_file() and pdf.read_bytes().startswith(b"%PDF-")
+
+
+@requires_tex
+@pytest.mark.parametrize(("filename", "stem"), ODD_FILENAMES)
+def test_render_odd_filenames_produce_pdf(tmp_path: Path, filename: str, stem: str) -> None:
+    """AC2: P6 レビューで exit 2 になっていたファイル名で PDF が出る。"""
+    src = tmp_path / filename
+    src.write_text(json.dumps(load_example("valid/02-minimal.json")), encoding="utf-8")
+    out_dir = tmp_path / "out"
+    result = runner.invoke(app, ["render", str(src), "--out", str(out_dir)])
+    assert result.exit_code == 0, result.stderr
+    pdf = Path(result.stdout.strip())
+    assert pdf == out_dir / f"{stem}.pdf"
     assert pdf.is_file() and pdf.read_bytes().startswith(b"%PDF-")
 
 

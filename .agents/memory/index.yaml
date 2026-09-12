@@ -91,7 +91,7 @@ entries:
     tier: knowledge
     granularity: thread
     path: .agents/plans/algorithms/ir-validate-and-derive.md
-    summary: "P4 plan (H5) FR1–FR4 — envelope/type validation + derived values. Do complete 2026-09-12; AC1–5 covered by tests/test_ir_*.py"
+    summary: "P4 plan (H5) FR1–FR4 — envelope/type validation + derived values. Do + Check complete 2026-09-12 (pass); AC1–5 covered by tests/test_ir_*.py"
     tags: [plan, P4, P5, H5, ir-schema]
     recall: on_demand
     linked: [design-renderer, project-state]
@@ -101,7 +101,7 @@ entries:
     tier: knowledge
     granularity: thread
     path: .agents/plans/programs/render-and-cli.md
-    summary: "P4 plan (H4) FR5–FR8, NFR1–2 — escape, template, latexmk, CLI render. Do complete 2026-09-12; awaiting P6 review"
+    summary: "P4 plan (H4) FR5–FR8, NFR1–2 — escape, template, latexmk, CLI render. Do + Check complete 2026-09-12 (pass; W1 job name, W2 missing template → Act)"
     tags: [plan, P4, P5, H4, renderer, cli]
     recall: on_demand
     linked: [design-renderer, project-state]
@@ -115,6 +115,66 @@ entries:
     tags: [renderer, P5, implementation]
     recall: on_demand
     linked: [plan-render-and-cli, plan-ir-validate-and-derive]
+
+  - id: review-renderer-cli-p6
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/reviews/2026-09-12-renderer-cli-p6-review.md
+    summary: "P6 review of PR #8 (renderer/CLI): RTM FR1–8/NFR1–2 all pass; W1 latexmk job name from file stem, W2 missing template → exit 2; S1–S4 suggestions"
+    tags: [review, P6, renderer, cli]
+    recall: on_demand
+    linked: [plan-render-and-cli, plan-ir-validate-and-derive, design-renderer]
+
+  - id: design-api
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/design/programs/api.md
+    summary: "P3 design (H4, agreed 2026-09-12) for roadmap step 2 — entex.pipeline shared by CLI/API, POST /v1/render → PDF, RFC 9457 Problem Details, sync def + semaphore, P4 split pipeline-and-cli / api-render"
+    tags: [design, P3, H4, api, pipeline]
+    recall: on_demand
+    linked: [design-renderer, review-renderer-cli-p6, project-state, plan-pipeline-and-cli, plan-api-render]
+
+  - id: plan-pipeline-and-cli
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/programs/pipeline-and-cli.md
+    summary: "P4 plan (H4, agreed; P5 Do done 2026-09-12, AC1–AC5 verified, Check pending) — entex.pipeline.render_ir/prepare, CLI on top, absorbs review W1 (job name) / W2 (missing template → PackageError) / S1 (renderer.md IF) / S3 (TEXINPUTS). TeX-independent"
+    tags: [plan, P4, P5, H4, pipeline, cli]
+    recall: on_demand
+    linked: [design-api, review-renderer-cli-p6, project-state, ep-p5-pipeline-and-cli]
+
+  - id: plan-api-render
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/programs/api-render.md
+    summary: "P4 plan (H4, agreed) — FastAPI POST /v1/render → PDF, /v1/health, /v1/doc-types*, RFC 9457 problems, settings, schemas/api, Dockerfile CMD. Depends on pipeline-and-cli. Auth out of scope"
+    tags: [plan, P4, H4, api]
+    recall: on_demand
+    linked: [design-api, plan-pipeline-and-cli, project-state]
+
+  - id: ep-p6-review-and-api-design
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-p6-review-and-api-design.md
+    summary: "P6 review pass + API P3 design on branch feature/npc; W1/W2 deferred into pipeline plan; branch name vs AGENTS.md rule"
+    tags: [review, api, P6, P3]
+    recall: on_demand
+    linked: [review-renderer-cli-p6, design-api]
+
+  - id: ep-p5-pipeline-and-cli
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-p5-pipeline-and-cli.md
+    summary: "P5 Do of pipeline-and-cli on feature/npc (PR #10): entex.pipeline new, CLI via pipeline only, W1/W2/S1/S3 fixed, 168 tests pass on TeX host; pct-hash (no trailing dash) deviation noted"
+    tags: [implement, P5, pipeline, cli]
+    recall: on_demand
+    linked: [plan-pipeline-and-cli, design-api, design-renderer]
 
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons

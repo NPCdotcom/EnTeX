@@ -1,7 +1,7 @@
 ---
 title: ir-validate-and-derive — 封筒・型検証と導出値計算
 kind: plan
-status: agreed   # Do 完了（2026-09-12）。P6 review 後に superseded/closed を判断
+status: agreed   # Do・Check 完了（2026-09-12、pass）。Act の残りは S2 のみ
 scope_level: algorithm
 pdca_class: S1
 pdca_eligible: true
@@ -100,6 +100,7 @@ parent_hierarchy:
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。実装は同日中に着手 |
 | 2026-09-12 | on_track | Do 完了。AC1–AC5 すべてテストで担保。P6 レビュー待ち |
+| 2026-09-12 | done | P6 Check pass。残りは Suggestion S2（`pattern` の一致方式の明記）のみ |
 
 ## PDCA log
 
@@ -107,3 +108,4 @@ parent_hierarchy:
 |------|-------|------|
 | 2026-09-12 | Plan | renderer.md の分割案どおり起票。方式は案2（静的 pydantic + 型別検証関数）に決定 |
 | 2026-09-12 | Do | 実装: `src/entex/errors.py`・`packages.py`・`ir/{schema,validate,loader,derive}.py`、`schemas/ir/envelope.schema.json`（pydantic から生成、同期テストあり）。テスト 74 件（`tests/test_ir_*.py`）。設計からの差分: `ir/loader.py` の型検証部を `ir/validate.py` に分離し、`schema.json` のモデルを `ir/schema.py` に置いた（境界は変えていない）。`expr` の参照先検査（前方参照・循環・任意項目の default 必須）はパッケージ読み込み時に行う |
+| 2026-09-12 | Check | **pass** — FR1–FR4 の AC1–AC5 すべてテストで根拠あり（UT/IT/UAT）。Critical なし。Suggestion: `pattern` の `re.search`（部分一致）を語彙文書で明記または `fullmatch` に（S2）。詳細: [docs/reviews/2026-09-12-renderer-cli-p6-review.md](../../../docs/reviews/2026-09-12-renderer-cli-p6-review.md) |

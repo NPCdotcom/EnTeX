@@ -5,7 +5,7 @@
 | パス | 内容 |
 |------|------|
 | `ir/envelope.schema.json` | IR の封筒（`doc_type` / `schema_version` / `content`）。正本は `src/entex/ir/loader.py` の `Envelope`（pydantic）で、`python -m entex.ir.loader` で再生成する。ズレはテストで検知する |
-| `api/`（予定） | API の入出力（着手順 2 で OpenAPI を生成して置く） |
+| `api/`（予定） | API の入出力（着手順 2 で OpenAPI と Problem Details の JSON Schema を生成して置く。設計: [docs/design/programs/api.md](../docs/design/programs/api.md) §3.7） |
 
 文書種ごとの `content` の形は `packages/<slug>/schema.json` 側にあり、その読み手は `src/entex/ir/schema.py`。
 

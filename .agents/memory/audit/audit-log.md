@@ -106,3 +106,91 @@ Format: skill `memory-record` · `assets/audit/audit-entry-template.md`
 実装ブランチ `cursor/renderer-cli-render-172b`（クラウドエージェントの命名規則。AGENTS.md の `issue/担当者/やること` とは異なる — マージ時に判断）。次は P6 `review-conduct`。
 
 ---
+## 2026-09-12T03:30:00+00:00 | review | p6-renderer-cli-pass
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `review` |
+| **actor** | `agent`（reviewer 役） |
+| **decision** | pass（Critical 0 · Warning 2 · Suggestion 4） |
+| **phase** | P5 → P6 |
+| **summary** | PR #8（renderer / CLI 実装、`main@7955490`）を V-model RTM で点検。FR1–FR8・NFR1–2 すべてにテスト根拠あり。W1: JSON ファイル名が latexmk ジョブ名に素通し（`-` 始まり・`%` `#` で生成失敗）。W2: `template.tex.j2` 欠落が exit 2（plan は 3）。いずれも AC 違反ではなく Act の小パッチへ |
+| **reason** | ユーザーが推奨案 A（P6 review）→ B（API P3 設計）を承認（2026-09-12、ブランチ `feature/npc` 指定） |
+
+### Refs
+
+- review: `docs/reviews/2026-09-12-renderer-cli-p6-review.md`
+- plan: `.agents/plans/algorithms/ir-validate-and-derive.md`（Check 行） · `.agents/plans/programs/render-and-cli.md`（Check 行）
+- team: `docs/project-state.yaml`（current_phase: P6, gate_status.current: pending, proposal = Act + API P3 ゲート）
+- trace: `.agents/memory/episodes/2026-09-12-p6-review-and-api-design.md`
+
+### Detail（任意）
+
+W1 / W2 はレビュー PR では直していない（review-conduct の「drive-by refactor 禁止」）。`docs/design/programs/api.md` の P4 分割案 `pipeline-and-cli` に含める提案。
+
+---
+
+## 2026-09-12T03:45:00+00:00 | design | api-p3-draft
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `design` |
+| **actor** | `agent`（spec_designer 役） |
+| **decision** | draft 作成（agreed はユーザー確認待ち） |
+| **phase** | P3（着手順 2） |
+| **summary** | `docs/design/programs/api.md`: `entex.pipeline.render_ir()` を CLI / API 共通の入口にし、`POST /v1/render` → `application/pdf`、エラーは RFC 9457 Problem Details、同期 `def` + セマフォ、P4 は `pipeline-and-cli` → `api-render` の 2 plan に分割する案 |
+| **reason** | charter §11 着手順 2。P6 レビュー S4（3 段の並びが CLI にある）の解消を兼ねる。terminology-research 済み（RFC 9457 / 9110 / 6266 / 8187、FastAPI async、Starlette threadpool） |
+
+### Refs
+
+- design: `docs/design/programs/api.md`
+- team: `docs/project-state.yaml`（scope_focus.path → api.md, allowed_actions に patch-conduct）
+- questions: api.md §9（要件.md の独立、認証、RenderTimeoutError、doc-types の schema 公開範囲）
+
+---
+## 2026-09-12T02:20:00+00:00 | gate | p3-to-p4-api
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `gate` |
+| **actor** | `user` |
+| **decision** | Go（api.md agreed → P4 plan-record 2 本） |
+| **phase** | P3 → P4（着手順 2） |
+| **summary** | ユーザー回答「1. api.md を agreed にしてよいです。2. Go 3. 承知 4. 承認」。api.md を agreed にし、`.agents/plans/programs/pipeline-and-cli.md` と `api-render.md` を agreed で記録。`pyproject.toml` の pydantic 下限を 2.9 に上げた（4 の承認） |
+| **reason** | PROJECT_LIFECYCLE.md ゲート表: plan-record は PM ユーザー確認が必要。terminology alignment は api.md §6 に記録済み |
+
+### Refs
+
+- design: `docs/design/programs/api.md`（status: agreed）
+- plan: `.agents/plans/programs/pipeline-and-cli.md` · `.agents/plans/programs/api-render.md`
+- team: `docs/project-state.yaml`（current_phase: P4, active_pdca → pipeline-and-cli, allowed_actions に implement-conduct）
+- questions: ブランチ名（feature/npc は規約外だがユーザー了承。実装時に再確認）
+
+### Detail（任意）
+
+3（feature/npc の規約不一致）は「承知」= 認識のうえ継続。実装 PR のブランチ名は着手時に確認する。
+
+---
+## 2026-09-12T03:30:00+00:00 | phase | p5-pipeline-and-cli-do
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `agent` |
+| **decision** | P5 Do 完了（Check 待ち） |
+| **phase** | P4 → P5（plan `pipeline-and-cli`） |
+| **summary** | ユーザー指示「pipeline-and-cli の P5 実装に進めてください」。TDD で `src/entex/pipeline.py` を新設し CLI を pipeline 経由に。W1（ジョブ名規則 + `./` 前置）・W2（テンプレ欠落 → `PackageError`）・S3（`TEXINPUTS` 終端）・S1（renderer.md IF 表・図）を解消。`make lint` / `make test` 168 passed（TeX ありホスト、skip 0） |
+| **reason** | project-state `allowed_actions` に implement-conduct、gate passed（P3→P4 で Go）。ブランチ指示なしのため feature/npc（PR #10）を継続 |
+
+### Refs
+
+- plan: `.agents/plans/programs/pipeline-and-cli.md`（AC1–AC5 ✓、Do 行）
+- design: `docs/design/programs/renderer.md`（IF 表・図・エラー表を実装に追従、status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p5-pipeline-and-cli.md`
+- team: `docs/project-state.yaml`（current_phase: P5、proposal: P5→P6 Check）
+
+### Detail（任意）
+
+設計との差 1 点: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落として `pct-hash.tex` にした（`JOB_NAME_RE` は満たす）。次のゲート判断（Check を今やるか api-render 後にまとめるか）はユーザー。
+
+---

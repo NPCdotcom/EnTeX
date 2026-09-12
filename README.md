@@ -68,9 +68,11 @@ entex render <json> --out DIR            # 出力先を指定
 entex render <json> --tex-only           # latexmk を呼ばず .tex だけ書く（TeX の無いホストで確認するとき）
 ```
 
-`render` の終了コード: `0` 成功 / `1` 入力の誤り（封筒・中身。日本語でまとめて標準エラーに出る）/ `2` 組版の失敗（利用者向けには汎用文だけ。TeX のログは `out/.../latexmk.log`）/ `3` doc-package の不備。
+`render` の終了コード: `0` 成功 / `1` 入力の誤り（封筒・中身。日本語でまとめて標準エラーに出る）/ `2` 組版の失敗（利用者向けには汎用文だけ。TeX のログは `out/.../latexmk.log`）/ `3` doc-package の不備（`schema.json` / `template.tex.j2` の欠落など）。
 
-処理の流れは [docs/design/programs/renderer.md](docs/design/programs/renderer.md): `cli.py`（JSON を読む）→ `ir/loader.py`（封筒・型検証）→ `ir/derive.py`（導出値）→ `tex/escape.py`（エスケープ）→ `renderer.py`（`template.tex.j2` → latexmk）。
+出力ディレクトリは JSON のファイル名のまま（`out/render/<ファイル名>/`）だが、`.tex` / `.pdf` の名前は latexmk に安全な文字（英数字・`-`・`_`、先頭は英数字、64 文字まで）へ寄せる。例: `報告 8月.json` → `out/render/報告 8月/8.pdf`、`報告書.json` → `out/render/報告書/document.pdf`。
+
+処理の流れは [docs/design/programs/renderer.md](docs/design/programs/renderer.md): `cli.py`（JSON を読む）→ `pipeline.py`（共通入口。CLI も API もここを通る）→ `ir/loader.py`（封筒・型検証）→ `ir/derive.py`（導出値）→ `renderer.py`（`tex/escape.py` でエスケープ → `template.tex.j2` → latexmk）。
 
 ## Layout
 

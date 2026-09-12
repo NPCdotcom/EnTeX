@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from entex.errors import RenderError
+from entex.errors import PackageError, RenderError
 from entex.ir.derive import apply_derived
 from entex.ir.loader import load_and_validate
 from entex.packages import DocPackage, load_package
@@ -143,7 +143,21 @@ def test_undefined_variable_in_template_is_a_render_error(
     assert ei.value.detail and "no_such_field" in ei.value.detail
 
 
-def test_missing_template_is_a_render_error(tmp_path: Path, packages_dir: Path) -> None:
+def test_missing_template_is_a_package_error(tmp_path: Path, packages_dir: Path) -> None:
+    """テンプレートの欠落はパッケージの不備（P6 レビュー W2）。組版まで進ませない。"""
+    package = _copy_package_with_template(tmp_path, packages_dir, "")
+    package.template_path.unlink()
+    with pytest.raises(PackageError) as ei:
+        load_package(tmp_path, "circle-monthly-report")
+    # PackageError は作者向け（exit 3）なので、置くべきファイル名を含めてよい
+    assert "template.tex.j2" in ei.value.user_message
+    assert "circle-monthly-report" in ei.value.user_message
+
+
+def test_build_tex_still_guards_against_a_vanished_template(
+    tmp_path: Path, packages_dir: Path
+) -> None:
+    """読み込み後にテンプレートが消えた場合の安全網。RenderError のまま（TeX 語彙は漏らさない）。"""
     package = _copy_package_with_template(tmp_path, packages_dir, "")
     package.template_path.unlink()
     content, _ = _content("02-minimal.json", packages_dir)
@@ -197,6 +211,67 @@ def test_latexmk_failure_keeps_tex_log_server_side(
     assert "Undefined control sequence" in log and "stderr noise" in log
     # .tex 自体は書き出されている（運用者が再現できる）
     assert (out_dir / "document.tex").is_file()
+
+
+@pytest.fixture
+def recording_latexmk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """呼ばれ方（引数と TEXINPUTS）を記録して失敗する偽 latexmk。記録先のパスを返す。"""
+    bin_dir = tmp_path / "recbin"
+    bin_dir.mkdir()
+    record = tmp_path / "latexmk-call.txt"
+    script = bin_dir / "latexmk"
+    script.write_text(
+        f'#!/bin/sh\nprintf \'%s\\n\' "$@" > "{record}"\n'
+        f'printf \'TEXINPUTS=%s\\n\' "$TEXINPUTS" >> "{record}"\nexit 1\n',
+        encoding="utf-8",
+    )
+    script.chmod(script.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}")
+    return record
+
+
+def test_texinputs_keeps_default_path(
+    recording_latexmk: Path, tmp_path: Path, packages_dir: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """既存の TEXINPUTS が区切りで終わっていなくても、末尾の区切り（既定探索）を残す（S3）。"""
+    monkeypatch.setenv("TEXINPUTS", "/foo")
+    content, package = _content("02-minimal.json", packages_dir)
+    with pytest.raises(RenderError):
+        render(content, package, tmp_path / "out")
+    line = next(
+        line
+        for line in recording_latexmk.read_text("utf-8").splitlines()
+        if line.startswith("TEXINPUTS=")
+    )
+    value = line.removeprefix("TEXINPUTS=")
+    assert value.endswith(os.pathsep), value
+    parts = value.split(os.pathsep)
+    assert parts[0] == str(package.style_dir.resolve())
+    assert parts[1] == str(package.dir.resolve())
+    assert parts[2] == "/foo"
+    assert parts[-1] == ""
+
+
+def test_texinputs_without_inherited_value_ends_with_separator(
+    recording_latexmk: Path, tmp_path: Path, packages_dir: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("TEXINPUTS", raising=False)
+    content, package = _content("02-minimal.json", packages_dir)
+    with pytest.raises(RenderError):
+        render(content, package, tmp_path / "out")
+    text = recording_latexmk.read_text("utf-8")
+    assert f"{package.dir.resolve()}{os.pathsep}\n" in text
+
+
+def test_tex_filename_is_passed_with_dot_slash(
+    recording_latexmk: Path, tmp_path: Path, packages_dir: Path
+) -> None:
+    """latexmk への引数は `./<job>.tex`（オプションと誤認されない。P6 レビュー W1）。"""
+    content, package = _content("02-minimal.json", packages_dir)
+    with pytest.raises(RenderError):
+        render(content, package, tmp_path / "out", job_name="job-1")
+    argv = recording_latexmk.read_text("utf-8").splitlines()
+    assert argv[-2] == "./job-1.tex"  # 最後の行は TEXINPUTS= の記録
 
 
 def test_missing_latexmk_is_a_render_error(

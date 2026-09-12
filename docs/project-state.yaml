@@ -3,32 +3,32 @@
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
 current_phase: P5   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "P0ゲート Go 済み（2026-09-12）。要求(P1)→要件(P2)→renderer基本設計(P3)→plan-record(P4: algorithms/ir-validate-and-derive, programs/render-and-cli)→実装(P5)。ユーザー指示「P3の設計に従って実装に入ってください」(2026-09-12) を引き継ぎの明示的な再認可とみなし、別エージェント(本セッション)が P4/P5 を実施。"
+phase_note: "着手順1（CLI で1本通す）は P6 Check pass で完了（docs/reviews/2026-09-12-renderer-cli-p6-review.md）。着手順2（API化）: P3 設計 docs/design/programs/api.md agreed → P4 plan 2 本（programs/pipeline-and-cli → programs/api-render）。pipeline-and-cli の P5 Do 完了（2026-09-12、AC1–AC5 検証済み、168 tests）。W1/W2/S1/S3 解消済み。次は pipeline-and-cli の P6 Check（review-conduct）または api-render の P5 実装（ユーザー指示で着手）。"
 
 scope_focus:      # which H level we are clarifying now
   level: H4       # H0|H1|H2|H3|H4|H5
-  path: "docs/design/programs/renderer.md"
+  path: "docs/design/programs/api.md"
 
 active_pdca:      # primary S1 cycle (program or algorithm)
-  plan_path: ".agents/plans/programs/render-and-cli.md"
+  plan_path: ".agents/plans/programs/pipeline-and-cli.md"
   scope_level: program
   pdca_class: S1
 
 # Stage-gate status (Gate Keeper = user)
 gate_status:
   current: passed         # pending | passed | conditional | recycled | hold | killed
-  proposal: "P5→P6: 実装 PR のレビュー(review-conduct)。Docker での FR6/FR8/NFR1 確認は CI(tex job)とレビュアー手元で行う"
+  proposal: "P5→P6: plan pipeline-and-cli の Check（review-conduct、PR #10 の差分）。あるいは Check を api-render 完了後にまとめて 1 回にするか、ユーザー判断"
   last_decision: "Go"
   last_decided_at: "2026-09-12"
   conditions: []
   gate_keeper: user       # fixed; PM proposes, user decides
 
-last_gate_passed: "P3→P4 (2026-09-12, user instruction to implement per P3 design)"
+last_gate_passed: "P3→P4 (2026-09-12, user: api.md agreed + Go on the 2-plan split + pydantic>=2.9 approved)"
 allowed_actions:
   - design-deliberate
   - design-record
   - plan-record
-  - implement-conduct
+  - implement-conduct    # pipeline-and-cli → api-render の順
   - review-conduct
 
 open_blockers: []
@@ -38,7 +38,7 @@ lifecycle_plan:
   profile: "standard"      # hotfix | spike | standard | full | doc_only | custom
   brownfield: false
   last_planned_at: "2026-09-12"
-  executed_phases: [P0, P1, P2, P3, P4, P5]
+  executed_phases: [P0, P1, P2, P3, P4, P5, P6]
   skipped_phases: []
   skipped_stages: []
   recommended_cursor_mode: "Plan→Agent"

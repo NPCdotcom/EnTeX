@@ -4,20 +4,20 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User re-authorized implementation ('P3の設計に従って実装に入ってください'). plan-record (P4) for ir-validate-and-derive + render-and-cli, then implement-conduct (P5) for both. Roadmap step 1 (CLI JSON → PDF) now works end-to-end."
+  intent: "User (2026-09-12): 'pipeline-and-cli の P5 実装に進めてください'. Done on feature/npc (PR #10): entex.pipeline + CLI on it + W1/W2/S1/S3 fixes, 168 tests pass on TeX host. AC1-AC5 ticked, plan Do row written. Next gate: P5→P6 Check of pipeline-and-cli, or continue to P5 api-render."
   turn_estimate: 1
-  chat_id_hint: "entex-renderer-impl"
+  chat_id_hint: "entex-p5-pipeline"
 
 navigation:
-  active_thread_id: "renderer-implementation"
-  active_plan: ".agents/plans/programs/render-and-cli.md"
+  active_thread_id: "api-pipeline"
+  active_plan: ".agents/plans/programs/pipeline-and-cli.md"
   next_actions:
-    - "P6: review-conduct on the implementation PR (branch cursor/renderer-cli-render-172b). Check V-model: AC ↔ tests ↔ 要件.md FR1–FR8/NFR1–2 ↔ renderer.md"
-    - "CI: confirm the tex job (docker) passes incl. NFR1 timing test; if the first-run font cache makes it flaky, raise ENTEX_NFR1_SECONDS or warm differently"
-    - "Branch name follows the cloud-agent template (cursor/…), not AGENTS.md's issue/owner/topic — rename or accept when merging; open an issue number for this work"
-    - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/schema.json + template.tex.j2 + style (changes must stay inside the package)"
-    - "Next roadmap step (charter §11 step 2): API — reuse the same 4-step pipeline (load_and_validate → apply_derived → render). Consider a shared pipeline function before adding FastAPI"
-    - "Post `@coderabbitai review` on the PR after opening / after pushes (AGENTS.md)"
+    - "Await user: (a) P6 review-conduct for pipeline-and-cli now (diff = commits d5675ab..644edb0 on PR #10), or (b) go straight to P5 api-render and review both together. project-state proposal says (a) or (b) is user's call"
+    - "P5 api-render: src/entex/api/{app,routes,problems,settings}.py, tests/test_api.py (TestClient), schemas/api/{problem.schema.json,openapi.json}, Dockerfile CMD uvicorn, make docker-serve, README §API. render_ir(timeout=...) already accepts None → renderer default. Decide RenderTimeoutError split (plan recommends yes)"
+    - "Post `@coderabbitai review` on PR #10 after each push (AGENTS.md)"
+    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. Open an issue number before api-render if user wants to realign"
+    - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/ only (layout UAT still pending)"
+    - "Minor Act item not in any plan yet: S2 pattern search vs fullmatch (decide + 1 line in ir-type-vocabulary.md). S3 is done in pipeline-and-cli"
   blockers: []
 
 alignment:
@@ -28,8 +28,8 @@ alignment:
 
 pressure:
   level: low
-  signals: []
-  last_l2_flush_at: ""
+  signals: ["context was summarized once during this turn; re-anchored from nav + plan + source"]
+  last_l2_flush_at: "2026-09-12"
   reanchor_required: false
   pre_compact_recommended: false
 
