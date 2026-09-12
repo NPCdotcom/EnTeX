@@ -36,6 +36,16 @@ entries:
     recall: every_turn
     linked: []
 
+  - id: ep-ir-type-vocabulary
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-ir-type-vocabulary.md
+    summary: "IR type vocabulary reviewed; design doc at docs/design/elements/ir-type-vocabulary.md"
+    tags: [ir-schema, H1, design]
+    recall: on_demand
+    linked: [project-state]
+
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
   #   scope: project

@@ -7,6 +7,7 @@
 | [project-state.yaml](project-state.yaml) | Current phase / scope focus / gates |
 | [TEAM.md](TEAM.md) | Members (NPC / Aster) |
 | [design/](design/) | H0–H5 design。製品の正本は [design/product/charter.md](design/product/charter.md) |
+| [design/elements/ir-type-vocabulary.md](design/elements/ir-type-vocabulary.md) | IR の型の語彙（月次報告書を題材に精査） |
 | [adr/](adr/) | Architecture decisions |
 | [glossary/](glossary/) | Terms |
 | [evaluations/](evaluations/) | Evaluation records |
