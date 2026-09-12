@@ -1,0 +1,39 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-09",
+    "submitted_on": "2026-10-03",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "advisor": "田中 一郎",
+    "members": { "enrolled": 27, "joined": 4, "left": 1 },
+    "facilities_used": ["music_room", "gym"],
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "新歓イベントと学園祭リハーサルを行った。機材の修理費が想定より高く、当月は赤字となった。" }
+      ]
+    },
+    "activities": [
+      { "date": "2026-09-15", "category": "event", "title": "新歓ライブ", "place": "体育館前ステージ", "participants": 22 },
+      { "date": "2026-09-26", "category": "regular", "title": "学園祭リハーサル", "place": "音楽練習室A", "participants": 20 }
+    ],
+    "balance_carried": 19400,
+    "finance": [
+      { "date": "2026-09-01", "category": "income", "item": "部費（9月分）", "amount": 54000 },
+      { "date": "2026-09-10", "category": "expense", "item": "ベースアンプ修理費", "amount": 68000 },
+      { "date": "2026-09-15", "category": "expense", "item": "新歓ライブ 印刷費", "amount": 6200 },
+      { "date": "2026-09-26", "category": "expense", "item": "練習室使用料", "amount": 4000 }
+    ],
+    "next_month_plan": ["学園祭本番（10/24–10/25）", "赤字分の臨時徴収を総会で提案"],
+    "incident": "minor",
+    "remarks": {
+      "blocks": [
+        { "type": "paragraph", "text": "残高が負になるため、10月に1人あたり200円の臨時徴収を行う予定。" },
+        { "type": "paragraph", "text": "新歓ライブ中にマイクスタンドが倒れたが、けが人・備品の破損はなし。" }
+      ]
+    },
+    "audited": false
+  }
+}

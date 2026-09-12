@@ -1,0 +1,31 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-10",
+    "submitted_on": "2026-11-04",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "members": { "enrolled": 27 },
+    "summary": { "blocks": [ { "type": "paragraph", "text": "活動実績が上限10行を超える11行" } ] },
+    "activities": [
+      { "date": "2026-10-01", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 19 },
+      { "date": "2026-10-03", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 21 },
+      { "date": "2026-10-06", "category": "meeting", "title": "打合せ", "place": "第1会議室", "participants": 8 },
+      { "date": "2026-10-08", "category": "regular", "title": "定例練習", "place": "音楽練習室B", "participants": 20 },
+      { "date": "2026-10-10", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 22 },
+      { "date": "2026-10-15", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 23 },
+      { "date": "2026-10-17", "category": "regular", "title": "通しリハーサル", "place": "体育館", "participants": 25 },
+      { "date": "2026-10-22", "category": "regular", "title": "最終リハーサル", "place": "体育館", "participants": 26 },
+      { "date": "2026-10-24", "category": "event", "title": "学園祭ライブ（1日目）", "place": "体育館", "participants": 27 },
+      { "date": "2026-10-25", "category": "event", "title": "学園祭ライブ（2日目）", "place": "体育館", "participants": 26 },
+      { "date": "2026-10-29", "category": "meeting", "title": "反省会", "place": "第2会議室", "participants": 15 }
+    ],
+    "balance_carried": 0,
+    "finance": [],
+    "next_month_plan": ["省略"],
+    "incident": "none",
+    "audited": false
+  }
+}

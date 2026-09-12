@@ -1,0 +1,44 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-08",
+    "submitted_on": "2026-09-05",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "advisor": "田中 一郎",
+    "members": { "enrolled": 24, "joined": 1, "left": 0 },
+    "facilities_used": ["music_room", "meeting_room"],
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "8月は夏合宿を中心に活動した。合宿では新曲3曲を仕上げ、秋の学園祭に向けた編成を決めた。" },
+        { "type": "list", "items": ["夏合宿（8/3–8/5、長野）", "学園祭の出演申請を提出", "新歓ビラの原案を作成"] },
+        { "type": "paragraph", "text": "定例練習の参加率は前月より改善した。" }
+      ]
+    },
+    "activities": [
+      { "date": "2026-08-03", "category": "camp", "title": "夏合宿（1日目）", "place": "長野県 白樺研修所", "participants": 18 },
+      { "date": "2026-08-04", "category": "camp", "title": "夏合宿（2日目）", "place": "長野県 白樺研修所", "participants": 18 },
+      { "date": "2026-08-05", "category": "camp", "title": "夏合宿（3日目）", "place": "長野県 白樺研修所", "participants": 17 },
+      { "date": "2026-08-20", "category": "regular", "title": "定例練習", "place": "音楽練習室B", "participants": 15 },
+      { "date": "2026-08-27", "category": "meeting", "title": "学園祭出演の編成会議", "place": "第2会議室", "participants": 9 }
+    ],
+    "balance_carried": 12800,
+    "finance": [
+      { "date": "2026-08-01", "category": "income", "item": "部費（8月分）", "amount": 48000 },
+      { "date": "2026-08-01", "category": "income", "item": "合宿参加費", "amount": 90000 },
+      { "date": "2026-08-03", "category": "expense", "item": "合宿宿泊費", "amount": 108000 },
+      { "date": "2026-08-03", "category": "expense", "item": "合宿食材費", "amount": 21400 },
+      { "date": "2026-08-20", "category": "expense", "item": "練習室使用料", "amount": 2000 }
+    ],
+    "next_month_plan": ["新歓イベント（9/15、体育館前）", "学園祭リハーサル（9/26）", "秋合宿の会場予約"],
+    "incident": "none",
+    "remarks": {
+      "blocks": [
+        { "type": "paragraph", "text": "合宿費の一部を立て替えているため、9月中に精算する。" }
+      ]
+    },
+    "audited": false
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "doc_type": "circle-monthly-report",
+  "schema_version": 1,
+  "content": {
+    "organization": "青葉大学 軽音楽サークル",
+    "report_month": "2026-10",
+    "submitted_on": "2026-11-04",
+    "representative": { "name": "佐藤 美咲", "student_id": "B2301234" },
+    "author": { "role": "会計", "name": "山田 太郎" },
+    "advisor": "田中 一郎",
+    "members": { "enrolled": 27 },
+    "facilities_used": ["music_room", "gym", "meeting_room"],
+    "summary": {
+      "blocks": [
+        { "type": "paragraph", "text": "学園祭に向けて練習回数を増やした。活動実績は上限の10行、施設は3種類を使用した。" }
+      ]
+    },
+    "activities": [
+      { "date": "2026-10-01", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 19 },
+      { "date": "2026-10-03", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 21 },
+      { "date": "2026-10-06", "category": "meeting", "title": "学園祭運営打合せ", "place": "第1会議室", "participants": 8 },
+      { "date": "2026-10-08", "category": "regular", "title": "定例練習", "place": "音楽練習室B", "participants": 20 },
+      { "date": "2026-10-10", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 22 },
+      { "date": "2026-10-15", "category": "regular", "title": "定例練習", "place": "音楽練習室A", "participants": 23 },
+      { "date": "2026-10-17", "category": "regular", "title": "通しリハーサル", "place": "体育館", "participants": 25 },
+      { "date": "2026-10-22", "category": "regular", "title": "最終リハーサル", "place": "体育館", "participants": 26 },
+      { "date": "2026-10-24", "category": "event", "title": "学園祭ライブ（1日目）", "place": "体育館", "participants": 27 },
+      { "date": "2026-10-25", "category": "event", "title": "学園祭ライブ（2日目）", "place": "体育館", "participants": 26 }
+    ],
+    "balance_carried": -4800,
+    "finance": [
+      { "date": "2026-10-01", "category": "income", "item": "部費（10月分）", "amount": 54000 },
+      { "date": "2026-10-01", "category": "income", "item": "臨時徴収（9月赤字分）", "amount": 5400 },
+      { "date": "2026-10-06", "category": "expense", "item": "会議室使用料", "amount": 500 },
+      { "date": "2026-10-10", "category": "expense", "item": "練習室使用料（前半）", "amount": 6000 },
+      { "date": "2026-10-17", "category": "expense", "item": "体育館使用料", "amount": 3000 },
+      { "date": "2026-10-20", "category": "expense", "item": "学園祭 機材レンタル", "amount": 24000 },
+      { "date": "2026-10-22", "category": "expense", "item": "練習室使用料（後半）", "amount": 4000 },
+      { "date": "2026-10-24", "category": "income", "item": "学園祭 物販売上", "amount": 31200 },
+      { "date": "2026-10-25", "category": "expense", "item": "学園祭 消耗品", "amount": 7300 }
+    ],
+    "next_month_plan": [
+      "学園祭の反省会（11/5）",
+      "物販売上の会計処理",
+      "冬季の練習室予約",
+      "OB・OG会への活動報告送付",
+      "新入会員向けの機材講習",
+      "12月ライブの選曲",
+      "会計監査の日程調整",
+      "来年度の予算案作成に着手"
+    ],
+    "incident": "none",
+    "audited": false
+  }
+}
