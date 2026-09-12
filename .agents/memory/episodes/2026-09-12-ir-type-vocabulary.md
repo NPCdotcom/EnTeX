@@ -42,3 +42,16 @@ NPC proposed 11 IR types (`text` `rich_text` `month` `date` `integer` `money` `e
 - Need the real Word monthly report to fix schema fields (first Open item).
 - `schema_version` bump policy; `expr` vocabulary sufficiency — confirm against real form.
 - Enum labels live in schema, not IR — API (step 2) must expose the schema too.
+
+## Turn 3 (same day): P0 gate Go, P1 要求 written
+
+- Reviewed progress against the 6 主要要素 (charter §8): `ir-schema` (type vocabulary) and `doc-package` (circle-monthly-report scaffold) have a base; `renderer` is untouched (only `version`/`doctor` in `src/entex/cli.py`); `form-ui`/`job-runner`/`data-import` are later roadmap steps.
+- User decided **P0 gate = Go**, and confirmed **renderer-first** order (matches charter §11 step 1). Recorded in `docs/project-state.yaml` (`current_phase: P1`, `gate_status.current: passed`) and `.agents/memory/audit/audit-log.md` (`gate` entry, decision Go).
+- Note: the workspace mount path changed mid-session (from a Windows path to `/workspace`); the gate-recording edits from the prior turn had landed on the old path and were not present in the actual repo, so they were redone here on `/workspace`.
+- Wrote `docs/requirements/circle-monthly-report/要求.md` (P1) — grounded in charter §3/§5, `packages/circle-monthly-report/README.md`, and `schema.json`. Includes R1–R10 requirements list, agent recommendation (proceed with 案A: build renderer core now with provisional schema/layout, fix fields once the real report arrives), Facts/Assumptions carried over from ir-type-vocabulary.md.
+- Linked from `docs/README.md`.
+
+### Next
+
+- User review of `要求.md` → promote to `要件.md` (P2, verifiable acceptance).
+- Then P3 basic design for `renderer` (`docs/design/programs/renderer.md`, H4) → `plan-record` (P4) before any `implement-conduct`.

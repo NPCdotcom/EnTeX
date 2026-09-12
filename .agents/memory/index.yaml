@@ -46,6 +46,26 @@ entries:
     recall: on_demand
     linked: [project-state]
 
+  - id: audit-p0-go
+    scope: team
+    tier: audit
+    granularity: anchor
+    path: .agents/memory/audit/audit-log.md
+    summary: "P0→P1 gate: user Go (2026-09-12); renderer-first order agreed among 6 主要要素"
+    tags: [gate, P0, P1, renderer]
+    recall: on_demand
+    linked: [project-state]
+
+  - id: req-circle-monthly-report
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/requirements/circle-monthly-report/要求.md
+    summary: "P1 要求 for the first doc-type (サークル月次報告書), grounded in charter §3/§5 and packages/circle-monthly-report/README.md"
+    tags: [requirements, P1, circle-monthly-report]
+    recall: on_demand
+    linked: [project-state]
+
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
   #   scope: project
