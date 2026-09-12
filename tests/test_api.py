@@ -369,7 +369,12 @@ def test_doc_types_lists_packages(client: TestClient) -> None:
             "doc_type": "circle-monthly-report",
             "schema_version": 1,
             "title": "サークル月次活動報告書",
-        }
+        },
+        {
+            "doc_type": "club-meeting-log",
+            "schema_version": 1,
+            "title": "部会ログ",
+        },
     ]
 
 

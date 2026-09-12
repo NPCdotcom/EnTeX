@@ -24,13 +24,29 @@ FieldType = Literal[
     "object",
     "row_list",
     "list",
+    "document",
 ]
+
+#: `document` の block の語彙（ir-type-vocabulary.md §2.8）。
+#: パッケージは `blocks` 属性でこの部分集合を宣言する
+DocumentBlockType = Literal["heading", "paragraph", "list", "quote", "code", "image"]
+DOCUMENT_BLOCK_TYPES: tuple[str, ...] = ("heading", "paragraph", "list", "quote", "code", "image")
+#: `list` block の入れ子の上限。LaTeX の itemize は 4 段までなので、
+#: テンプレートが 1 段包む余地を残す
+DOCUMENT_LIST_MAX_DEPTH = 3
 
 SCALAR_TYPES: frozenset[str] = frozenset(
     {"text", "month", "date", "integer", "money", "enum", "boolean"}
 )
 NUMERIC_TYPES: frozenset[str] = frozenset({"integer", "money"})
 LIST_ITEM_TYPES: frozenset[str] = frozenset({"text", "enum", "date", "integer"})
+#: `document` でだけ意味を持つ属性。他の型に付いていたらパッケージ作者の誤り
+DOCUMENT_ONLY_ATTRS: tuple[str, ...] = (
+    "sections",
+    "extra_sections",
+    "blocks",
+    "max_heading_level",
+)
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 FIELD_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -77,6 +93,16 @@ class Expr(BaseModel):
         raise AssertionError("unreachable: validated to have one operator")
 
 
+class SectionDef(BaseModel):
+    """`document` の節 1 つの宣言（ir-type-vocabulary.md §3 `sections`）。並びが出力の順序。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    key: Annotated[str, Field(pattern=FIELD_NAME_RE.pattern)]
+    heading: str
+    required: bool = True
+
+
 class FieldDef(BaseModel):
     """フィールド 1 つの宣言。型と、型とは別軸の属性を持つ。"""
 
@@ -98,10 +124,25 @@ class FieldDef(BaseModel):
     items: FieldDef | None = None
     fields: dict[str, FieldDef] | None = None
     options: list[EnumOption] | None = None
+    # `document` 専用（§2.8・§3）
+    sections: list[SectionDef] | None = None
+    extra_sections: Literal["allow", "forbid"] = "forbid"
+    blocks: list[DocumentBlockType] | None = None
+    max_heading_level: Annotated[int, Field(ge=1)] = 2
+    # 値の取り出し元。`data-import` が読むだけで、`src/entex/` は中身を解釈しない（§3）
+    source: dict[str, str] | None = None
 
     @property
     def has_default(self) -> bool:
         return "default" in self.model_fields_set and self.default is not None
+
+    @property
+    def section_keys(self) -> list[str]:
+        return [s.key for s in self.sections or []]
+
+    @property
+    def sections_by_key(self) -> dict[str, SectionDef]:
+        return {s.key: s for s in self.sections or []}
 
     @property
     def effective_minimum(self) -> int | None:
@@ -152,6 +193,14 @@ class FieldDef(BaseModel):
         for name in list((self.fields or {}).keys()):
             if not FIELD_NAME_RE.match(name):
                 raise ValueError(f"フィールド名 '{name}' は英小文字のスネークケースで書く")
+        if t == "document":
+            self._check_document_shape()
+        else:
+            for attr in DOCUMENT_ONLY_ATTRS:
+                if attr in self.model_fields_set:
+                    raise ValueError(f"{attr} は document でだけ使える")
+        if self.source is not None and not self.source:
+            raise ValueError("source は空にできない（付けないなら省く）")
         if self.derived:
             if self.expr is None:
                 raise ValueError("derived: true には expr が必要")
@@ -180,6 +229,19 @@ class FieldDef(BaseModel):
         ):
             raise ValueError("min_items / max_items は row_list / list でだけ使える")
         return self
+
+    def _check_document_shape(self) -> None:
+        if not self.sections:
+            raise ValueError("document には sections が必要")
+        if not self.blocks:
+            raise ValueError("document には blocks が必要")
+        seen: set[str] = set()
+        for sec in self.sections:
+            if sec.key in seen:
+                raise ValueError(f"sections のキー '{sec.key}' が重複している")
+            seen.add(sec.key)
+        if len(set(self.blocks)) != len(self.blocks):
+            raise ValueError("blocks に同じ block が 2 回ある")
 
 
 class Schema(BaseModel):
