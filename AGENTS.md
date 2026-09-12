@@ -23,10 +23,10 @@ User chat: **Japanese** · Kit canon: **English** — [LANGUAGE_POLICY.md](.agen
 | Field | Value |
 |-------|-------|
 | Name | **EnTeX** |
-| Description | Form input → fixed-format PDF via LaTeX, for people who do not write TeX. Charter: [docs/design/product/charter.md](docs/design/product/charter.md) |
+| Description | Front matter + Markdown, or form input → fixed-format PDF via LaTeX, for people who do not write TeX. Charter: [docs/design/product/charter.md](docs/design/product/charter.md) |
 | Stack | Python 3.12+ · FastAPI · pydantic · Jinja2 · Typer · LuaLaTeX+luatexja (container only) · React (later) |
 | Dev env | WSL2 Ubuntu + Docker single image `entex-dev` · clone under WSL FS (`~/EnTeX`), not `/mnt/c` |
-| Members | NPC (`NPCdotcom`) · Aster (`astel_isk`) |
+| Members | NPC (`NPCdotcom`) · Aster (`Astel-isk`) |
 
 ## Stack docs
 

@@ -1,6 +1,6 @@
 ﻿# EnTeX
 
-TeX を知らない人が、フォームに入力するだけで、決められた書式どおりの PDF を崩さずに出力できる Web アプリケーション。  
+TeX を知らない人が、決められた項目を埋めて本文を Markdown で書くか、フォームに入力するだけで、決められた書式どおりの PDF を崩さずに出力できる Web アプリケーション。  
 概要の正本: [docs/design/product/charter.md](docs/design/product/charter.md)
 
 ## Members
@@ -8,7 +8,7 @@ TeX を知らない人が、フォームに入力するだけで、決められ�
 | Nickname | GitHub ID | Role |
 |----------|-----------|------|
 | NPC | [NPCdotcom](https://github.com/NPCdotcom) | Owner / collaborator |
-| Aster | [astel_isk](https://github.com/astel_isk) | Collaborator |
+| Aster | [Astel-isk](https://github.com/Astel-isk) | Collaborator |
 
 ## Repository
 

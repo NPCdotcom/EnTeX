@@ -11,7 +11,7 @@ requires-python = ">=3.12"
 license = { text = "TBD" }
 authors = [
   { name = "NPC (NPCdotcom)" },
-  { name = "Aster (astel_isk)" },
+  { name = "Aster (Astel-isk)" },
 ]
 dependencies = [
   "fastapi>=0.115",

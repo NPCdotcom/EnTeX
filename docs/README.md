@@ -15,6 +15,8 @@
 | [design/programs/renderer.md](design/programs/renderer.md) | P3 基本設計（H4）— renderer のモジュール分割・インターフェース・エラー方針・仮レイアウト方針 |
 | [design/programs/api.md](design/programs/api.md) | P3 基本設計（H4、draft）— 着手順 2 API 化。共通パイプライン関数・`POST /v1/render`・RFC 9457 エラー応答・実行モデル |
 | [reviews/2026-09-12-renderer-cli-p6-review.md](reviews/2026-09-12-renderer-cli-p6-review.md) | P6 レビュー — renderer / CLI 実装（PR #8）の V-model RTM と判定（pass） |
+| [reviews/2026-09-12-api-and-pipeline-p6-review.md](reviews/2026-09-12-api-and-pipeline-p6-review.md) | P6 レビュー — pipeline-and-cli（PR #10）+ api-render（PR #12）の V-model RTM と判定（pass。Warning 1 / Suggestion 6） |
+| [reviews/2026-09-12-charter-schema-alignment-review.md](reviews/2026-09-12-charter-schema-alignment-review.md) | charter・IR型語彙・renderer設計と実装の整合レビュー。**PR #8 時点のツリーに対するもの**で、ADR-0001 以前の記述（型語彙11型など）を含む |
 | [adr/](adr/) | Architecture decisions |
 | [glossary/](glossary/) | Terms |
 | [evaluations/](evaluations/) | Evaluation records |
@@ -26,10 +28,12 @@ P4 実装計画（renderer.md「次」の分割案どおり）:
 
 - [.agents/plans/algorithms/ir-validate-and-derive.md](../.agents/plans/algorithms/ir-validate-and-derive.md) — FR1–FR4（H5。TeX 非依存）
 - [.agents/plans/programs/render-and-cli.md](../.agents/plans/programs/render-and-cli.md) — FR5–FR8・NFR1–2（H4）
+- [.agents/plans/programs/pipeline-and-cli.md](../.agents/plans/programs/pipeline-and-cli.md) — 着手順2。`entex.pipeline` 共通入口と CLI の乗せ替え（H4）
+- [.agents/plans/programs/api-render.md](../.agents/plans/programs/api-render.md) — 着手順2。`POST /v1/render` ほか FastAPI（H4）
 
 未作成（必要になった段階で作る）:
 
-- `LINEAR_PHASE_MAP.md` — Linear states ↔ P/H（optional。`project-state.yaml` の `linear_sync.map_doc` が参照している）
+- `LINEAR_PHASE_MAP.md` — キット側 `.agents/docs/LINEAR_PHASE_MAP.md` にある（optional。`project-state.yaml` の `linear_sync.map_doc` は `docs/LINEAR_PHASE_MAP.md` を指しているが、consumer 側には複製していない）
 
 Plans: [.agents/plans/](../.agents/plans/README.md)
 Kit: [.agents/README.md](../.agents/README.md)
