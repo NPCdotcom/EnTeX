@@ -1,0 +1,55 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-10-21",
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "1段目"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "spans": [
+                        {
+                          "text": "2段目"
+                        }
+                      ],
+                      "items": [
+                        {
+                          "spans": [
+                            {
+                              "text": "3段目"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "spans": [
+                                {
+                                  "text": "4段目"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

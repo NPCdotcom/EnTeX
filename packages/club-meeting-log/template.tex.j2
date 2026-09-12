@@ -1,0 +1,74 @@
+%# EnTeX テンプレート — 部会ログ（club-meeting-log）
+%# 区切り: \VAR{...} = 値、\BLOCK{...} = 制御、%# = この行はコメント（.tex には出ない）
+%# 渡される変数: doc（利用者の値。文字列はエスケープ済み。code block だけは素のまま）、
+%#               schema（title・label など）
+%# 体裁の値（余白・見出し・引用や画像の見せ方・団体名）は style/club-meeting-log.sty に置く
+%#
+%# 【前提】このテンプレートは `document` 型が src/entex/ に実装されたときに通る。
+%# 実装側に求める形は README.md の「テンプレートが前提にしている context」に書いた。
+%# --- 行内（spans）。href の付いた span だけがリンクになる ---------------------
+\BLOCK{macro spans(ss)}\BLOCK{for s in ss}\BLOCK{if s.href is defined}\logLink{\VAR{s.text}}{\VAR{s.href}}\BLOCK{else}\VAR{s.text}\BLOCK{endif}\BLOCK{endfor}\BLOCK{endmacro}
+%#
+%# --- 箇条書き（list block）。入れ子は深さ3まで（ir-type-vocabulary.md §2.8）----
+\BLOCK{macro listitems(items)}
+\begin{logitems}
+\BLOCK{for it in items}
+  \item \VAR{spans(it.spans)}
+\BLOCK{if it.items is defined}
+\VAR{listitems(it.items)}
+\BLOCK{endif}
+\BLOCK{endfor}
+\end{logitems}
+\BLOCK{endmacro}
+%#
+%# --- block の並び ------------------------------------------------------------
+\BLOCK{macro blocks(bs)}
+\BLOCK{for b in bs}
+\BLOCK{if b.type == "heading"}
+\logHeading{\VAR{b.level}}{\VAR{b.text}}
+\BLOCK{elif b.type == "paragraph"}
+\VAR{spans(b.spans)}\par
+\BLOCK{elif b.type == "list"}
+\VAR{listitems(b.items)}
+\BLOCK{elif b.type == "quote"}
+\begin{logquote}
+\VAR{spans(b.spans)}
+\end{logquote}
+\BLOCK{elif b.type == "code"}
+\begin{logcode}
+\VAR{b.text}
+\end{logcode}
+\BLOCK{elif b.type == "image"}
+\logImage{\VAR{b.src}}{\VAR{b.alt|default("", true)}}
+\BLOCK{endif}
+\BLOCK{endfor}
+\BLOCK{endmacro}
+%#
+%# --- 表題の材料。回次と年度は無いことがある（要求 R6: 止めるのは開催日だけ）----
+\BLOCK{if doc.session_no_total is defined}
+\BLOCK{set sessionLabel = "第" ~ doc.session_no_total ~ "回部会"}
+\BLOCK{else}
+\BLOCK{set sessionLabel = "部会"}
+\BLOCK{endif}
+\BLOCK{if doc.fiscal_year is defined}
+\BLOCK{set fiscalLabel = doc.fiscal_year ~ "年度"}
+\BLOCK{else}
+\BLOCK{set fiscalLabel = ""}
+\BLOCK{endif}
+\documentclass[a4paper,10pt]{ltjsarticle}
+\usepackage{club-meeting-log}
+\begin{document}
+
+%# 回次の見出しは入力に書かせない。ここで組み立てる（要求 R1・charter §5.1）
+\logTitle{\VAR{doc.meeting_date|ja_date(with_year=false, with_weekday=true)}}{\VAR{sessionLabel}}{\VAR{fiscalLabel}}
+
+%# 節は src/entex/ が宣言順に並べ、宣言外の節を後ろに回して渡す（ir-type-vocabulary.md §5）。
+%# 空の節を落とすかどうかはパッケージ側の判断なので、ここで落とす（要求 R7）
+\BLOCK{for sec in doc.body.sections}
+\BLOCK{if sec.blocks}
+\logSection{\VAR{sec.heading}}
+\VAR{blocks(sec.blocks)}
+\BLOCK{endif}
+\BLOCK{endfor}
+
+\end{document}

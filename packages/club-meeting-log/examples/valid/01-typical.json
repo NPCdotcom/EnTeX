@@ -1,0 +1,169 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-10-21",
+    "session_no_total": 7,
+    "fiscal_year": 2025,
+    "body": {
+      "sections": {
+        "activity_report": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "ハッカソン入賞報告"
+            },
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "学外のハッカソンで最優秀賞を受賞しました。作ったものは "
+                },
+                {
+                  "text": "公開ページ",
+                  "href": "https://example.com/projects/1234"
+                },
+                {
+                  "text": " にあります。"
+                }
+              ]
+            }
+          ]
+        },
+        "announcement": {
+          "blocks": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "学園祭のシフト"
+            },
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "シフト表は "
+                },
+                {
+                  "text": "共有ドライブ",
+                  "href": "https://example.com/drive/shift"
+                },
+                {
+                  "text": " に置きました。"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "受付"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "spans": [
+                        {
+                          "text": "来場者数を記録する"
+                        }
+                      ]
+                    },
+                    {
+                      "spans": [
+                        {
+                          "text": "パンフレットを渡す"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "案内"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "spans": [
+                        {
+                          "text": "展示物を事前に把握しておく"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "物販"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "採用ステッカー発表"
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "投票で3案が採用されました"
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "個人負担の枠はまだ募集中です"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "next_notice": {
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                {
+                  "spans": [
+                    {
+                      "text": "10/28 展示試遊会（B21教室）"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "spans": [
+                        {
+                          "text": "成果物を展示できる形にしておくこと"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "spans": [
+                    {
+                      "text": "残りの成果物発表会"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 1,
+  "content": {
+    "meeting_date": "2025-10-21",
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "table",
+              "rows": [
+                [
+                  "日付",
+                  "内容"
+                ],
+                [
+                  "10/21",
+                  "定例"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}

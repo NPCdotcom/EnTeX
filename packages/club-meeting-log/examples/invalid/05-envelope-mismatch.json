@@ -1,0 +1,24 @@
+{
+  "doc_type": "club-meeting-log",
+  "schema_version": 2,
+  "content": {
+    "meeting_date": "2025-10-21",
+    "body": {
+      "sections": {
+        "announcement": {
+          "blocks": [
+            {
+              "type": "paragraph",
+              "spans": [
+                {
+                  "text": "封筒の版が合わない。"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "extra_sections": []
+    }
+  }
+}
