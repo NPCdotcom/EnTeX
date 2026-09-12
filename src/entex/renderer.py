@@ -19,7 +19,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, TemplateError
 
-from entex.errors import RenderError
+from entex.errors import RenderError, RenderTimeoutError
 from entex.ir.schema import FieldDef, Schema
 from entex.packages import TEMPLATE_FILENAME, DocPackage
 from entex.tex.escape import escape_content, escape_text
@@ -203,8 +203,13 @@ def render(
             check=False,
         )
     except subprocess.TimeoutExpired as exc:
-        _write_log(latexmk_log, f"latexmk timed out after {timeout}s\n{exc.stdout or ''}")
-        raise RenderError(log_path=latexmk_log, detail="latexmk timed out") from exc
+        partial = exc.stdout
+        if isinstance(partial, bytes):  # text=True でも bytes で来る Python 版がある
+            partial = partial.decode("utf-8", "replace")
+        _write_log(latexmk_log, f"latexmk timed out after {timeout}s\n{partial or ''}")
+        raise RenderTimeoutError(
+            log_path=latexmk_log, detail=f"latexmk timed out after {timeout}s"
+        ) from exc
 
     _write_log(latexmk_log, proc.stdout + ("\n" if proc.stderr else "") + proc.stderr)
     pdf_path = out_dir / f"{job_name}.pdf"
