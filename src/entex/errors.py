@@ -61,7 +61,8 @@ class DerivationError(EnTeXError):
 class RenderError(EnTeXError):
     """`.tex` の組み立て、または latexmk が失敗した（FR7）。
 
-    `log_path` はサーバ側にだけ残す生ログの場所。利用者向けメッセージには含めない。
+    `log_path` はサーバ側にだけ残す生ログの場所、`detail` は運用者向けの短い原因メモ。
+    どちらも利用者向けメッセージには含めない。
     """
 
     GENERIC_MESSAGE = (
@@ -69,6 +70,13 @@ class RenderError(EnTeXError):
         "解決しない場合は管理者へお問い合わせください。"
     )
 
-    def __init__(self, user_message: str | None = None, *, log_path: Path | None = None) -> None:
+    def __init__(
+        self,
+        user_message: str | None = None,
+        *,
+        log_path: Path | None = None,
+        detail: str | None = None,
+    ) -> None:
         super().__init__(user_message or self.GENERIC_MESSAGE)
         self.log_path = log_path
+        self.detail = detail
