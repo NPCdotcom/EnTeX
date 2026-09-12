@@ -1,0 +1,120 @@
+%# EnTeX テンプレート — サークル月次活動報告書（仮レイアウト）
+%# 区切り: \VAR{...} = 値、\BLOCK{...} = 制御、%# = この行はコメント（.tex には出ない）
+%# 渡される変数: doc（利用者の値。text / rich_text はエスケープ済み）、schema（label・enum の表示名）
+%# 体裁の値（余白・罫線・フォント）は style/circle-monthly-report.sty に置く
+\BLOCK{set f = schema.fields}
+\BLOCK{macro money(v)}\BLOCK{if v < 0}△\VAR{(-v)|group_digits}\BLOCK{else}\VAR{v|group_digits}\BLOCK{endif}\BLOCK{endmacro}
+\BLOCK{macro rich(rt)}
+\BLOCK{for block in rt.blocks}
+\BLOCK{if block.type == "paragraph"}
+\VAR{block.text}\par
+\BLOCK{else}
+\begin{compactitems}
+\BLOCK{for item in block.items}
+  \item \VAR{item}
+\BLOCK{endfor}
+\end{compactitems}
+\BLOCK{endif}
+\BLOCK{endfor}
+\BLOCK{endmacro}
+\documentclass[a4paper,10pt]{ltjsarticle}
+\usepackage{circle-monthly-report}
+\begin{document}
+
+\reportTitle{\VAR{schema.title}}
+
+%# --- 団体情報 -----------------------------------------------------------
+\begin{tabularx}{\linewidth}{|L{28mm}|X|L{24mm}|X|}
+\hline
+\fieldName{\VAR{f.report_month.label}} & \VAR{doc.report_month|ja_month}
+  & \fieldName{\VAR{f.submitted_on.label}} & \VAR{doc.submitted_on|ja_date} \\ \hline
+\fieldName{\VAR{f.organization.label}} & \multicolumn{3}{l|}{\VAR{doc.organization}} \\ \hline
+\fieldName{\VAR{f.representative.label}} & \VAR{doc.representative.name}
+  & \fieldName{\VAR{f.representative.fields.student_id.label}} & \VAR{doc.representative.student_id} \\ \hline
+\fieldName{\VAR{f.author.label}} & \multicolumn{3}{l|}{\VAR{doc.author.role}\quad \VAR{doc.author.name}} \\ \hline
+\fieldName{\VAR{f.advisor.label}} & \multicolumn{3}{l|}{%
+\BLOCK{if doc.advisor is defined}\VAR{doc.advisor}\BLOCK{else}---\BLOCK{endif}} \\ \hline
+\fieldName{\VAR{f.members.label}} & \multicolumn{3}{l|}{%
+  \VAR{f.members.fields.enrolled.label} \VAR{doc.members.enrolled}名\quad
+  \VAR{f.members.fields.joined.label} \VAR{doc.members.joined}名\quad
+  \VAR{f.members.fields.left.label} \VAR{doc.members.left}名} \\ \hline
+\fieldName{\VAR{f.facilities_used.label}} & \multicolumn{3}{l|}{%
+\BLOCK{if doc.facilities_used is defined and doc.facilities_used}
+\BLOCK{for v in doc.facilities_used}\VAR{f.facilities_used.items.option_labels[v]}\BLOCK{if not loop.last}、\BLOCK{endif}\BLOCK{endfor}
+\BLOCK{else}---\BLOCK{endif}} \\ \hline
+\end{tabularx}
+
+%# --- 活動概要 -----------------------------------------------------------
+\reportSection{\VAR{f.summary.label}}
+\VAR{rich(doc.summary)}
+
+%# --- 活動実績 -----------------------------------------------------------
+\reportSection{\VAR{f.activities.label}}
+\BLOCK{if doc.activities}
+\noindent
+\begin{tabularx}{\linewidth}{L{16mm} L{20mm} X L{34mm} R{16mm}}
+\toprule
+\VAR{f.activities.fields.date.label} & \VAR{f.activities.fields.category.label}
+  & \VAR{f.activities.fields.title.label} & \VAR{f.activities.fields.place.label}
+  & \VAR{f.activities.fields.participants.label} \\
+\midrule
+\BLOCK{for row in doc.activities}
+\VAR{row.date|ja_date(with_year=false)} & \VAR{f.activities.fields.category.option_labels[row.category]}
+  & \VAR{row.title} & \VAR{row.place} & \VAR{row.participants} \\
+\BLOCK{endfor}
+\bottomrule
+\end{tabularx}
+\BLOCK{else}
+\emptyNote{当月の活動はありません。}
+\BLOCK{endif}
+\vspace{0.3em}
+\VAR{f.activity_count.label}: \VAR{doc.activity_count}回\quad
+\VAR{f.participants_total.label}: \VAR{doc.participants_total}名
+
+%# --- 会計 ---------------------------------------------------------------
+\reportSection{\VAR{f.finance.label}}
+\VAR{f.balance_carried.label}: \VAR{money(doc.balance_carried)}円\par
+\vspace{0.3em}
+\BLOCK{if doc.finance}
+\noindent
+\begin{tabularx}{\linewidth}{L{16mm} L{14mm} X R{28mm}}
+\toprule
+\VAR{f.finance.fields.date.label} & \VAR{f.finance.fields.category.label}
+  & \VAR{f.finance.fields.item.label} & \VAR{f.finance.fields.amount.label}（円） \\
+\midrule
+\BLOCK{for row in doc.finance}
+\VAR{row.date|ja_date(with_year=false)} & \VAR{f.finance.fields.category.option_labels[row.category]}
+  & \VAR{row.item} & \VAR{money(row.amount)} \\
+\BLOCK{endfor}
+\midrule
+ & & \VAR{f.income_total.label} & \VAR{money(doc.income_total)} \\
+ & & \VAR{f.expense_total.label} & \VAR{money(doc.expense_total)} \\
+ & & \textbf{\VAR{f.balance.label}} & \textbf{\VAR{money(doc.balance)}} \\
+\bottomrule
+\end{tabularx}
+\BLOCK{else}
+\emptyNote{当月の収支はありません。}
+\VAR{f.income_total.label}: \VAR{money(doc.income_total)}円\quad
+\VAR{f.expense_total.label}: \VAR{money(doc.expense_total)}円\quad
+\textbf{\VAR{f.balance.label}: \VAR{money(doc.balance)}円}
+\BLOCK{endif}
+
+%# --- 次月の予定 ---------------------------------------------------------
+\reportSection{\VAR{f.next_month_plan.label}}
+\begin{compactitems}
+\BLOCK{for item in doc.next_month_plan}
+  \item \VAR{item}
+\BLOCK{endfor}
+\end{compactitems}
+
+%# --- 特記事項 -----------------------------------------------------------
+\reportSection{特記事項}
+\VAR{f.incident.label}: \VAR{f.incident.option_labels[doc.incident]}\par
+\VAR{f.audited.label}: \BLOCK{if doc.audited}済\BLOCK{else}未\BLOCK{endif}\par
+\BLOCK{if doc.remarks is defined}
+\vspace{0.3em}
+\textbf{\VAR{f.remarks.label}}\par
+\VAR{rich(doc.remarks)}
+\BLOCK{endif}
+
+\end{document}

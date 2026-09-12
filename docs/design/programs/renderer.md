@@ -3,7 +3,7 @@ title: renderer — IR + doc-package から PDF を組み立てる
 kind: design
 phase: P3
 scope_level: program
-status: draft
+status: agreed
 created: 2026-09-12
 updated: 2026-09-12
 parent_element: docs/design/elements/ir-type-vocabulary.md
@@ -122,10 +122,11 @@ charter §7 で既に確定済みのため、この設計で新規のフレー�
 
 ## Open questions
 
-- `schema.json` からpydanticモデルを動的生成する方式と、型ごとに検証関数を書く方式のどちらにするかは、`ir-validate-and-derive` のP4計画時に決める（この設計では「pydanticを使う」までを決定、実装方式は未定）
-- `template.tex.j2` の可変長 `tabular` を luatexja 環境でどう組むか（`longtable` 等の要否）は `render-and-cli` の実装時に確認する
+- ~~`schema.json` からpydanticモデルを動的生成する方式と、型ごとに検証関数を書く方式のどちらにするか~~ → **決定（P4, 2026-09-12）**: `schema.json` 自体・封筒・`expr` は pydantic の静的モデル（`ir/schema.py`）、`content` は型ごとの検証関数（`ir/validate.py`）。理由は plan `ir-validate-and-derive` の Agent recommendations
+- ~~`template.tex.j2` の可変長 `tabular` を luatexja 環境でどう組むか~~ → **当面の実装（P5）**: `tabularx` + `booktabs`、`longtable` は使わず改ページを許容。上限行数（活動 10・会計 20）で A4 2 枚に収まることを確認済み。実物入手後に再判定
 - `RenderError` の汎用メッセージ1種で当面足りるか、latexmkのエラーパターン別メッセージが必要になるかは、実物のテスト運用で判断する
 
 ## 次
 
-- [ ] P3 ゲート → `.agents/plans/programs/ir-validate-and-derive.md` と `.agents/plans/programs/render-and-cli.md`（**PM ユーザー確認が必要。本設計はここで一旦止め、`plan-record` 以降は別エージェントに委ねる**）
+- [x] P3 ゲート → [`.agents/plans/algorithms/ir-validate-and-derive.md`](../../../.agents/plans/algorithms/ir-validate-and-derive.md) と [`.agents/plans/programs/render-and-cli.md`](../../../.agents/plans/programs/render-and-cli.md)（2026-09-12、ユーザー指示「P3の設計に従って実装に入ってください」を PM 確認として記録）
+- [ ] P6 レビュー（`review-conduct`）→ 実物の Word 版報告書を入手して `packages/circle-monthly-report/` を直す

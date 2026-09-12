@@ -2,16 +2,26 @@
 
 最初の文書種（charter §5 の MVP）。大学サークルが学生課へ毎月出す活動報告書を題材にしている。
 
-**状態: スキーマと IR 例だけ。テンプレート（`template.tex.j2`）とスタイルは着手順 1 で書く。**
-実物の Word 版報告書はまだ確認していないので、項目構成は一般的なサークル報告書の形に沿った **仮定** である（[ir-type-vocabulary.md](../../docs/design/elements/ir-type-vocabulary.md) の Assumptions）。
+**状態: スキーマ・IR 例・仮レイアウトのテンプレートとスタイルが揃い、`entex render` で PDF が出る（着手順 1）。**
+実物の Word 版報告書はまだ確認していないので、項目構成もレイアウトも一般的なサークル報告書の形に沿った **仮定** である（[ir-type-vocabulary.md](../../docs/design/elements/ir-type-vocabulary.md) の Assumptions、[renderer.md](../../docs/design/programs/renderer.md) の仮レイアウト方針）。
 
 ## 中身
 
 | パス | 内容 |
 |---|---|
 | `schema.json` | 入力の形。型の語彙は [ir-type-vocabulary.md](../../docs/design/elements/ir-type-vocabulary.md) §1、書式は同 §8 の案 1（仮） |
+| `template.tex.j2` | TeX 雛形（Jinja2）。区切りは `\VAR{…}`（値）・`\BLOCK{…}`（制御）・行頭 `%#`（コメント）。渡される変数は `doc`（利用者の値。`text` / `rich_text` はエスケープ済み）と `schema`（`label`・enum の表示名） |
+| `style/circle-monthly-report.sty` | 体裁（余白・罫線・表の列幅・見出し）。**体裁の値はここに置き、`src/entex/` には置かない** |
 | `examples/valid/` | 検証を通り、PDF が出るべき IR。運用で起こる場面ごとに 1 件 |
-| `examples/invalid/` | 検証で **弾かれるべき** IR。将来のテストの素材 |
+| `examples/invalid/` | 検証で **弾かれるべき** IR。`tests/test_ir_loader.py` の素材 |
+
+```bash
+# コンテナ内で
+entex render packages/circle-monthly-report/examples/valid/01-typical.json
+# → out/render/01-typical/01-typical.pdf
+```
+
+テンプレートで使える整形フィルタ（`src/entex/renderer.py` が提供。どれを使うかはテンプレートが選ぶ）: `group_digits`（3 桁区切り）・`ja_month`（`2026年8月`）・`ja_date`（`2026年8月3日` / `with_year=false` で `8月3日`）。金額の負号（`△`）や「済 / 未」の表記はテンプレート内のマクロで決めている。
 
 ## スキーマが網羅している型と属性
 

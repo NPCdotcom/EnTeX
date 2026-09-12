@@ -2,7 +2,7 @@
 
 文書種 1 つ = ディレクトリ 1 つ。**本体コード（`src/entex`）を変えずに増やせる**ことが設計の合否判定（charter §4・§6）。
 
-想定する中身（H1 で確定させる。現時点は仮）:
+中身（最初の文書種で実際に使っている構成。2 つ目の文書種で妥当性を判定する）:
 
 ```
 packages/<doc-type-slug>/
@@ -17,4 +17,6 @@ packages/<doc-type-slug>/
 
 | パッケージ | 状態 |
 |---|---|
-| [`circle-monthly-report/`](circle-monthly-report/README.md) | スキーマと IR 例のみ。テンプレートは着手順 1 で書く |
+| [`circle-monthly-report/`](circle-monthly-report/README.md) | スキーマ・IR 例・仮レイアウトのテンプレートとスタイル。`entex render` で PDF が出る。実物の様式に合わせた調整は未 |
+
+`src/entex/` が読むのは `schema.json` の中身と `template.tex.j2` / `style/` の場所だけ（`src/entex/packages.py`）。`style/` は latexmk 実行時に `TEXINPUTS` へ加えられるので、`.sty` はファイル名だけで `\usepackage` できる。

@@ -1,0 +1,31 @@
+{
+  "additionalProperties": false,
+  "description": "IR がどの文書種のどの版のスキーマに従うかを自己申告する封筒。content の形は packages/<doc_type>/schema.json が決める。",
+  "properties": {
+    "doc_type": {
+      "description": "パッケージのスラッグ。packages/<slug>/ と一致",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "title": "Doc Type",
+      "type": "string"
+    },
+    "schema_version": {
+      "description": "パッケージの schema.json の版",
+      "minimum": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "content": {
+      "additionalProperties": true,
+      "description": "中身。schema.json の fields に従う",
+      "title": "Content",
+      "type": "object"
+    }
+  },
+  "required": [
+    "doc_type",
+    "schema_version",
+    "content"
+  ],
+  "title": "EnTeX IR envelope",
+  "type": "object"
+}

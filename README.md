@@ -62,9 +62,15 @@ make test            # TeX 依存テストは自動 skip
 ```bash
 entex version
 entex doctor         # コンテナ内で実行
+entex render packages/circle-monthly-report/examples/valid/01-typical.json   # コンテナ内で実行
+# → out/render/01-typical/01-typical.pdf（.tex と latexmk.log も同じ場所に残る）
+entex render <json> --out DIR            # 出力先を指定
+entex render <json> --tex-only           # latexmk を呼ばず .tex だけ書く（TeX の無いホストで確認するとき）
 ```
 
-`entex render <json>` は着手順 1（`JSON → PDF`）で最初の doc-package と一緒に入ります。
+`render` の終了コード: `0` 成功 / `1` 入力の誤り（封筒・中身。日本語でまとめて標準エラーに出る）/ `2` 組版の失敗（利用者向けには汎用文だけ。TeX のログは `out/.../latexmk.log`）/ `3` doc-package の不備。
+
+処理の流れは [docs/design/programs/renderer.md](docs/design/programs/renderer.md): `cli.py`（JSON を読む）→ `ir/loader.py`（封筒・型検証）→ `ir/derive.py`（導出値）→ `tex/escape.py`（エスケープ）→ `renderer.py`（`template.tex.j2` → latexmk）。
 
 ## Layout
 

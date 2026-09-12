@@ -1,0 +1,38 @@
+%% circle-monthly-report — 仮レイアウトの体裁（フォント・余白・罫線）。
+%% 体裁に関わる値は src/entex/ ではなくここに置く（AGENTS.md）。実物の様式入手後に直す。
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{circle-monthly-report}[2026/09/12 EnTeX circle-monthly-report provisional style]
+
+\RequirePackage[a4paper,top=20mm,bottom=20mm,left=20mm,right=20mm]{geometry}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+
+% 段落の字下げなし、表の行間はやや広め
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{5pt}
+
+% 右寄せの固定幅列（金額・人数）と、見出し用の左寄せ列
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% 表題・節見出し
+\newcommand{\reportTitle}[1]{%
+  \begin{center}{\LARGE\bfseries #1}\end{center}\vspace{0.5em}}
+\newcommand{\reportSection}[1]{%
+  \vspace{1.0em}\par\noindent{\large\bfseries #1}\par\nobreak\vspace{0.3em}}
+
+% 項目名セル（基本情報の表で使う）
+\newcommand{\fieldName}[1]{\textbf{#1}}
+
+% 箇条書きの余白を詰める（rich_text の list ブロック・次月の予定）
+\newenvironment{compactitems}{%
+  \begin{itemize}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\topsep}{0.2em}}%
+  {\end{itemize}}
+
+% 空の表の代わりに出す一文
+\newcommand{\emptyNote}[1]{{\small #1}\par}
+
+\endinput
