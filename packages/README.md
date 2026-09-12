@@ -17,7 +17,7 @@ packages/<doc-type-slug>/
 
 | パッケージ | 状態 |
 |---|---|
-| [`club-meeting-log/`](club-meeting-log/README.md) | 最初の文書種（charter §5 の MVP）。実物47本に基づくスキーマ・IR 例・テンプレートとスタイルが揃っている。**PDF はまだ出ない** — 本文の `document` 型が `src/entex/` に未実装（同 README の「`src/entex/` に足りないもの」） |
+| [`club-meeting-log/`](club-meeting-log/README.md) | 最初の文書種（charter §5 の MVP）。実物47本に基づくスキーマ・IR 例・テンプレートとスタイルが揃っている。`document` 型の実装（[issue #30](https://github.com/NPCdotcom/EnTeX/issues/30)）で画像なしの例は PDF が出る |
 | [`circle-monthly-report/`](circle-monthly-report/README.md) | スキーマ・IR 例・仮レイアウトのテンプレートとスタイル。`entex render` で PDF が出る。**新規の文書種としては開発を継続しない**（[ADR-0001](../docs/adr/0001-first-doc-type-pivot-to-meeting-log.md)）。型語彙を一通り使う参考資料として残す |
 
 `src/entex/` が読むのは `schema.json` の中身と `template.tex.j2` / `style/` の場所だけ（`src/entex/packages.py`）。`style/` は latexmk 実行時に `TEXINPUTS` へ加えられるので、`.sty` はファイル名だけで `\usepackage` できる。
