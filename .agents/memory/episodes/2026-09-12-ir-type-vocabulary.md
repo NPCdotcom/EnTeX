@@ -42,3 +42,42 @@ NPC proposed 11 IR types (`text` `rich_text` `month` `date` `integer` `money` `e
 - Need the real Word monthly report to fix schema fields (first Open item).
 - `schema_version` bump policy; `expr` vocabulary sufficiency — confirm against real form.
 - Enum labels live in schema, not IR — API (step 2) must expose the schema too.
+
+## Turn 3 (same day): P0 gate Go, P1 要求 written
+
+- Reviewed progress against the 6 主要要素 (charter §8): `ir-schema` (type vocabulary) and `doc-package` (circle-monthly-report scaffold) have a base; `renderer` is untouched (only `version`/`doctor` in `src/entex/cli.py`); `form-ui`/`job-runner`/`data-import` are later roadmap steps.
+- User decided **P0 gate = Go**, and confirmed **renderer-first** order (matches charter §11 step 1). Recorded in `docs/project-state.yaml` (`current_phase: P1`, `gate_status.current: passed`) and `.agents/memory/audit/audit-log.md` (`gate` entry, decision Go).
+- Note: the workspace mount path changed mid-session (from a Windows path to `/workspace`); the gate-recording edits from the prior turn had landed on the old path and were not present in the actual repo, so they were redone here on `/workspace`.
+- Wrote `docs/requirements/circle-monthly-report/要求.md` (P1) — grounded in charter §3/§5, `packages/circle-monthly-report/README.md`, and `schema.json`. Includes R1–R10 requirements list, agent recommendation (proceed with 案A: build renderer core now with provisional schema/layout, fix fields once the real report arrives), Facts/Assumptions carried over from ir-type-vocabulary.md.
+- Linked from `docs/README.md`.
+
+### Next
+
+- User review of `要求.md` → promote to `要件.md` (P2, verifiable acceptance).
+- Then P3 basic design for `renderer` (`docs/design/programs/renderer.md`, H4) → `plan-record` (P4) before any `implement-conduct`.
+
+## Turn 4 (same day): P2 要件 written
+
+- User said "次に進んでください" (proceed) — treated as continuation, not a new Stage-Gate decision (要件.md起票 only needs 要求.md to be reviewable, per PROJECT_LIFECYCLE.md gate table; no separate user Go required here).
+- Wrote `docs/requirements/circle-monthly-report/要件.md` (P2): scope (in/out), FR1–FR8 (envelope check → type validation → derived-key rejection → expr evaluation → TeX escape → latexmk PDF → user-facing error mapping → CLI `entex render`), NFR1 (≤10s) / NFR2 (determinism), each with a concrete verification method tied to existing `examples/`. Agent recommendation: split renderer into `ir/loader.py` / `ir/derive.py` / `tex/escape.py` / `renderer.py` / `cli.py` (案2) rather than one monolithic module, to keep the doc-package-dependent vs. -independent boundary visible ahead of the 2nd doc-type judgment (charter §11 step 3).
+- Open items carried to P3: how to split FR1–FR8 into plan-sized PDCA units, provisional `template.tex.j2` layout policy, FR7's latexmk→Japanese error mapping rules.
+- Linked from `docs/README.md`. Recorded `phase_change` (P1→P2) in audit-log (not a new Stage-Gate; P0 Go remains the operative gate decision).
+
+### Next
+
+- P3 basic design: `docs/design/programs/renderer.md` (H4) — resolve the 3 Open items above, then `plan-record` (P4).
+
+## Turn 5 (same day): P3 renderer design, then explicit stop
+
+- User: "次に進んでほしいのですが、実装ではなく設計で止めてください。実装は別のエージェントに行わせたいです。" — proceed to next step (P3), but stop before implementation; a separate agent will implement.
+- Wrote `docs/design/programs/renderer.md` (P3, H4): 5-module split (`ir/loader.py`, `ir/derive.py`, `tex/escape.py`, `renderer.py`, `cli.py`) with a data-flow diagram and an interface table (function signatures as design intent, not code); resolved the 3 要件.md Open items:
+  - Plan split: `ir-validate-and-derive` (H5, FR1-4, TeX-independent, `make test`-able) and `render-and-cli` (H4, FR5-8, needs `make docker-test`)
+  - Error mapping (FR7): 4-way classification (`EnvelopeError`/`ValidationError`/`DerivationError`/`RenderError`), generic Japanese message for latexmk failures with raw log server-side only
+  - Provisional `template.tex.j2` layout: `ltjsarticle`, field order follows `schema.json` declaration order, variable-length `tabular` (not fixed to `max_items`), all styling values live in `packages/circle-monthly-report/` per AGENTS.md
+- **Explicitly stopped here per user instruction.** `docs/project-state.yaml`: `current_phase: P3`, `allowed_actions` still design-only (no `plan-record`/`implement-conduct` uncommented), added `gate_status.conditions` noting the handoff boundary. Audit log entry `phase_change` (p2-to-p3-stop) records the user's explicit "design only" instruction as the reason plan/implementation are deferred.
+- Left explicit handoff notes in both `renderer.md`'s 次 section and `nav.yaml.next_actions` for whichever agent/session picks up `plan-record`.
+
+### Next (for a different, later agent/session)
+
+- `plan-record` (P4) for `ir-validate-and-derive` and `render-and-cli`, with PM user confirmation per PROJECT_LIFECYCLE.md gate table, then `implement-conduct` (P5).
+- This session/agent should not perform those steps unless the user explicitly re-authorizes it here.

@@ -2,12 +2,12 @@
 # Session navigation (every turn): .agents/memory/state/nav.yaml — see .agents/docs/PM_ROUTING.md
 # Gate: .agents/docs/ROLES_AND_GOVERNANCE.md · Lifecycle: docs/PROJECT_LIFECYCLE.md
 
-current_phase: P0   # P0|P1|P2|P3|P4|P5|P6
-phase_note: "Charter drafted by NPC+Aster (2026-09-12, 案B adopted). Dev environment scaffolded (Docker + LuaLaTeX + Python pkg). Awaiting user Go on P0."
+current_phase: P3   # P0|P1|P2|P3|P4|P5|P6
+phase_note: "P0ゲート Go 済み（2026-09-12）。要求.md(P1)→要件.md(P2)→renderer基本設計(P3, H4, docs/design/programs/renderer.md)まで完了。ユーザー指示により、ここで意図的に停止: plan-record(P4)・implement-conduct(P5)は別エージェント/別セッションに委ねる。allowed_actionsはdesign-recordのみのまま未解禁で維持。"
 
 scope_focus:      # which H level we are clarifying now
-  level: H0       # H0|H1|H2|H3|H4|H5
-  path: "docs/design/product/charter.md"
+  level: H4       # H0|H1|H2|H3|H4|H5
+  path: "docs/design/programs/renderer.md"
 
 active_pdca:      # primary S1 cycle (program or algorithm) — none until a plan exists
   plan_path: ""
@@ -16,14 +16,15 @@ active_pdca:      # primary S1 cycle (program or algorithm) — none until a pla
 
 # Stage-gate status (Gate Keeper = user)
 gate_status:
-  current: pending        # pending | passed | conditional | recycled | hold | killed
-  proposal: "Go"          # PM proposal for P0 → P1: charter is complete enough to write 要求 for the first doc-type
-  last_decision: ""
-  last_decided_at: ""
-  conditions: []
+  current: passed         # pending | passed | conditional | recycled | hold | killed
+  proposal: "P3→P4: renderer.mdのplan分割案(ir-validate-and-derive / render-and-cli)でplan-recordする。実行者は別エージェントを想定（本エージェントは設計までで停止）"
+  last_decision: "Go"
+  last_decided_at: "2026-09-12"
+  conditions:
+    - "plan-record・implement-conductはユーザーが明示的に別エージェントへ引き継ぐまで着手しない"
   gate_keeper: user       # fixed; PM proposes, user decides
 
-last_gate_passed: ""
+last_gate_passed: "P0→P1 (2026-09-12)"
 allowed_actions:
   - design-deliberate
   - design-record
@@ -37,7 +38,7 @@ lifecycle_plan:
   profile: "standard"      # hotfix | spike | standard | full | doc_only | custom
   brownfield: false
   last_planned_at: "2026-09-12"
-  executed_phases: [P0]
+  executed_phases: [P0, P1]
   skipped_phases: []
   skipped_stages: []
   recommended_cursor_mode: "Plan→Agent"

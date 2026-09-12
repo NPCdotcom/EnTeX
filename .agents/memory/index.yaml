@@ -46,6 +46,46 @@ entries:
     recall: on_demand
     linked: [project-state]
 
+  - id: audit-p0-go
+    scope: team
+    tier: audit
+    granularity: anchor
+    path: .agents/memory/audit/audit-log.md
+    summary: "P0→P1 gate: user Go (2026-09-12); renderer-first order agreed among 6 主要要素"
+    tags: [gate, P0, P1, renderer]
+    recall: on_demand
+    linked: [project-state]
+
+  - id: req-circle-monthly-report
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/requirements/circle-monthly-report/要求.md
+    summary: "P1 要求 for the first doc-type (サークル月次報告書), grounded in charter §3/§5 and packages/circle-monthly-report/README.md"
+    tags: [requirements, P1, circle-monthly-report]
+    recall: on_demand
+    linked: [project-state]
+
+  - id: reqspec-circle-monthly-report
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/requirements/circle-monthly-report/要件.md
+    summary: "P2 要件 — FR1-FR8 (envelope/type検証・derived計算・escape・latexmk・CLI) + NFR1-2 (10秒以内・決定性), open items for P3"
+    tags: [requirements, P2, circle-monthly-report, renderer]
+    recall: on_demand
+    linked: [project-state, req-circle-monthly-report]
+
+  - id: design-renderer
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: docs/design/programs/renderer.md
+    summary: "P3 basic design (H4) for renderer — module split, interfaces, error mapping, provisional template layout policy, P4 plan split recommendation (ir-validate-and-derive / render-and-cli). Session stopped here by explicit user request; implementation deferred to a separate agent."
+    tags: [design, P3, H4, renderer, handoff]
+    recall: on_demand
+    linked: [project-state, reqspec-circle-monthly-report]
+
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
   #   scope: project
