@@ -35,6 +35,7 @@ Example（中立・削除可）: [_example/](_example/)
 
 | Plan | scope_level | Status | Summary |
 |------|-------------|--------|---------|
-| *(add rows)* | | | |
+| [algorithms/ir-validate-and-derive](algorithms/ir-validate-and-derive.md) | H5 algorithm | agreed | 封筒・型検証・導出値計算（FR1–FR4、TeX 非依存） |
+| [programs/render-and-cli](programs/render-and-cli.md) | H4 program | agreed | エスケープ・テンプレ組み立て・latexmk・CLI `render`（FR5–FR8、NFR1–2） |
 
 Rules: `planning`, `plans-content`, `project-lifecycle`
