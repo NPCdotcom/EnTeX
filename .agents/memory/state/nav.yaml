@@ -4,19 +4,18 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User accepted 推奨案 A→B (P6 review of PR #8, then P3 design for API incl. shared pipeline) on branch feature/npc. Review recorded (pass, W1/W2 warnings); api.md drafted. Waiting for user Go on api.md and the P4 split."
+  intent: "User Go (2026-09-12): api.md agreed, P4 split approved, feature/npc acknowledged, pydantic>=2.9 approved. Plans pipeline-and-cli and api-render recorded (agreed). PR #10 holds review + design + plans. Next: P5 implement pipeline-and-cli on user instruction."
   turn_estimate: 1
-  chat_id_hint: "entex-p6-review-api-design"
+  chat_id_hint: "entex-p4-api-plans"
 
 navigation:
-  active_thread_id: "api-design"
-  active_plan: ".agents/plans/programs/render-and-cli.md"   # Check done; next plans not yet recorded
+  active_thread_id: "api-pipeline"
+  active_plan: ".agents/plans/programs/pipeline-and-cli.md"
   next_actions:
-    - "Gate (user): read docs/design/programs/api.md → agree/adjust → set status: agreed. Open items: separate 要件.md or keep §1; auth token in v1 or later; RenderTimeoutError split"
-    - "After Go: plan-record ×2 — programs/pipeline-and-cli (entex.pipeline + CLI on it + W1 job-name rule + W2 PackageError for missing template + renderer.md IF table S1) then programs/api-render (FastAPI routes, Problem Details, Settings, schemas/api, Dockerfile CMD, make docker-serve). Branch per AGENTS.md: <issue>/<npc|aster>/<topic>"
-    - "api-render: align pyproject pydantic floor to >=2.9 (current FastAPI requirement)"
-    - "Post `@coderabbitai review` on the feature/npc PR (AGENTS.md) — do after each push"
-    - "Branch name feature/npc does not match AGENTS.md / .githooks pre-push regex; user chose it explicitly. Mention when merging; open an issue number for API work"
+    - "P5 implement-conduct: plan pipeline-and-cli (entex.pipeline render_ir/prepare/RenderResult; CLI on it; W1 job-name rule + ./ prefix for latexmk; W2 PackageError in load_package; S3 TEXINPUTS trailing sep; S1 renderer.md IF table). TeX-independent: make lint / make test decide. Read implement-reference first"
+    - "Then P5 api-render: src/entex/api/{app,routes,problems,settings}.py, tests/test_api.py (TestClient), schemas/api/{problem.schema.json,openapi.json}, Dockerfile CMD uvicorn, make docker-serve, README §API. Decide RenderTimeoutError split (plan recommends yes)"
+    - "Branch for implementation: ask/confirm — AGENTS.md wants <issue>/npc/<topic>; user chose feature/npc for docs. Open an issue number for API work"
+    - "Post `@coderabbitai review` on PR #10 after each push (AGENTS.md)"
     - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/ only (layout UAT still pending)"
     - "Minor Act items not in any plan yet: S2 pattern search vs fullmatch (decide + 1 line in ir-type-vocabulary.md), S3 TEXINPUTS trailing separator"
   blockers: []

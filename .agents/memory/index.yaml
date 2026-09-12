@@ -131,10 +131,30 @@ entries:
     tier: knowledge
     granularity: thread
     path: docs/design/programs/api.md
-    summary: "P3 design (H4, draft) for roadmap step 2 — entex.pipeline shared by CLI/API, POST /v1/render → PDF, RFC 9457 Problem Details, sync def + semaphore, P4 split pipeline-and-cli / api-render"
+    summary: "P3 design (H4, agreed 2026-09-12) for roadmap step 2 — entex.pipeline shared by CLI/API, POST /v1/render → PDF, RFC 9457 Problem Details, sync def + semaphore, P4 split pipeline-and-cli / api-render"
     tags: [design, P3, H4, api, pipeline]
     recall: on_demand
-    linked: [design-renderer, review-renderer-cli-p6, project-state]
+    linked: [design-renderer, review-renderer-cli-p6, project-state, plan-pipeline-and-cli, plan-api-render]
+
+  - id: plan-pipeline-and-cli
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/programs/pipeline-and-cli.md
+    summary: "P4 plan (H4, agreed) — entex.pipeline.render_ir/prepare, CLI on top, absorbs review W1 (job name) / W2 (missing template → PackageError) / S1 (renderer.md IF) / S3 (TEXINPUTS). TeX-independent"
+    tags: [plan, P4, H4, pipeline, cli]
+    recall: on_demand
+    linked: [design-api, review-renderer-cli-p6, project-state]
+
+  - id: plan-api-render
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/programs/api-render.md
+    summary: "P4 plan (H4, agreed) — FastAPI POST /v1/render → PDF, /v1/health, /v1/doc-types*, RFC 9457 problems, settings, schemas/api, Dockerfile CMD. Depends on pipeline-and-cli. Auth out of scope"
+    tags: [plan, P4, H4, api]
+    recall: on_demand
+    linked: [design-api, plan-pipeline-and-cli, project-state]
 
   - id: ep-p6-review-and-api-design
     scope: project

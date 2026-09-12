@@ -148,3 +148,26 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 - questions: api.md §9（要件.md の独立、認証、RenderTimeoutError、doc-types の schema 公開範囲）
 
 ---
+## 2026-09-12T02:20:00+00:00 | gate | p3-to-p4-api
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `gate` |
+| **actor** | `user` |
+| **decision** | Go（api.md agreed → P4 plan-record 2 本） |
+| **phase** | P3 → P4（着手順 2） |
+| **summary** | ユーザー回答「1. api.md を agreed にしてよいです。2. Go 3. 承知 4. 承認」。api.md を agreed にし、`.agents/plans/programs/pipeline-and-cli.md` と `api-render.md` を agreed で記録。`pyproject.toml` の pydantic 下限を 2.9 に上げた（4 の承認） |
+| **reason** | PROJECT_LIFECYCLE.md ゲート表: plan-record は PM ユーザー確認が必要。terminology alignment は api.md §6 に記録済み |
+
+### Refs
+
+- design: `docs/design/programs/api.md`（status: agreed）
+- plan: `.agents/plans/programs/pipeline-and-cli.md` · `.agents/plans/programs/api-render.md`
+- team: `docs/project-state.yaml`（current_phase: P4, active_pdca → pipeline-and-cli, allowed_actions に implement-conduct）
+- questions: ブランチ名（feature/npc は規約外だがユーザー了承。実装時に再確認）
+
+### Detail（任意）
+
+3（feature/npc の規約不一致）は「承知」= 認識のうえ継続。実装 PR のブランチ名は着手時に確認する。
+
+---
