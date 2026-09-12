@@ -4,34 +4,33 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User (2026-09-12): revise the charter to resolve issue #14 (Aster's census of 47 real 部会ログ + proposal: front matter + Markdown input, document type, image brought forward). This turn: charter §1/§3/§5(+5.1)/§6/§8/§9/§10/§11/Facts revised on branch cursor/charter-issue-14-markdown-input-9732 — done. Scope limited to charter per user; vocabulary/ADR/TEAM follow-ups listed below."
+  intent: "User (2026-09-12): revise the charter to resolve issue #14 (Aster's census of 47 real 部会ログ + proposal: front matter + Markdown input, document type, image brought forward). Charter §1/§3/§5(+5.1)/§6/§8/§9/§10/§11/Facts revised on branch cursor/charter-issue-14-markdown-input-9732 (PR #17). Scope limited to charter per user; vocabulary/ADR/TEAM follow-ups listed below. Meanwhile PR #12 (api-render + combined P6 Check pass) merged to main → roadmap step 2 (API) complete; origin/main merged into PR #17 to resolve the memory-file conflicts."
   turn_estimate: 1
   chat_id_hint: "entex-charter-issue-14"
 
 navigation:
   active_thread_id: "club-meeting-log-markdown-input"
-  active_plan: ".agents/plans/programs/pipeline-and-cli.md"
+  active_plan: ""   # step-2 plans both Check pass; next plan is created at roadmap step 3a (club-meeting-log) P3/P4
   next_actions:
-    - "Await NPC/Aster review+merge of the charter PR (issue #14 §5 checkbox (1)). Merge = agreement on §3-(1). Post `@coderabbitai review` on the PR"
-    - "Follow-up PR (issue #14 §3-(2)(3)): docs/design/elements/ir-type-vocabulary.md — add `document` type (sections/extra_sections/blocks/max_heading_level; blocks heading/paragraph/list/quote/link/image), move `image` §7 → 「次に入れる」, keep time/小数/表 excluded (0 occurrences in 47 logs). Charter §5.1 already points there"
+    - "Await NPC/Aster review+merge of charter PR #17 (issue #14 §5 checkbox (1)). Merge = agreement on §3-(1). `@coderabbitai review` already posted; re-post after each push"
+    - "Follow-up PR (issue #14 §3-(2)(3)): docs/design/elements/ir-type-vocabulary.md — add `document` type (sections/extra_sections/blocks/max_heading_level; blocks heading/paragraph/list/quote/link/image), move `image` §7 → 「次に入れる」, keep time/小数/表 excluded (0 occurrences in 47 logs). Charter §5.1 already points there. Fold in old S2/S4 (pattern / is_valid_slug → fullmatch, 1 line)"
     - "Follow-up: ADR-0001 Open questions are all answered by issue #14 — add a pointer/amendment (or ADR-0002 for the input-format decision). docs/TEAM.md: packages/=aster, src/entex/=npc split (charter §6 now refers to it)"
-    - "Follow-up: open implementation issues — packages/club-meeting-log/ (aster: schema.json / template.tex.j2 / style / converted samples) and npc: document validation, Markdown → IR importer (data-import), block TeX expansion. New P1 要求.md for club-meeting-log under docs/requirements/"
-    - "Unaffected, still pending from before: (a) P6 review-conduct for pipeline-and-cli (diff = commits d5675ab..644edb0 on PR #10), or (b) go straight to P5 api-render and review both together. project-state proposal says (a) or (b) is user's call"
-    - "P5 api-render: src/entex/api/{app,routes,problems,settings}.py, tests/test_api.py (TestClient), schemas/api/{problem.schema.json,openapi.json}, Dockerfile CMD uvicorn, make docker-serve, README §API. render_ir(timeout=...) already accepts None → renderer default. Decide RenderTimeoutError split (plan recommends yes)"
-    - "Post `@coderabbitai review` on PRs after each push (AGENTS.md)"
-    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. This turn's own branch (cursor/... suffix) is a cloud-agent harness requirement, also outside AGENTS.md convention — noted, not to be 'fixed' unilaterally"
-    - "Minor Act item not in any plan yet: S2 pattern search vs fullmatch (decide + 1 line in ir-type-vocabulary.md). S3 is done in pipeline-and-cli"
-  blockers: []
+    - "Roadmap step 3a (charter §11 after PR #17): new P1 要求.md for club-meeting-log under docs/requirements/, then P3 design for document type validation + Markdown → IR importer (data-import) + block TeX expansion (npc) and packages/club-meeting-log/ (aster). Image-less past logs first, `image` next. Open implementation issues per issue #14 §4"
+    - "Roadmap step 3b: charter §6 pass/fail 'zero changes under src/entex/' is judged only with a REAL second doc-type (circle-monthly-report does not count). Fold in review S2 (RenderResult.title so the API stops calling load_package twice) and use GET /v1/doc-types as the judgment signal"
+    - "Small patches (patch-reference first): W1 stream body in read_ir_body + chunked oversize test (with the auth/public-deploy plan); S1 fix api.md §3.1 sentence '新しい例外型は増やさない' (status untouched)"
+    - "Nice-to-have tests: S3 internal-error safety net (TestClient raise_server_exceptions=False), S5 Settings validation; S6 measure NFR-A1 with ENTEX_MAX_CONCURRENT_RENDERS=4 in Docker; Starlette httpx→httpx2 only if CI turns warnings into errors. After PR #12 merge, run `make docker-serve` once in the user's Docker env (only UAT item not exercised — no Docker on this host)"
+    - "Branch note: cloud-agent branches (cursor/...-9732) are a harness requirement, outside AGENTS.md <issue>/<owner>/<topic> — noted, not to be 'fixed' unilaterally"
+  blockers: []   # 部会ログの様式待ちは issue #14 の実測で解消（2026-09-12）
 
 alignment:
   project_state_path: docs/project-state.yaml
-  phase: P5
+  phase: P6
   scope_level: H4
   gate_status: passed
 
 pressure:
   level: low
-  signals: ["local checkout was 21 commits behind origin/main at turn start; reset to origin/main before editing"]
+  signals: ["local checkout was 21 commits behind origin/main at turn start; reset to origin/main before editing", "PR #12 merged to main mid-turn; origin/main merged into this branch and memory files reconciled by hand"]
   last_l2_flush_at: "2026-09-12"
   reanchor_required: false
   pre_compact_recommended: false

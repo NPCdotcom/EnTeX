@@ -80,3 +80,16 @@ class RenderError(EnTeXError):
         super().__init__(user_message or self.GENERIC_MESSAGE)
         self.log_path = log_path
         self.detail = detail
+
+
+class RenderTimeoutError(RenderError):
+    """latexmk が制限時間内に終わらなかった。
+
+    組版失敗（`RenderError`）の一種として扱えるが、利用者には「やり直せば通るかもしれない」
+    と伝えたいので文言と API の `type` を分ける（api.md §9）。
+    """
+
+    GENERIC_MESSAGE = (
+        "PDFの生成が時間内に終わりませんでした。しばらくしてからやり直してください。"
+        "繰り返し起きる場合は管理者へお問い合わせください。"
+    )

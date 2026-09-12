@@ -1,0 +1,308 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "EnTeX API",
+    "description": "中間表現（IR）を POST すると固定様式の PDF が返る。失敗は application/problem+json（RFC 9457）。設計: docs/design/programs/api.md",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/v1/render": {
+      "post": {
+        "summary": "IR から PDF を生成する",
+        "operationId": "render_v1_render_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "生成した PDF",
+            "headers": {
+              "Content-Disposition": {
+                "description": "attachment; filename=\"<doc_type>.pdf\"; filename*=UTF-8''<title>.pdf",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "リクエストの本文を読めません",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "本文が大きすぎます",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "対応していない形式です",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "入力に問題があります",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "PDFの生成に失敗しました",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "混み合っています",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "ツールチェーンの有無（readiness）",
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "lualatex / latexmk / luatexja.sty がそろっている",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "503": {
+            "description": "いずれかが見つからない"
+          }
+        }
+      }
+    },
+    "/v1/doc-types": {
+      "get": {
+        "summary": "使える文書種の一覧",
+        "operationId": "list_doc_types_v1_doc_types_get",
+        "responses": {
+          "200": {
+            "description": "packages/ 配下の doc-package（読み込めるものだけ）",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/doc-types/{doc_type}": {
+      "get": {
+        "summary": "文書種の schema.json",
+        "operationId": "get_doc_type_v1_doc_types__doc_type__get",
+        "parameters": [
+          {
+            "name": "doc_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "packages/<doc_type>/schema.json の内容",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "見つかりません",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "文書種の定義に問題があります",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProblemIssue": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "description": "content 内の場所（例: finance[1].amount）",
+            "title": "Path",
+            "type": "string"
+          },
+          "message": {
+            "description": "利用者向けの完成文（フィールドの label を含む）",
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "message"
+        ],
+        "title": "ProblemIssue",
+        "type": "object"
+      },
+      "Problem": {
+        "additionalProperties": false,
+        "description": "EnTeX API の失敗応答（application/problem+json、RFC 9457）。detail は日本語の完成文で、TeX のログや Python のトレースバックは含まない。",
+        "properties": {
+          "type": {
+            "description": "問題の種類の URI。https://entex.example/problems/<slug>",
+            "title": "Type",
+            "type": "string"
+          },
+          "title": {
+            "description": "種類ごとに固定の短い日本語",
+            "title": "Title",
+            "type": "string"
+          },
+          "status": {
+            "maximum": 599,
+            "minimum": 400,
+            "title": "Status",
+            "type": "integer"
+          },
+          "detail": {
+            "description": "この出来事の説明（日本語の完成文）",
+            "title": "Detail",
+            "type": "string"
+          },
+          "instance": {
+            "description": "リクエスト ID。urn:uuid:<uuid>。サーバ側ログとの突き合わせ用",
+            "title": "Instance",
+            "type": "string"
+          },
+          "issues": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ProblemIssue"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "ir-invalid のときの件ごとの問題",
+            "title": "Issues"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "instance"
+        ],
+        "title": "EnTeX Problem Details",
+        "type": "object"
+      },
+      "Envelope": {
+        "additionalProperties": false,
+        "description": "IR がどの文書種のどの版のスキーマに従うかを自己申告する封筒。content の形は packages/<doc_type>/schema.json が決める。",
+        "properties": {
+          "doc_type": {
+            "description": "パッケージのスラッグ。packages/<slug>/ と一致",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "title": "Doc Type",
+            "type": "string"
+          },
+          "schema_version": {
+            "description": "パッケージの schema.json の版",
+            "minimum": 1,
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "content": {
+            "additionalProperties": true,
+            "description": "中身。schema.json の fields に従う",
+            "title": "Content",
+            "type": "object"
+          }
+        },
+        "required": [
+          "doc_type",
+          "schema_version",
+          "content"
+        ],
+        "title": "EnTeX IR envelope",
+        "type": "object"
+      }
+    }
+  }
+}

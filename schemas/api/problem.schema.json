@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "ProblemIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "content 内の場所（例: finance[1].amount）",
+          "title": "Path",
+          "type": "string"
+        },
+        "message": {
+          "description": "利用者向けの完成文（フィールドの label を含む）",
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "message"
+      ],
+      "title": "ProblemIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "EnTeX API の失敗応答（application/problem+json、RFC 9457）。detail は日本語の完成文で、TeX のログや Python のトレースバックは含まない。",
+  "properties": {
+    "type": {
+      "description": "問題の種類の URI。https://entex.example/problems/<slug>",
+      "title": "Type",
+      "type": "string"
+    },
+    "title": {
+      "description": "種類ごとに固定の短い日本語",
+      "title": "Title",
+      "type": "string"
+    },
+    "status": {
+      "maximum": 599,
+      "minimum": 400,
+      "title": "Status",
+      "type": "integer"
+    },
+    "detail": {
+      "description": "この出来事の説明（日本語の完成文）",
+      "title": "Detail",
+      "type": "string"
+    },
+    "instance": {
+      "description": "リクエスト ID。urn:uuid:<uuid>。サーバ側ログとの突き合わせ用",
+      "title": "Instance",
+      "type": "string"
+    },
+    "issues": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/ProblemIssue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "ir-invalid のときの件ごとの問題",
+      "title": "Issues"
+    }
+  },
+  "required": [
+    "type",
+    "title",
+    "status",
+    "detail",
+    "instance"
+  ],
+  "title": "EnTeX Problem Details",
+  "type": "object"
+}

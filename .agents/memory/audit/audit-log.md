@@ -194,6 +194,53 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 設計との差 1 点: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落として `pct-hash.tex` にした（`JOB_NAME_RE` は満たす）。次のゲート判断（Check を今やるか api-render 後にまとめるか）はユーザー。
 
 ---
+## 2026-09-12T03:10:00+00:00 | phase | p5-api-render-do
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `user` → `agent` |
+| **decision** | 「2で進みましょう。」= pipeline-and-cli の Check を先にせず api-render の P5 へ。Check は 2 plan まとめて 1 回 |
+| **phase** | P5（plan `api-render`）Do 完了 |
+| **summary** | TDD で `src/entex/api/`（settings / problems / routes / app）を新設。`POST /v1/render` → `application/pdf`、失敗は RFC 9457 Problem Details（13 種）、同期 `def` + `BoundedSemaphore`、リクエストごとの一時ディレクトリ、`X-Request-ID`。`RenderTimeoutError` を追加。`schemas/api/{problem.schema.json,openapi.json}` を生成し同期テスト。Dockerfile `CMD` uvicorn、`make docker-serve` / `make schemas`、README §API。`make lint` / `make test` 217 passed（TeX ありホスト）。ホストで uvicorn + curl → PDF 61 KB / 2.1 秒。PR #10 はこのターン前にマージ済みだったため新規 PR #12 |
+| **reason** | project-state `allowed_actions` に implement-conduct。plan `api-render` は agreed、依存 `pipeline-and-cli` は Do 完了（PR #10 で main へ） |
+
+### Refs
+
+- plan: `.agents/plans/programs/api-render.md`（AC1–AC5 ✓、Do 行、Open 解消）
+- design: `docs/design/programs/api.md`（§3.3 表に render-timeout / 415 / 404 / internal-error、§3.4 に async 依存の注記、§9 Open 3 件解消。status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p5-api-render.md`
+- team: `docs/project-state.yaml`（current_phase: P5、active_pdca → api-render、proposal: P6 Check ×2 plan）
+
+### Detail（任意）
+
+設計との差: 本文読み取りだけ `async def` 依存（`await request.body()` が要る）。`X-Request-ID` は UUID のみ採用。`/v1/doc-types` は壊れたパッケージを一覧から外す（警告ログ）。Docker がこの環境に無いため `make docker-test` は未実行、CI の tex ジョブで代替。
+
+---
+## 2026-09-12T04:10:00+00:00 | phase | p6-review-api-and-pipeline
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `agent`（reviewer） |
+| **decision** | P6 Check を `pipeline-and-cli` + `api-render` の 2 plan 合同で実施（ユーザー判断「2で進みましょう」の後段）。判定 **pass** |
+| **phase** | P5 → P6（両 plan Check pass） |
+| **summary** | V-model RTM: api.md FR-A1〜A8 / NFR-A1〜A4 と両 plan の AC 計 10 件がすべて自動テスト（file:line）に辿れる。`ruff` / `pytest` 217 passed（TeX ありホスト）、CI（PR #12）green。設計前提 4 項目違反なし。Critical 0 / Warning 1（W1: chunked 本文を全文読んでから 413。`request.stream()` で打ち切りへ、公開配置前）/ Suggestion 6（api.md §3.1 文言、`RenderResult.title`、`internal-error` テスト、`is_valid_slug` fullmatch、`Settings` テスト、同時 4 件計測 + httpx2）。前回レビュー W1 / W2 / S1 / S3 / S4 の解消を確認 |
+| **reason** | project-state `allowed_actions` に review-conduct。両 plan Do 完了、PR #10 マージ済み・PR #12 CI green |
+
+### Refs
+
+- review: `docs/reviews/2026-09-12-api-and-pipeline-p6-review.md`
+- plans: `.agents/plans/programs/pipeline-and-cli.md` / `api-render.md`（Check 行・Progress `done`）· `.agents/plans/README.md`（Check pass）
+- design: `docs/design/programs/api.md`（「次」の P6 Check にチェック。status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p6-review-api-and-pipeline.md`
+- team: `docs/project-state.yaml`（current_phase: P6、proposal: PR #12 マージ（ユーザー）→ 着手順3 P3）
+
+### Detail（任意）
+
+レビュー中の drive-by 修正なし。W1 はレビュー時に `TestClient` の chunked 送信で「413 は返る（機能は満たす）が全文バッファ後」であることを実機確認し、`uvicorn --help` に本文上限オプションが無いことも確認した。
+
+---
 
 ## 2026-09-12T04:10:00+00:00 | gate | recycle-first-doc-type
 
@@ -218,5 +265,22 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 ### Detail（任意）
 
 次アクション: ユーザーが部会ログの実物様式（頻度・欄構成など）を提示した時点で、`docs/requirements/`配下に新しいP1要求（`要求.md`）を起票する。`packages/circle-monthly-report/`を改修するか新規パッケージを起こすかはその時点で決める（ADR-0001 Open questions）。
+
+---
+## 2026-09-12T04:24:00+00:00 | patch | resolve-pr12-conflict-with-main
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `patch` |
+| **actor** | `user` → `agent` |
+| **decision** | ユーザー指示「PR #12 のコンフリクトを解消して下さい」。`origin/main`（PR #13、issue #11 の文書種ピボット）を `feature/npc` へマージ |
+| **phase** | P6（変更なし。着手順2 API 化のマージ前コンフリクト解消） |
+| **summary** | コンフリクトは `docs/project-state.yaml` / `.agents/memory/state/nav.yaml` / `.agents/memory/audit/audit-log.md` の3ファイル（進行メモのみ）。両ブランチの記録を両方残す形で解消（`current_phase: P6` を維持しつつ issue #11 のピボット注記を追記）。`src/` / `tests/` / `schemas/` は無衝突。マージ後のツリーで `ruff check` 通過・`pytest` 217 passed を再確認。CI（run 34673073103）lint/test 3.12・3.13・tex smoke すべて pass。`gh pr view` で `mergeStateStatus: CLEAN` |
+| **reason** | ユーザー明示指示。マージ判断そのもの（PR #12 → main）はユーザーの担当のまま |
+
+### Refs
+
+- commit: `33cc554`（merge commit, feature/npc）
+- PR: https://github.com/NPCdotcom/EnTeX/pull/12（コメントで解消内容を記録、`@coderabbitai review` 再投稿）
 
 ---

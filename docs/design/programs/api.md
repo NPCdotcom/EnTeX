@@ -141,8 +141,14 @@ FastAPI 既定の `{"detail": ...}` ではなく、[RFC 9457](https://www.rfc-ed
 | `IRValidationError` | 422 | `ir-invalid` | `user_message` | `issues[]`（`FieldIssue` をそのまま） |
 | `PackageError` / `DerivationError` | 500 | `package-broken` | 汎用文「文書種の定義に問題があります。管理者へお問い合わせください。」 | — （`user_message` はサーバ側ログ） |
 | `RenderError` | 500 | `render-failed` | `RenderError.GENERIC_MESSAGE` | — （`detail` / `log_path` の中身はサーバ側ログ） |
+| `RenderTimeoutError`（P5 で追加。`RenderError` の派生） | 500 | `render-timeout` | `RenderTimeoutError.GENERIC_MESSAGE`（やり直しを促す文） | — |
 | 同時実行上限 | 503 | `busy` | 「混み合っています。しばらくしてからやり直してください。」 | ヘッダ `Retry-After` |
 | 本文過大 | 413 | `content-too-large` | 上限値を含む日本語文 | — |
+| `Content-Type` が JSON でない | 415 | `unsupported-media-type` | 「本文は application/json で送ってください。」 | — |
+| 未知のパス / 未知の `doc_type`（`/v1/doc-types/{doc_type}`） | 404 | `not-found` | 定型文 | — |
+| 想定外の例外（安全網） | 500 | `internal-error` | 定型文（トレースバックは出さない） | — |
+
+P5 実装メモ（2026-09-12）: `type` の一覧と `title` は `src/entex/api/problems.py` の `ALL_TYPES` が正本。`X-Request-ID` は **UUID として解釈できるときだけ** 採用し、それ以外は生成する（任意文字列をログや応答に反射しない。§9 Open の解消）。応答ヘッダにも同じ `X-Request-ID` を返す。
 
 `type` の URI は当面ドキュメントに解決しないダミー（`https://entex.example/problems/<slug>`）。実 URL に変えるのは配置先が決まってから。`title` は `type` ごとに固定、`detail` だけが出来事ごとに変わる（RFC 9457 §3.1.3 / §3.1.4）。`instance` はリクエスト ID（`X-Request-ID` を受け取ればそれ、無ければ生成）で、サーバ側ログの行と突き合わせる鍵にする。
 
@@ -150,7 +156,7 @@ FastAPI 既定の `{"detail": ...}` ではなく、[RFC 9457](https://www.rfc-ed
 
 ### 3.4 実行モデル
 
-- エンドポイントは **同期 `def`** で書く。FastAPI（Starlette）は `def` のハンドラをスレッドプール（AnyIO、既定 40 トークン）で実行するので、`subprocess.run` の latexmk がイベントループを塞がない。`renderer.render()` を async 化しない
+- エンドポイントは **同期 `def`** で書く。FastAPI（Starlette）は `def` のハンドラをスレッドプール（AnyIO、既定 40 トークン）で実行するので、`subprocess.run` の latexmk がイベントループを塞がない。`renderer.render()` を async 化しない。本文の読み取り（415 / 413 / 400）だけは `async def` の依存 `read_ir_body` に切り出す（`await request.body()` が要るため。P5 実装メモ）
 - 同時実行は `threading.BoundedSemaphore(ENTEX_MAX_CONCURRENT_RENDERS)`（既定: CPU 数）で絞る。取得を `ENTEX_QUEUE_WAIT_SECONDS`（既定 5 秒）待って取れなければ `503`
 - 1 リクエスト = 1 一時ディレクトリ（`tempfile.mkdtemp(dir=ENTEX_WORK_DIR)`）。PDF を **bytes に読んでから** `Response(content=..., media_type="application/pdf")` で返し、`finally` で消す（`FileResponse` + `BackgroundTask` は応答送出後まで削除を遅らせる必要が出るので採らない。PDF は数十〜数百 KB の想定）
 - 失敗時は `latexmk.log` / `render-error.log` の中身を `logging`（`request_id` 付き）に流してから消す。`ENTEX_KEEP_FAILED_JOBS=1` のときだけディレクトリを残す
@@ -256,15 +262,18 @@ charter §7 で FastAPI は確定済み。新規選定なし。
 - API 固有の要件（§1）を `docs/requirements/api/要件.md` として P2 文書に独立させるか、この設計の §1 のままでよいか。**推奨**: このままで進め、着手順 4（UI）で要件が膨らんだら独立させる
 - 認証: 公開配置の前に、最低限の共有トークン（`Authorization: Bearer`）を `api-render` に含めるか、別 plan にするか
 - `type` URI の実ドメイン（配置先決定後）
-- `RenderError` を「タイムアウト」と「組版失敗」で `type` を分けるか（現状の `RenderError` は区別を持たない。分けるなら `errors.py` に `RenderTimeoutError` を足す小さな変更）
-- `GET /v1/doc-types/{doc_type}` が返す `schema.json` に `expr` や `derived` をそのまま含めてよいか（UI は `derived` を「入力欄にしない」判断に使う。含めてよいと考えている）
+- ~~`RenderError` を「タイムアウト」と「組版失敗」で `type` を分けるか（現状の `RenderError` は区別を持たない。分けるなら `errors.py` に `RenderTimeoutError` を足す小さな変更）~~ → **分けた（P5, 2026-09-12）**: `errors.RenderTimeoutError(RenderError)`、`type` は `render-timeout`。CLI は `RenderError` として捕まえるので exit 2 のまま（文言だけ変わる）
+- ~~`GET /v1/doc-types/{doc_type}` が返す `schema.json` に `expr` や `derived` をそのまま含めてよいか~~ → **含める（P5）**: ファイルの内容をそのまま返す（`load_package` で検証してから）。UI は `derived` を「入力欄にしない」判断に使う
+- 一覧 `GET /v1/doc-types` は **読み込めるパッケージだけ** を返し、壊れたものは警告ログに出して外す（P5 の判断。作者が気づけるよう `/v1/doc-types/{doc_type}` の方は `500 package-broken` を返す）
 
 ## ユーザー思考
 
 > 2026-09-12: 「1. api.md を agreed にしてよいです。2. Go（P4 の 2 分割）3. 承知（ブランチ名 feature/npc の規約不一致）4. 承認（pydantic 下限を >=2.9 に）」
+> 2026-09-12: 「pipeline-and-cli の P5 実装に進めてください。」→ Do 完了後の選択肢（1: 先に P6 Check / 2: api-render の P5 へ進み Check をまとめる）に「2で進みましょう。」
 
 ## 次
 
 - [x] P3 ゲート → `status: agreed`（2026-09-12）→ [`.agents/plans/programs/pipeline-and-cli.md`](../../../.agents/plans/programs/pipeline-and-cli.md)・[`.agents/plans/programs/api-render.md`](../../../.agents/plans/programs/api-render.md)
 - [x] `docs/project-state.yaml` の `scope_focus.path` をこの文書へ
-- [ ] §9 Open のうち plan 側で決めるもの: 認証トークン（`api-render` の Out of scope に置き、別 plan）、`RenderTimeoutError`（`api-render` で `type` を分けるかを判断）
+- [x] §9 Open のうち plan 側で決めるもの: 認証トークン（`api-render` の Out of scope に置き、別 plan）、`RenderTimeoutError`（`api-render` で分けた）
+- [x] P6 Check（`pipeline-and-cli` と `api-render` をまとめて。ユーザー判断 2026-09-12「2 で進みましょう」）→ pass: [docs/reviews/2026-09-12-api-and-pipeline-p6-review.md](../../reviews/2026-09-12-api-and-pipeline-p6-review.md)（W1: chunked 本文の 413 を stream 化 — 公開配置前。S1: §3.1「新しい例外型は増やさない」の 1 文が §3.3 / §9 と矛盾）
