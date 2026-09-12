@@ -113,7 +113,6 @@ curl -sS http://localhost:8000/v1/doc-types    # [{"doc_type":"circle-monthly-re
 | `AGENTS.md` · `CLAUDE.md` | yes | AI エージェント向けの前提。`CLAUDE.md` は `AGENTS.md` へ転送するだけ |
 | `.claude/` | yes | Claude Code 用のスキル・権限（`docs-sync-check` など） |
 | `.github/` | yes | CI（lint/test と TeX スモーク）・PR テンプレート |
-| `.coderabbit.yaml` | yes | CodeRabbit レビュー設定（日本語） |
 | `out/` · `.venv/` · `.env` · `.cursor` junctions | no | 生成物・秘密情報（`.gitignore`） |
 
 `.gitignore` に **独自 AI アセットは載せません**。共同者がドキュメント・スキーマ・デザイン・エージェント資産を同じリポジトリで共有できるようにしています。
@@ -143,7 +142,7 @@ cd EnTeX
 - ブランチ名: `issue番号/担当者/やること`（例: `7/aster/cli_render_json`）
 - コミット: `接頭辞:やったこと`（コロンの後に空白なし。`feat` / `fix` / `docs` / `refact` / `chore` など）
 - PR を出す前に `make lint` と `make test` を通す（TeX を触ったときは `make docker-test` と `make tex-smoke` も）
-- レビューが要るときは PR に `@coderabbitai review` をコメントする
+- レビューはもう一方に依頼する（担当領域は [docs/TEAM.md](docs/TEAM.md)）。自動レビューは入れていない
 - 上の3点は `.githooks/` の hook が検査する。**クローン後に一度 `make hooks`**（`make setup` からも呼ばれる）
 
 ## Docs entry
