@@ -106,3 +106,45 @@ Format: skill `memory-record` · `assets/audit/audit-entry-template.md`
 実装ブランチ `cursor/renderer-cli-render-172b`（クラウドエージェントの命名規則。AGENTS.md の `issue/担当者/やること` とは異なる — マージ時に判断）。次は P6 `review-conduct`。
 
 ---
+## 2026-09-12T03:30:00+00:00 | review | p6-renderer-cli-pass
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `review` |
+| **actor** | `agent`（reviewer 役） |
+| **decision** | pass（Critical 0 · Warning 2 · Suggestion 4） |
+| **phase** | P5 → P6 |
+| **summary** | PR #8（renderer / CLI 実装、`main@7955490`）を V-model RTM で点検。FR1–FR8・NFR1–2 すべてにテスト根拠あり。W1: JSON ファイル名が latexmk ジョブ名に素通し（`-` 始まり・`%` `#` で生成失敗）。W2: `template.tex.j2` 欠落が exit 2（plan は 3）。いずれも AC 違反ではなく Act の小パッチへ |
+| **reason** | ユーザーが推奨案 A（P6 review）→ B（API P3 設計）を承認（2026-09-12、ブランチ `feature/npc` 指定） |
+
+### Refs
+
+- review: `docs/reviews/2026-09-12-renderer-cli-p6-review.md`
+- plan: `.agents/plans/algorithms/ir-validate-and-derive.md`（Check 行） · `.agents/plans/programs/render-and-cli.md`（Check 行）
+- team: `docs/project-state.yaml`（current_phase: P6, gate_status.current: pending, proposal = Act + API P3 ゲート）
+- trace: `.agents/memory/episodes/2026-09-12-p6-review-and-api-design.md`
+
+### Detail（任意）
+
+W1 / W2 はレビュー PR では直していない（review-conduct の「drive-by refactor 禁止」）。`docs/design/programs/api.md` の P4 分割案 `pipeline-and-cli` に含める提案。
+
+---
+
+## 2026-09-12T03:45:00+00:00 | design | api-p3-draft
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `design` |
+| **actor** | `agent`（spec_designer 役） |
+| **decision** | draft 作成（agreed はユーザー確認待ち） |
+| **phase** | P3（着手順 2） |
+| **summary** | `docs/design/programs/api.md`: `entex.pipeline.render_ir()` を CLI / API 共通の入口にし、`POST /v1/render` → `application/pdf`、エラーは RFC 9457 Problem Details、同期 `def` + セマフォ、P4 は `pipeline-and-cli` → `api-render` の 2 plan に分割する案 |
+| **reason** | charter §11 着手順 2。P6 レビュー S4（3 段の並びが CLI にある）の解消を兼ねる。terminology-research 済み（RFC 9457 / 9110 / 6266 / 8187、FastAPI async、Starlette threadpool） |
+
+### Refs
+
+- design: `docs/design/programs/api.md`
+- team: `docs/project-state.yaml`（scope_focus.path → api.md, allowed_actions に patch-conduct）
+- questions: api.md §9（要件.md の独立、認証、RenderTimeoutError、doc-types の schema 公開範囲）
+
+---
