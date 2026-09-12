@@ -4,21 +4,24 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User (2026-09-12): 'pipeline-and-cli の P5 実装に進めてください'. Done on feature/npc (PR #10): entex.pipeline + CLI on it + W1/W2/S1/S3 fixes, 168 tests pass on TeX host. AC1-AC5 ticked, plan Do row written. Next gate: P5→P6 Check of pipeline-and-cli, or continue to P5 api-render."
+  intent: "User (2026-09-12, issue #11): monthly report operation turned out not to exist for the circle. Pivot first doc-type from circle-monthly-report to formatting the circle's 部会ログ (meeting/committee log). This turn: write the project-level description of the pivot (charter §3/§5/§11, ADR-0001, project-state, docs/README, pivot notices) — done. Awaiting user's next message with the concrete meeting-log format details before drafting new 要求.md."
   turn_estimate: 1
-  chat_id_hint: "entex-p5-pipeline"
+  chat_id_hint: "entex-pivot-meeting-log"
 
 navigation:
-  active_thread_id: "api-pipeline"
+  active_thread_id: "circle-meeting-log-pivot"
   active_plan: ".agents/plans/programs/pipeline-and-cli.md"
   next_actions:
-    - "Await user: (a) P6 review-conduct for pipeline-and-cli now (diff = commits d5675ab..644edb0 on PR #10), or (b) go straight to P5 api-render and review both together. project-state proposal says (a) or (b) is user's call"
+    - "Await user: they said they will present the concrete 部会ログ (meeting log) format next — align docs/requirements/ (new 要求.md, P1) and eventually schema/template to it once received (issue #11, ADR-0001)"
+    - "Decide (during that P1 pass): refit packages/circle-monthly-report/ into the meeting-log package, or add a new slug (e.g. circle-meeting-log/) alongside it — see ADR-0001 Open questions"
+    - "docs/design/elements/ir-type-vocabulary.md §7 (time/time_range etc.) may need re-judgment once the real meeting-log fields are known"
+    - "Unaffected, still pending from before: (a) P6 review-conduct for pipeline-and-cli (diff = commits d5675ab..644edb0 on PR #10), or (b) go straight to P5 api-render and review both together. project-state proposal says (a) or (b) is user's call"
     - "P5 api-render: src/entex/api/{app,routes,problems,settings}.py, tests/test_api.py (TestClient), schemas/api/{problem.schema.json,openapi.json}, Dockerfile CMD uvicorn, make docker-serve, README §API. render_ir(timeout=...) already accepts None → renderer default. Decide RenderTimeoutError split (plan recommends yes)"
-    - "Post `@coderabbitai review` on PR #10 after each push (AGENTS.md)"
-    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. Open an issue number before api-render if user wants to realign"
-    - "Obtain the real circle monthly report (Word) → adjust packages/circle-monthly-report/ only (layout UAT still pending)"
+    - "Post `@coderabbitai review` on PRs after each push (AGENTS.md)"
+    - "Branch note: feature/npc still violates AGENTS.md <issue>/npc/<topic>; user acknowledged. This turn's own branch (cursor/... suffix) is a cloud-agent harness requirement, also outside AGENTS.md convention — noted, not to be 'fixed' unilaterally"
     - "Minor Act item not in any plan yet: S2 pattern search vs fullmatch (decide + 1 line in ir-type-vocabulary.md). S3 is done in pipeline-and-cli"
-  blockers: []
+  blockers:
+    - "部会ログの実物様式情報待ち（ユーザー提示予定）"
 
 alignment:
   project_state_path: docs/project-state.yaml
