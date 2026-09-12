@@ -20,3 +20,25 @@ packages/<doc-type-slug>/
 | [`circle-monthly-report/`](circle-monthly-report/README.md) | スキーマ・IR 例・仮レイアウトのテンプレートとスタイル。`entex render` で PDF が出る。実物の様式に合わせた調整は未 |
 
 `src/entex/` が読むのは `schema.json` の中身と `template.tex.j2` / `style/` の場所だけ（`src/entex/packages.py`）。`style/` は latexmk 実行時に `TEXINPUTS` へ加えられるので、`.sty` はファイル名だけで `\usepackage` できる。
+
+## `schema.json` の書き方と版
+
+書き方は **EnTeX 独自の簡潔な形式（案1）** が正本である（[型の語彙 §8](../docs/design/elements/ir-type-vocabulary.md#8-schemajson-の書き方決定-案1)）。JSON Schema では書かない。読み込む pydantic モデルは [`src/entex/ir/schema.py`](../src/entex/ir/schema.py) で、使える型は 11 種、フィールド属性は同 §3 の表に限る。
+
+`schema_version` を上げるかどうかは、**「それまで通っていた IR が通らなくなるか」** の一軸で決める。
+
+| よくある変更 | 版 |
+|---|---|
+| 任意フィールドの追加、`label` の変更、制約の緩和、`enum` の選択肢の追加 | 上げない |
+| 必須フィールドの追加、フィールドの削除・改名、型の変更、`derived` の増減、制約の強化、`enum` の選択肢の削除 | **上げる** |
+
+網羅した表と理由は [型の語彙 §6.1](../docs/design/elements/ir-type-vocabulary.md#schema_version-を上げる基準) にある。
+
+上げるときの手順:
+
+1. `schema.json` の `schema_version` を 1 つ増やす
+2. `examples/` の IR の封筒の `schema_version` を新しい版に揃える。**古い版を受け付け続ける仕組みは無いので、揃えなかった例は中身を見られる前に落ちる**
+   - 例外は**版の不一致そのものを試している例**（[`circle-monthly-report/examples/invalid/06-envelope-mismatch.json`](circle-monthly-report/examples/invalid/06-envelope-mismatch.json)）。これは「合わない版」であり続ける必要があるので、スキーマより 1 つ大きい値に付け替える
+3. `make test` で `examples/` が期待どおりに通る・落ちることを確かめる
+
+体裁だけの変更（`template.tex.j2` や `style/` の修正）では上げない。`schema_version` が版付けするのは入力の形であって、出力の見た目ではない。
