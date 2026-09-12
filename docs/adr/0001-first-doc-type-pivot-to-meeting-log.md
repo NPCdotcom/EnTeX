@@ -1,6 +1,6 @@
 ---
 title: 最初の文書種をサークル月次報告書から部会ログのフォーマット化へ差し替える
-status: accepted
+status: agreed
 created: 2026-09-12
 updated: 2026-09-12
 ---

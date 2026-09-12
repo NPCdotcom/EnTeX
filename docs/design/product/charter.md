@@ -4,6 +4,7 @@ kind: design
 phase: P0
 scope_level: H0
 status: draft
+created: 2026-09-12
 updated: 2026-09-12
 authors:
   - NPC (NPCdotcom)

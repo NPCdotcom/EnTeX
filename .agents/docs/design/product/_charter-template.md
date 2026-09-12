@@ -4,6 +4,8 @@ kind: design
 phase: P0
 scope_level: H0
 status: draft
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
 ---
 
 # プロダクト charter（H0）
