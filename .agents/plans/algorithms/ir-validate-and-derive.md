@@ -1,7 +1,7 @@
 ---
 title: ir-validate-and-derive — 封筒・型検証と導出値計算
 kind: plan
-status: agreed
+status: agreed   # Do 完了（2026-09-12）。P6 review 後に superseded/closed を判断
 scope_level: algorithm
 pdca_class: S1
 pdca_eligible: true
@@ -54,11 +54,11 @@ parent_hierarchy:
 
 ## Acceptance criteria（S1: ≤5 推奨）
 
-- [ ] AC1 (FR1): `examples/invalid/06-envelope-mismatch.json` を渡すと `EnvelopeError` 1 件のみで止まり、中身のエラーは報告されない
-- [ ] AC2 (FR2): `examples/invalid/03-unknown-enum-and-negative-amount.json` で、区分の不正と金額の負の **2 件が 1 回の呼び出しで** 返る。`examples/valid/` 6 件はすべて検証を通り、`examples/invalid/` 6 件はすべて弾かれる
-- [ ] AC3 (FR3): `examples/invalid/01-derived-key-in-input.json` で `income_total` / `balance` が「自動計算です」の文言で拒否される
-- [ ] AC4 (FR4): `01-typical`（活動 5 回・延べ 77 人・収入 138,000・支出 131,400・残高 19,400）・`02-minimal`（残高 5,400）・`03-deficit`（残高 −4,800）・`04-max-rows`・`05-fiscal-year-start` の導出値が README の期待値と一致する。`expr` に前方参照・循環を仕込んだ schema は `PackageError` で読み込み時に落ちる
-- [ ] AC5: 利用者向けメッセージは日本語で、フィールド名ではなく `label` を使う。`make lint` / `make test` が通る
+- [x] AC1 (FR1): `examples/invalid/06-envelope-mismatch.json` を渡すと `EnvelopeError` 1 件のみで止まり、中身のエラーは報告されない — `tests/test_ir_loader.py::test_envelope_mismatch_stops_before_content`
+- [x] AC2 (FR2): `examples/invalid/03-unknown-enum-and-negative-amount.json` で、区分の不正と金額の負の **2 件が 1 回の呼び出しで** 返る。`examples/valid/` 6 件はすべて検証を通り、`examples/invalid/` 6 件はすべて弾かれる — `test_two_errors_come_back_in_one_call` / `test_all_valid_examples_pass` / `test_all_invalid_examples_fail`
+- [x] AC3 (FR3): `examples/invalid/01-derived-key-in-input.json` で `income_total` / `balance` が「自動計算です」の文言で拒否される — `test_derived_key_in_input_is_rejected`
+- [x] AC4 (FR4): `01-typical`（活動 5 回・延べ 77 人・収入 138,000・支出 131,400・残高 19,400）・`02-minimal`（残高 5,400）・`03-deficit`（残高 −4,800）・`04-max-rows`・`05-fiscal-year-start` の導出値が README の期待値と一致する。`expr` に前方参照・循環を仕込んだ schema は `PackageError` で読み込み時に落ちる — `tests/test_ir_derive.py` / `tests/test_ir_schema.py`
+- [x] AC5: 利用者向けメッセージは日本語で、フィールド名ではなく `label` を使う。`make lint` / `make test` が通る — `test_messages_use_labels_not_field_names`、ruff / pytest 全通過（2026-09-12）
 
 ## Dependencies
 
@@ -99,9 +99,11 @@ parent_hierarchy:
 | Date | Verdict | Summary |
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。実装は同日中に着手 |
+| 2026-09-12 | on_track | Do 完了。AC1–AC5 すべてテストで担保。P6 レビュー待ち |
 
 ## PDCA log
 
 | Date | Phase | Note |
 |------|-------|------|
 | 2026-09-12 | Plan | renderer.md の分割案どおり起票。方式は案2（静的 pydantic + 型別検証関数）に決定 |
+| 2026-09-12 | Do | 実装: `src/entex/errors.py`・`packages.py`・`ir/{schema,validate,loader,derive}.py`、`schemas/ir/envelope.schema.json`（pydantic から生成、同期テストあり）。テスト 74 件（`tests/test_ir_*.py`）。設計からの差分: `ir/loader.py` の型検証部を `ir/validate.py` に分離し、`schema.json` のモデルを `ir/schema.py` に置いた（境界は変えていない）。`expr` の参照先検査（前方参照・循環・任意項目の default 必須）はパッケージ読み込み時に行う |

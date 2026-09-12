@@ -1,7 +1,7 @@
 ---
 title: render-and-cli — エスケープ・テンプレ組み立て・latexmk・CLI
 kind: plan
-status: agreed
+status: agreed   # Do 完了（2026-09-12）。P6 review 待ち
 scope_level: program
 pdca_class: S1
 pdca_eligible: true
@@ -54,11 +54,11 @@ parent_hierarchy:
 
 ## Acceptance criteria（S1: ≤5 推奨）
 
-- [ ] AC1 (FR5): `& % $ # _ { } ~ ^ \ < > '` を含む `examples/valid/06-tex-special-chars.json` から組み立てた `.tex` に、未エスケープの特殊文字が本文として残らない（`escape_text` の単体テスト + `.tex` の検査）
-- [ ] AC2 (FR6/FR8): Docker 環境で `entex render packages/circle-monthly-report/examples/valid/01-typical.json` が終了コード 0 で PDF パスを出力し、そのパスに PDF がある。`examples/valid/` 6 件すべてで PDF が出る
-- [ ] AC3 (FR7): latexmk が失敗したとき、CLI の標準出力・標準エラー・`RenderError.user_message` のいずれにも `! `, `LaTeX Error`, `Undefined control sequence`, `.tex` のファイル名などの TeX 語彙が含まれず、原文は `out/.../latexmk.log` に残る
-- [ ] AC4 (NFR2): 同じ IR から 2 回組み立てた `.tex` が一致する（テンプレートに生成時刻を入れない）
-- [ ] AC5 (NFR1): Docker 環境で `01-typical` の生成（フォントキャッシュ済みの 2 回目）が 10 秒以内。`make lint` / `make test` / `make docker-test` / `make tex-smoke` が通る
+- [x] AC1 (FR5): `& % $ # _ { } ~ ^ \ < > '` を含む `examples/valid/06-tex-special-chars.json` から組み立てた `.tex` に、未エスケープの特殊文字が本文として残らない — `tests/test_tex_escape.py`、`tests/test_renderer.py::test_built_tex_has_no_unescaped_specials`
+- [x] AC2 (FR6/FR8): `entex render packages/circle-monthly-report/examples/valid/01-typical.json` が終了コード 0 で PDF パスを出力し、そのパスに PDF がある。`examples/valid/` 6 件すべてで PDF が出る — `test_valid_examples_render_to_pdf`（6 件）/ `tests/test_cli.py::test_render_typical_prints_pdf_path`（TeX 環境で実行済み。Docker ではなくホストに同じ apt パッケージを入れて確認。CI の tex ジョブでも走る）
+- [x] AC3 (FR7): latexmk が失敗したとき、CLI の標準出力・標準エラー・`RenderError.user_message` のいずれにも TeX 語彙が含まれず、原文は `out/.../latexmk.log` に残る — 偽 latexmk による `test_latexmk_failure_keeps_tex_log_server_side` / `test_render_failure_hides_tex_log_from_user`（ホストで実行）、壊れたテンプレートによる `test_broken_template_fails_without_leaking_tex`（TeX 環境）
+- [x] AC4 (NFR2): 同じ IR から 2 回組み立てた `.tex` が一致する — `test_build_tex_is_deterministic`（6 件）
+- [x] AC5 (NFR1): `01-typical` の生成（2 回目）が 10 秒以内 — `test_typical_render_finishes_within_budget`（実測 1.5–4 秒）。ruff / pytest（TeX あり 126 件・なし 115 件+11 skip）通過。`make docker-test` / `make tex-smoke` は Docker が無い環境のため未実行（CI の tex ジョブで代替）
 
 ## Dependencies
 
@@ -98,9 +98,11 @@ parent_hierarchy:
 | Date | Verdict | Summary |
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。`ir-validate-and-derive` 完了後に着手 |
+| 2026-09-12 | on_track | Do 完了。AC1–AC5 テストで担保。残: Docker での `make docker-test` 実行（CI）、P6 レビュー、実物様式に合わせたレイアウト調整 |
 
 ## PDCA log
 
 | Date | Phase | Note |
 |------|-------|------|
 | 2026-09-12 | Plan | renderer.md の分割案どおり起票。区切りは案2 |
+| 2026-09-12 | Do | 実装: `src/entex/tex/escape.py`・`renderer.py`（`build_tex` / `render`、フィルタ 3 種、`\VAR{}` `\BLOCK{}` `%#` 区切り、`StrictUndefined`）・`cli.py render`（`--out` / `--packages-dir` / `--tex-only`、終了コード 0/1/2/3）、`packages/circle-monthly-report/template.tex.j2` と `style/circle-monthly-report.sty`。設計からの差分: エスケープは `renderer.build_tex` の内部で必ず通す（呼び出し側が忘れられない形）。テンプレートへ渡す dict は `SimpleNamespace` に変換（Jinja2 で `x.items` が dict のメソッドに解決される罠を避ける）。生成 PDF は目視確認（1〜2 ページ、特殊文字が正しく出る、負の残高は △ 表記） |

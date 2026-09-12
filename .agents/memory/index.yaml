@@ -81,10 +81,40 @@ entries:
     tier: knowledge
     granularity: thread
     path: docs/design/programs/renderer.md
-    summary: "P3 basic design (H4) for renderer — module split, interfaces, error mapping, provisional template layout policy, P4 plan split recommendation (ir-validate-and-derive / render-and-cli). Session stopped here by explicit user request; implementation deferred to a separate agent."
-    tags: [design, P3, H4, renderer, handoff]
+    summary: "P3 basic design (H4) for renderer — module split, interfaces, error mapping, provisional template layout policy. Open items resolved at P4/P5 (static pydantic + type walker; tabularx without longtable)."
+    tags: [design, P3, H4, renderer]
     recall: on_demand
-    linked: [project-state, reqspec-circle-monthly-report]
+    linked: [project-state, reqspec-circle-monthly-report, plan-render-and-cli]
+
+  - id: plan-ir-validate-and-derive
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/algorithms/ir-validate-and-derive.md
+    summary: "P4 plan (H5) FR1–FR4 — envelope/type validation + derived values. Do complete 2026-09-12; AC1–5 covered by tests/test_ir_*.py"
+    tags: [plan, P4, P5, H5, ir-schema]
+    recall: on_demand
+    linked: [design-renderer, project-state]
+
+  - id: plan-render-and-cli
+    scope: project
+    tier: knowledge
+    granularity: thread
+    path: .agents/plans/programs/render-and-cli.md
+    summary: "P4 plan (H4) FR5–FR8, NFR1–2 — escape, template, latexmk, CLI render. Do complete 2026-09-12; awaiting P6 review"
+    tags: [plan, P4, P5, H4, renderer, cli]
+    recall: on_demand
+    linked: [design-renderer, project-state]
+
+  - id: ep-renderer-implementation
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-renderer-implementation.md
+    summary: "plan-record + implementation of renderer (roadmap step 1). Module map, decisions, risks (branch name vs AGENTS.md, no Docker locally)"
+    tags: [renderer, P5, implementation]
+    recall: on_demand
+    linked: [plan-render-and-cli, plan-ir-validate-and-derive]
 
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
