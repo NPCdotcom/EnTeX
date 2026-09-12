@@ -1,9 +1,12 @@
 """`content` を `schema.json` の型と属性に従って検証する（FR2・FR3）。
 
-方針（plan `ir-validate-and-derive` 案2）: 語彙は 11 型で閉じているので、型ごとの検証関数で
+方針（plan `ir-validate-and-derive` 案2）: 語彙は 12 型で閉じているので、型ごとの検証関数で
 スキーマを辿る。エラーは見つかった分をすべて集めて返し、文言はフィールドの `label` を使った
 日本語にする。戻り値の content は NFC 正規化と `default` の補完を済ませた **新しい** dict で、
 キーの並びはスキーマの宣言順に揃える。
+
+`document`（ir-type-vocabulary.md §2.8）はここで「宣言外の節・宣言外の block の拒否、見出しの深さ、
+`list` の入れ子の上限」を見る。節の並べ替えは検証の仕事ではなく、`renderer.build_context` が行う。
 """
 
 from __future__ import annotations
@@ -15,11 +18,25 @@ import unicodedata
 from typing import Any
 
 from entex.errors import FieldIssue
-from entex.ir.schema import FieldDef, Schema
+from entex.ir.schema import DOCUMENT_LIST_MAX_DEPTH, FieldDef, Schema
 
 MONTH_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 RICH_TEXT_BLOCK_TYPES = ("paragraph", "list")
+
+#: `document` の block ごとに使えるキー
+_DOCUMENT_BLOCK_KEYS: dict[str, frozenset[str]] = {
+    "heading": frozenset({"type", "level", "text"}),
+    "paragraph": frozenset({"type", "spans"}),
+    "list": frozenset({"type", "items"}),
+    "quote": frozenset({"type", "spans"}),
+    "code": frozenset({"type", "text", "lang"}),
+    "image": frozenset({"type", "src", "alt"}),
+}
+#: `image` の `src` に許す文字。TeX の特殊文字を含まない範囲に留め、`\includegraphics` に
+#: そのまま渡せる形だけを通す。`src` が何を指すか（ID か相対パスか）は未決なので、
+#: 決まったら緩める（charter §11 Open）
+IMAGE_SRC_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
 
 _TYPE_WORD = {
     "text": "文字列",
@@ -33,6 +50,7 @@ _TYPE_WORD = {
     "row_list": "配列（[ ... ]）",
     "list": "配列（[ ... ]）",
     "rich_text": 'オブジェクト（{ "blocks": [ ... ] }）',
+    "document": 'オブジェクト（{ "sections": { ... } }）',
 }
 
 
@@ -133,6 +151,8 @@ class _Walker:
             return self.plain_list(raw, fdef, path=path, label=label)
         if t == "rich_text":
             return self.rich_text(raw, fdef, path=path, label=label)
+        if t == "document":
+            return self.document(raw, fdef, path=path, label=label)
         raise AssertionError(f"unknown type {t}")  # pragma: no cover - schema 側で弾く
 
     def row_list(self, raw: Any, fdef: FieldDef, *, path: str, label: str) -> Any:
@@ -227,6 +247,290 @@ class _Walker:
                 continue
             out_items.append(self.text_value(item, path=f"{path}.items[{j}]", label=item_label))
         return {"type": "list", "items": out_items}
+
+    # -- document（ir-type-vocabulary.md §2.8） --------------------------------------
+
+    def document(self, raw: Any, fdef: FieldDef, *, path: str, label: str) -> Any:
+        if not isinstance(raw, dict):
+            self.type_issue(path, label, fdef)
+            return raw
+        for key in raw:
+            if key not in ("sections", "extra_sections"):
+                self.issue(
+                    _join(path, key),
+                    f"{label}に使えないキー '{key}' があります（sections / extra_sections のみ）",
+                )
+
+        sections = raw.get("sections")
+        if not isinstance(sections, dict):
+            self.issue(
+                _join(path, "sections"),
+                f"{label}の sections はオブジェクト（{{ ... }}）で入力してください",
+            )
+            sections = {}
+        out_sections = self.document_sections(sections, fdef, path=path, label=label)
+
+        extras = raw.get("extra_sections", [])
+        out_extras = self.document_extra_sections(extras, fdef, path=path, label=label)
+        return {"sections": out_sections, "extra_sections": out_extras}
+
+    def document_sections(
+        self, sections: dict[str, Any], fdef: FieldDef, *, path: str, label: str
+    ) -> dict[str, Any]:
+        declared = fdef.sections_by_key
+        for key in sections:
+            if key in declared:
+                continue
+            hint = difflib.get_close_matches(key, list(declared), n=1, cutoff=0.6)
+            suffix = f"（{hint[0]} の間違い？）" if hint else ""
+            if not suffix and fdef.extra_sections == "allow":
+                suffix = "（宣言外の節は extra_sections に入れてください）"
+            self.issue(f"{path}.sections.{key}", f"{label}に使えない節 '{key}' があります{suffix}")
+
+        # 出力の並びはスキーマの宣言順（IR のキーの並びは見ない）
+        out: dict[str, Any] = {}
+        for sdef in fdef.sections or []:
+            sec_path = f"{path}.sections.{sdef.key}"
+            sec_label = f"{label}の{sdef.heading}"
+            if sdef.key not in sections:
+                if sdef.required:
+                    self.issue(sec_path, f"{sec_label}は必須です")
+                continue
+            sec = sections[sdef.key]
+            if sec is None:
+                self.issue(
+                    sec_path, f"{sec_label}は空ならキーごと省いてください（null は使えません）"
+                )
+                continue
+            out[sdef.key] = self.document_section(
+                sec, fdef, path=sec_path, label=sec_label, allowed_keys=frozenset({"blocks"})
+            )
+        return out
+
+    def document_extra_sections(
+        self, extras: Any, fdef: FieldDef, *, path: str, label: str
+    ) -> list[Any]:
+        extras_path = _join(path, "extra_sections")
+        if not isinstance(extras, list):
+            self.issue(extras_path, f"{label}の extra_sections は配列で入力してください")
+            return []
+        if extras and fdef.extra_sections == "forbid":
+            self.issue(
+                extras_path,
+                f"{label}に宣言外の節は入れられません（extra_sections は空にしてください）",
+            )
+            return extras
+        out = []
+        for i, sec in enumerate(extras):
+            sec_path = f"{extras_path}[{i}]"
+            sec_label = f"{label}の{i + 1}番目の臨時の節"
+            if not isinstance(sec, dict):
+                self.issue(sec_path, f"{sec_label}はオブジェクト（{{ ... }}）で入力してください")
+                out.append(sec)
+                continue
+            heading = sec.get("heading")
+            if not isinstance(heading, str) or not heading:
+                self.issue(
+                    _join(sec_path, "heading"), f"{sec_label}には見出し（heading）が必要です"
+                )
+                heading = ""
+            else:
+                heading = self.text_value(heading, path=_join(sec_path, "heading"), label=sec_label)
+            body = self.document_section(
+                sec,
+                fdef,
+                path=sec_path,
+                label=sec_label,
+                allowed_keys=frozenset({"heading", "blocks"}),
+            )
+            out.append({"heading": heading, "blocks": body.get("blocks", [])})
+        return out
+
+    def document_section(
+        self,
+        sec: Any,
+        fdef: FieldDef,
+        *,
+        path: str,
+        label: str,
+        allowed_keys: frozenset[str],
+    ) -> Any:
+        if not isinstance(sec, dict):
+            self.issue(path, f"{label}はオブジェクト（{{ ... }}）で入力してください")
+            return sec
+        for key in sec:
+            if key not in allowed_keys:
+                self.issue(_join(path, key), f"{label}に使えないキー '{key}' があります")
+        blocks = sec.get("blocks")
+        if not isinstance(blocks, list):
+            self.issue(_join(path, "blocks"), f"{label}は blocks の配列で入力してください")
+            return sec
+        if not blocks:
+            # 空の節は IR に出さない（§2.8。`required` と同じ規則で null も空配列も使わない）
+            self.issue(_join(path, "blocks"), f"{label}が空です。節ごと省いてください")
+        out_blocks = [
+            self.document_block(
+                block, fdef, path=f"{path}.blocks[{i}]", label=f"{label}の{i + 1}番目のブロック"
+            )
+            for i, block in enumerate(blocks)
+        ]
+        return {"blocks": out_blocks}
+
+    def document_block(self, block: Any, fdef: FieldDef, *, path: str, label: str) -> Any:
+        if not isinstance(block, dict):
+            self.issue(path, f"{label}はオブジェクト（{{ ... }}）で入力してください")
+            return block
+        btype = block.get("type")
+        allowed_types = fdef.blocks or []
+        if btype not in allowed_types:
+            self.issue(
+                _join(path, "type"),
+                f"{label}の種別は {' / '.join(allowed_types)} のいずれかです（実際: {btype!r}）",
+            )
+            return block
+        for key in block:
+            if key not in _DOCUMENT_BLOCK_KEYS[btype]:
+                self.issue(_join(path, key), f"{label}に使えないキー '{key}' があります")
+
+        if btype == "heading":
+            level = block.get("level")
+            if isinstance(level, bool) or not isinstance(level, int):
+                self.issue(
+                    _join(path, "level"),
+                    f"{label}の見出しの深さ（level）は整数で入力してください",
+                )
+            elif not 1 <= level <= fdef.max_heading_level:
+                self.issue(
+                    _join(path, "level"),
+                    f"{label}の見出しの深さ（level）は1から{fdef.max_heading_level}までです"
+                    f"（実際: {level}）",
+                )
+            text = block.get("text")
+            if not isinstance(text, str):
+                self.issue(_join(path, "text"), f"{label}の text は文字列で入力してください")
+                return block
+            return {
+                "type": "heading",
+                "level": level,
+                "text": self.text_value(text, path=_join(path, "text"), label=label),
+            }
+        if btype in ("paragraph", "quote"):
+            return {
+                "type": btype,
+                "spans": self.document_spans(block.get("spans"), path=path, label=label),
+            }
+        if btype == "list":
+            return {
+                "type": "list",
+                "items": self.document_list_items(
+                    block.get("items"), path=path, label=label, depth=1
+                ),
+            }
+        if btype == "code":
+            # エスケープしない唯一の block。複数行を許し、中身にも触らない（NFC もかけない）
+            text = block.get("text")
+            if not isinstance(text, str):
+                self.issue(_join(path, "text"), f"{label}の text は文字列で入力してください")
+                return block
+            out: dict[str, Any] = {"type": "code", "text": text}
+            if "lang" in block:
+                lang = block["lang"]
+                if not isinstance(lang, str):
+                    self.issue(_join(path, "lang"), f"{label}の lang は文字列で入力してください")
+                else:
+                    out["lang"] = self.text_value(lang, path=_join(path, "lang"), label=label)
+            return out
+        # image
+        src = block.get("src")
+        if not isinstance(src, str) or not src:
+            self.issue(_join(path, "src"), f"{label}の画像（src）を指定してください")
+            return block
+        if not IMAGE_SRC_RE.match(src):
+            self.issue(
+                _join(path, "src"),
+                f"{label}の画像（src）に使えない文字があります（英数字と . _ / - のみ）",
+            )
+        out = {"type": "image", "src": src}
+        if "alt" in block:
+            alt = block["alt"]
+            if not isinstance(alt, str):
+                self.issue(_join(path, "alt"), f"{label}の alt は文字列で入力してください")
+            else:
+                out["alt"] = self.text_value(alt, path=_join(path, "alt"), label=label)
+        return out
+
+    def document_spans(self, spans: Any, *, path: str, label: str) -> Any:
+        spans_path = _join(path, "spans")
+        if not isinstance(spans, list):
+            self.issue(spans_path, f"{label}の spans は配列で入力してください")
+            return spans
+        out = []
+        for i, span in enumerate(spans):
+            span_path = f"{spans_path}[{i}]"
+            span_label = f"{label}の{i + 1}番目の文"
+            if not isinstance(span, dict):
+                self.issue(span_path, f"{span_label}はオブジェクト（{{ ... }}）で入力してください")
+                out.append(span)
+                continue
+            for key in span:
+                if key not in ("text", "href"):
+                    self.issue(
+                        _join(span_path, key), f"{span_label}に使えないキー '{key}' があります"
+                    )
+            text = span.get("text")
+            if not isinstance(text, str):
+                self.issue(
+                    _join(span_path, "text"), f"{span_label}の text は文字列で入力してください"
+                )
+                out.append(span)
+                continue
+            item: dict[str, Any] = {
+                "text": self.text_value(text, path=_join(span_path, "text"), label=span_label)
+            }
+            if "href" in span:
+                href = span["href"]
+                if not isinstance(href, str) or not href:
+                    self.issue(_join(span_path, "href"), f"{span_label}のリンク先（href）が空です")
+                else:
+                    item["href"] = self.text_value(
+                        href, path=_join(span_path, "href"), label=span_label
+                    )
+            out.append(item)
+        return out
+
+    def document_list_items(self, items: Any, *, path: str, label: str, depth: int) -> Any:
+        items_path = _join(path, "items")
+        if not isinstance(items, list):
+            self.issue(items_path, f"{label}の items は配列で入力してください")
+            return items
+        if depth > DOCUMENT_LIST_MAX_DEPTH:
+            self.issue(
+                items_path,
+                f"{label}の箇条書きの入れ子は{DOCUMENT_LIST_MAX_DEPTH}段までです",
+            )
+            return items
+        out = []
+        for j, item in enumerate(items):
+            item_path = f"{items_path}[{j}]"
+            item_label = f"{label}の{j + 1}項目"
+            if not isinstance(item, dict):
+                self.issue(item_path, f"{item_label}はオブジェクト（{{ ... }}）で入力してください")
+                out.append(item)
+                continue
+            for key in item:
+                if key not in ("spans", "items"):
+                    self.issue(
+                        _join(item_path, key), f"{item_label}に使えないキー '{key}' があります"
+                    )
+            entry: dict[str, Any] = {
+                "spans": self.document_spans(item.get("spans"), path=item_path, label=item_label)
+            }
+            if "items" in item:
+                entry["items"] = self.document_list_items(
+                    item["items"], path=item_path, label=item_label, depth=depth + 1
+                )
+            out.append(entry)
+        return out
 
     # -- スカラー -----------------------------------------------------------
 

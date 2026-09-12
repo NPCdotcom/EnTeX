@@ -23,7 +23,13 @@ from entex.renderer import (
     filter_ja_month,
     render,
 )
-from tests.conftest import EXAMPLES_DIR, load_example, requires_tex
+from tests.conftest import (
+    CLUB_LOG_EXAMPLES_DIR,
+    EXAMPLES_DIR,
+    load_club_log_example,
+    load_example,
+    requires_tex,
+)
 
 # 利用者向けの経路に出てはいけない TeX の語彙（FR7）
 TEX_VOCABULARY = (
@@ -38,9 +44,19 @@ TEX_VOCABULARY = (
     "Traceback",
 )
 
+# club-meeting-log の正常系のうち、画像ファイルが無くても PDF になるもの（`image` の `src` が
+# 何を指すかは未決。charter §11 Open）。`.tex` の組み立てまでは 6 件すべてで確かめる
+CLUB_LOG_VALID_NAMES = sorted(p.name for p in (CLUB_LOG_EXAMPLES_DIR / "valid").glob("*.json"))
+CLUB_LOG_PDF_NAMES = [n for n in CLUB_LOG_VALID_NAMES if n != "06-with-images.json"]
+
 
 def _content(name: str, packages_dir: Path) -> tuple[dict, DocPackage]:
     ir = load_and_validate(load_example(f"valid/{name}"), packages_dir)
+    return apply_derived(ir.content, ir.package.schema), ir.package
+
+
+def _club_log_content(name: str, packages_dir: Path) -> tuple[dict, DocPackage]:
+    ir = load_and_validate(load_club_log_example(f"valid/{name}"), packages_dir)
     return apply_derived(ir.content, ir.package.schema), ir.package
 
 
@@ -59,6 +75,67 @@ def test_filters() -> None:
     assert filter_ja_month("2026-08") == "2026年8月"
     assert filter_ja_date("2026-08-03") == "2026年8月3日"
     assert filter_ja_date("2026-08-03", with_year=False) == "8月3日"
+    # 曜日は入力せず開催日から導く（charter §5.2）。2026-07-10 は金曜
+    assert filter_ja_date("2026-07-10", with_year=False, with_weekday=True) == "7月10日(金)"
+    assert filter_ja_date("2026-07-12", with_weekday=True) == "2026年7月12日(日)"
+    assert filter_ja_date("2026-07-13", with_weekday=True) == "2026年7月13日(月)"
+
+
+# --- club-meeting-log（document 型。issue #30） ------------------------------------
+
+
+@pytest.mark.parametrize("name", CLUB_LOG_VALID_NAMES)
+def test_club_log_valid_examples_build_tex(packages_dir: Path, name: str) -> None:
+    content, package = _club_log_content(name, packages_dir)
+    tex = build_tex(content, package)
+    assert "\\documentclass" in tex and "\\end{document}" in tex
+    assert r"\VAR{" not in tex and r"\BLOCK{" not in tex and "%#" not in tex
+    assert build_tex(content, package) == tex
+
+
+def test_club_log_title_is_built_from_front_matter(packages_dir: Path) -> None:
+    content, package = _club_log_content("01-typical.json", packages_dir)
+    tex = build_tex(content, package)
+    # 回次の見出しは入力に書かせず、開催日（曜日つき）・回次・年度から組み立てる（charter §5.1）
+    assert r"\logTitle{10月21日(火)}{第7回部会}{2025年度}" in tex
+    content, package = _club_log_content("02-minimal.json", packages_dir)
+    tex = build_tex(content, package)
+    assert r"\logTitle{4月24日(水)}{部会}{}" in tex
+
+
+def test_club_log_sections_follow_schema_order_then_extras(packages_dir: Path) -> None:
+    content, package = _club_log_content("03-extra-sections.json", packages_dir)
+    tex = build_tex(content, package)
+    positions = [
+        tex.index(f"\\logSection{{{h}}}")
+        for h in ("アナウンス", "次回予告", "成果物発表会", "部費回収")
+    ]
+    assert positions == sorted(positions)
+    # 無い節（活動報告）はテンプレートが落とす
+    assert "活動報告" not in tex
+
+
+def test_club_log_special_chars_are_escaped_except_code_and_href(packages_dir: Path) -> None:
+    content, package = _club_log_content("05-tex-special-chars.json", packages_dir)
+    tex = build_tex(content, package)
+    assert r"\logHeading{1}{予算 \& 会計（100\% 確定）}" in tex
+    assert (
+        r"\logLink{詳細は \textless{}共有シート\textgreater{}}{https://example.com/sheet?a=1\&b=2}"
+        in tex
+    )
+    code = "# ここはエスケープしない\nprintf '%s\\n' \"${HOME}\" | tr a-z A-Z"
+    assert f"\\begin{{logcode}}\n{code}\n\\end{{logcode}}" in tex
+    body = content["body"]["sections"]["announcement"]["blocks"]
+    raw_values = (
+        body[0]["text"],
+        body[1]["spans"][0]["text"],
+        body[1]["spans"][1]["text"],
+        body[1]["spans"][2]["text"],
+        *(item["spans"][0]["text"] for item in body[2]["items"]),
+    )
+    for raw in raw_values:
+        assert any(ch in raw for ch in "&%$#_{}~^\\<>'\"`|"), raw
+        assert raw not in tex, raw
 
 
 # --- FR5: 組み立てた .tex に生の特殊文字が残らない ---------------------------------
@@ -314,6 +391,35 @@ def test_valid_examples_render_to_pdf(tmp_path: Path, packages_dir: Path, name: 
     pdf = render(content, package, tmp_path / "out", job_name=Path(name).stem)
     assert pdf.is_file() and pdf.stat().st_size > 1000
     assert pdf.read_bytes().startswith(b"%PDF-")
+
+
+@requires_tex
+@pytest.mark.parametrize("name", CLUB_LOG_PDF_NAMES)
+def test_club_log_valid_examples_render_to_pdf(
+    tmp_path: Path, packages_dir: Path, name: str
+) -> None:
+    content, package = _club_log_content(name, packages_dir)
+    pdf = render(content, package, tmp_path / "out", job_name=Path(name).stem)
+    assert pdf.is_file() and pdf.stat().st_size > 1000
+    assert pdf.read_bytes().startswith(b"%PDF-")
+
+
+@requires_tex
+def test_club_log_link_target_survives_escaping(tmp_path: Path, packages_dir: Path) -> None:
+    """`href` の `\\&` は hyperref が `&` に戻すので、PDF のリンク先は入力の URL のまま。"""
+    import re
+    import zlib
+
+    content, package = _club_log_content("05-tex-special-chars.json", packages_dir)
+    pdf = render(content, package, tmp_path / "out", job_name="links")
+    data = pdf.read_bytes()
+    uris = set(re.findall(rb"/URI\s*\((.*?)\)", data))
+    for m in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+        try:
+            uris.update(re.findall(rb"/URI\s*\((.*?)\)", zlib.decompress(m.group(1))))
+        except zlib.error:
+            continue
+    assert uris == {b"https://example.com/sheet?a=1&b=2"}
 
 
 @requires_tex

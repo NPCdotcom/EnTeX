@@ -66,10 +66,17 @@ def filter_ja_month(value: str) -> str:
     return f"{int(year)}年{int(month)}月"
 
 
-def filter_ja_date(value: str, with_year: bool = True) -> str:
-    """`2026-08-03` → `2026年8月3日`（`with_year=False` で `8月3日`）。"""
+JA_WEEKDAYS = "月火水木金土日"  # datetime.weekday() の 0 = 月曜
+
+
+def filter_ja_date(value: str, with_year: bool = True, with_weekday: bool = False) -> str:
+    """`2026-08-03` → `2026年8月3日`。`with_year=False` で `8月3日`、`with_weekday=True` で
+    `8月3日(月)` のように曜日を付ける（charter §5.2: 曜日は入力せず開催日から導く）。"""
     d = _dt.date.fromisoformat(value)
-    return f"{d.year}年{d.month}月{d.day}日" if with_year else f"{d.month}月{d.day}日"
+    text = f"{d.year}年{d.month}月{d.day}日" if with_year else f"{d.month}月{d.day}日"
+    if with_weekday:
+        text += f"({JA_WEEKDAYS[d.weekday()]})"
+    return text
 
 
 # --- コンテキスト --------------------------------------------------------------
@@ -80,11 +87,51 @@ def build_context(content: dict[str, Any], schema: Schema) -> dict[str, Any]:
 
     dict のままだと Jinja2 の `x.items` が dict のメソッドに解決されてしまう（`rich_text` の
     `block.items` や `list` の `items` 定義で踏む）ので、属性アクセスできる名前空間に変換する。
+
+    `document` は IR の形（`sections` は dict、`extra_sections` は別の配列）のままではなく、
+    節を **並べ済みの配列** にしてから渡す（`shape_documents`）。
     """
+    escaped = shape_documents(escape_content(content, schema), schema)
     return {
-        "doc": _to_namespace(escape_content(content, schema)),
+        "doc": _to_namespace(escaped),
         "schema": _to_namespace(schema_context(schema)),
     }
+
+
+def shape_documents(content: dict[str, Any], schema: Schema) -> dict[str, Any]:
+    """`document` 型のフィールドを、テンプレート向けの形に並べ替えた **新しい** dict を返す。
+
+    ir-type-vocabulary.md §5 の分担のうち `src/entex/` 側（節の順序の固定・宣言外の節の後置）を
+    ここで果たす。`doc.<field>.sections` は `{ key?, heading, blocks }` の配列で、
+
+    - 宣言節がスキーマの `sections[]` の順に並ぶ。IR に無い節も `blocks` が空の要素として入る
+      （落とすか「特になし」と書くかは体裁の判断なのでテンプレートが決める。§2.8）。
+      `heading` はスキーマの値（エスケープ済み）、`key` は宣言のキー
+    - その後ろに `extra_sections` が入力の順序で続く。`heading` は利用者の値（エスケープ済み）で、
+      `key` は持たない
+    """
+    out = dict(content)
+    for name, fdef in schema.fields.items():
+        if fdef.type == "document" and isinstance(content.get(name), dict):
+            out[name] = _shape_document(content[name], fdef)
+    return out
+
+
+def _shape_document(value: dict[str, Any], fdef: FieldDef) -> dict[str, Any]:
+    by_key: dict[str, Any] = value.get("sections", {})
+    sections: list[dict[str, Any]] = [
+        {
+            "key": sdef.key,
+            "heading": escape_text(sdef.heading),
+            "blocks": list(by_key.get(sdef.key, {}).get("blocks", [])),
+        }
+        for sdef in fdef.sections or []
+    ]
+    sections.extend(
+        {"heading": extra.get("heading", ""), "blocks": list(extra.get("blocks", []))}
+        for extra in value.get("extra_sections", [])
+    )
+    return {"sections": sections}
 
 
 def _to_namespace(value: Any) -> Any:
@@ -106,6 +153,11 @@ def schema_context(schema: Schema) -> dict[str, Any]:
             d["fields"] = {name: field(child) for name, child in fdef.fields.items()}
         if fdef.items is not None:
             d["items"] = field(fdef.items)
+        if fdef.sections:
+            d["sections"] = [
+                {"key": s.key, "heading": escape_text(s.heading), "required": s.required}
+                for s in fdef.sections
+            ]
         return d
 
     return {

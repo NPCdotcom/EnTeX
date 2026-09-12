@@ -2,8 +2,8 @@
 
 最初の文書種（charter §5 の MVP）。情報技術研究部が部会ごとに Notion で書いている記録を、同じ体裁の PDF にする。要求は [docs/requirements/club-meeting-log/要求.md](../../docs/requirements/club-meeting-log/要求.md)、経緯は [ADR-0001](../../docs/adr/0001-first-doc-type-pivot-to-meeting-log.md)。
 
-> **状態: `schema.json` / `template.tex.j2` / `style/` / `examples/` は揃っているが、PDF はまだ出ない。**
-> 本文を持つ `document` 型が `src/entex/` に実装されていないため、`schema.json` の読み込みそのものが落ちる（[issue #21](https://github.com/NPCdotcom/EnTeX/issues/21) で設計だけを決め、実装は残した）。足りないものは下の「`src/entex/` に足りないもの」にまとめた。
+> **状態: `schema.json` / `template.tex.j2` / `style/` / `examples/` は揃っており、`src/entex/` の `document` 型実装（[issue #30](https://github.com/NPCdotcom/EnTeX/issues/30)）で PDF が出る。**
+> 画像ありの例（`06-with-images.json`）は `image` の `src` が何を指すかが未決のため、MVP では画像なしの過去ログを対象にする（charter §5・§11 Open）。
 
 差し替え前の [`circle-monthly-report/`](../circle-monthly-report/README.md) は上書きせずに残してある。型語彙を一通り使う参考資料として価値があり、実物に基づかないので charter §6 の合否判定の材料にはならない。
 
@@ -56,41 +56,21 @@
 
 IR そのものの形（`sections` は dict、`extra_sections` は別の配列）と context の形が違うのは、並べ替えを `src/entex/` が済ませてからテンプレートに渡すためである。
 
-## `src/entex/` に足りないもの
+## `src/entex/` 側の実装（issue #30 で充足）
 
-このパッケージを置いた時点で `packages/` 側の作業は終わるが、PDF を出すには `src/entex/` に次が要る。[issue #22](https://github.com/NPCdotcom/EnTeX/issues/22) の完了条件が「触る必要が出たら直さずに報告する」としているので、ここに書き出すだけにしてある。
+このパッケージを置いた時点で `packages/` 側の作業は終わっていた。PDF を出すために足りなかったものは [issue #30](https://github.com/NPCdotcom/EnTeX/issues/30) で `src/entex/` に足した。
 
-実際に出るエラーは次のとおり（`load_and_validate` に `examples/valid/01-typical.json` を渡したもの）。
-
-```
-文書パッケージ 'club-meeting-log' の schema.json が不正です:
-  fields.meeting_date.source: Extra inputs are not permitted;
-  fields.session_no_total.source: Extra inputs are not permitted;
-  fields.fiscal_year.source: Extra inputs are not permitted;
-  fields.body.type: Input should be 'text', 'rich_text', 'month', 'date', 'integer',
-    'money', 'enum', 'boolean', 'object', 'row_list' or 'list';
-  fields.body.sections: Extra inputs are not permitted;
-  fields.body.extra_sections: Extra inputs are not permitted;
-  fields.body.blocks: Extra inputs are not permitted;
-  fields.body.max_heading_level: Extra inputs are not permitted
-```
-
-| 足りないもの | 置き場所 | 正本 |
-|---|---|---|
-| `source` 属性（`document` に限らず全フィールドに付く） | `FieldDef` | ir-type-vocabulary.md §3 |
-| `document` を `FieldType` に足す | `FieldType` | 同 §1・§2.8 |
-| `sections` / `extra_sections` / `blocks` / `max_heading_level` 属性 | `FieldDef` | 同 §3 |
-| block の検証（宣言外の type の拒否・`max_heading_level`・`list` の入れ子3段） | `ir/validate.py` | 同 §2.8 |
-| 節の並べ替え（宣言順の固定・宣言外の節の後置・見出しレベルの正規化） | `renderer.build_context` | 同 §5 |
-| span のエスケープ（`code` の `text` は除く。`href` の扱いは下記） | `tex/escape.py` | 同 §5 |
-| `ja_date` の曜日オプション | `renderer.py` のフィルタ | charter §5.2「曜日は `meeting_date` から `ja_date` フィルタで出す」 |
-
-決めていない点が2つある。どちらも実装のときに決まる。
-
-- **span の `href` をエスケープするか。** 文字列なので素直に読めばエスケープ対象だが、URL を TeX エスケープすると `\href` / `\url` に渡せなくなる。一方で素通しにもできない。`05-tex-special-chars.json` の URL（`https://example.com/sheet?a=1&b=2`）は `&` を含み、`\url` をマクロの引数越しに使うと `&` が表の区切りとして解釈されて壊れる。**エスケープではなくパーセントエンコードで TeX 特殊文字を消す**のが素直だと思うが、実装のときに決める
-- **臨時の節の `heading` をエスケープするか。** これは利用者の入力なのでエスケープが要る。宣言節の `heading` はスキーマの値なので `schema_context` と同じ扱いでよい
-
-なお、上の context を手で組み立ててテンプレートを素振りし、`examples/valid/` の6件すべてが `.tex` になるところまでは確かめてある（`src/entex/` は読み込んだだけで変更していない）。PDF になるかは LuaLaTeX を通していないので未確認である。
+| もの | 置き場所 |
+|---|---|
+| `source` 属性（全フィールド） | `FieldDef` |
+| `document` を `FieldType` に足す | `FieldType` |
+| `sections` / `extra_sections` / `blocks` / `max_heading_level` | `FieldDef` |
+| block の検証（宣言外 type・`max_heading_level`・`list` の入れ子3段） | `ir/validate.py` |
+| 節の並べ替え（宣言順の固定・宣言外の節の後置） | `renderer.shape_documents` |
+| span のエスケープ（`code` の `text` は除く） | `tex/escape.py` |
+| `href` は TeX エスケープせず、`%` `#` `&` は `\` 前置、他の特殊文字はパーセントエンコード | `tex/escape.escape_href` |
+| 臨時の節の `heading` はエスケープする | `tex/escape.py` |
+| `ja_date` の曜日オプション | `renderer.filter_ja_date(..., with_weekday=True)` |
 
 ## 正常系（`examples/valid/`）
 

@@ -108,7 +108,7 @@ authors:
 
 ### 2.8 `document`（節に分かれた本文）
 
-> **2026-09-12 追加（[issue #21](https://github.com/NPCdotcom/EnTeX/issues/21)）。** 原案にも §2.2 の精査にも無い型で、部会ログの実物47本（[issue #14](https://github.com/NPCdotcom/EnTeX/issues/14)）で必要になった。**設計のみで、実装はまだ無い**（`src/entex/ir/schema.py` の `FieldType` に `document` は入っていない）。
+> **2026-09-12 追加（[issue #21](https://github.com/NPCdotcom/EnTeX/issues/21)）。** 原案にも §2.2 の精査にも無い型で、部会ログの実物47本（[issue #14](https://github.com/NPCdotcom/EnTeX/issues/14)）で必要になった。実装は [issue #30](https://github.com/NPCdotcom/EnTeX/issues/30)（`src/entex/ir/schema.py` の `FieldType` に `document` が入っている）。
 
 `rich_text`（§2.2）は `paragraph` と `list` の2種しか持てず、見出しを持てない。部会ログは節（`## 活動報告`）と下位見出し（`### イベント名`）が本体なので、`rich_text` では表せない。charter §5.1 が本文の入力形式について決めた3点（見出しレベルは正規化する・宣言した節の順序は固定・宣言外の節は後ろに回す）を、この型の属性で表す。
 
@@ -419,7 +419,7 @@ IR の中身（`content`）だけを渡すと、受け取った側（CLI の `re
 
 | 実装 | 案1であることの根拠 |
 |---|---|
-| [`src/entex/ir/schema.py`](../../../src/entex/ir/schema.py) | 冒頭の docstring が「doc-package の `schema.json`（案1 形式）を表す pydantic モデル」と書いている。`FieldType` は §1 の型そのもの（`document` を除く11型。`document` は §2.8 のとおり設計のみで実装は未）、`FieldDef` の属性は §3 の表そのもの |
+| [`src/entex/ir/schema.py`](../../../src/entex/ir/schema.py) | 冒頭の docstring が「doc-package の `schema.json`（案1 形式）を表す pydantic モデル」と書いている。`FieldType` は §1 の型そのもの（12型。`document` は §2.8）、`FieldDef` の属性は §3 の表そのもの |
 | [`packages/circle-monthly-report/schema.json`](../../../packages/circle-monthly-report/schema.json) | 案1の形で書かれている。当初は「仮に」だったが、これが唯一の実例になった |
 | CLI・API・テスト | この読み込みの上に乗っている。`GET /v1/doc-types` が返す `schema_version` も `Schema` モデルの値 |
 
