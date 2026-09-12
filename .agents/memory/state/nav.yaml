@@ -4,23 +4,22 @@ updated: "2026-09-12"
 scope: project
 
 session:
-  intent: "User (2026-09-12): revise the charter to resolve issue #14 (Aster's census of 47 real 部会ログ + proposal: front matter + Markdown input, document type, image brought forward). Charter §1/§3/§5(+5.1)/§6/§8/§9/§10/§11/Facts revised on branch cursor/charter-issue-14-markdown-input-9732 (PR #17). Scope limited to charter per user; vocabulary/ADR/TEAM follow-ups listed below. Meanwhile PR #12 (api-render + combined P6 Check pass) merged to main → roadmap step 2 (API) complete; origin/main merged into PR #17 to resolve the memory-file conflicts."
+  intent: "Aster (2026-09-12): second docs/implementation consistency audit of main (61dd7fa) after the first audit's fixes (issues #33-#39 → PRs #40-#46) were merged. Findings filed as issues #47-#51 (Aster: #47 charter §5/§8 input-path wording + this file; #48 frontmatter keys. NPC: #49 stale one-line description in pyproject/__init__/cli, #50 track the notion-export adapter, #51 CRLF in 4 .agents/skills files). Roadmap: step 1 (CLI) and step 2 (API) are P6 Check pass; step 3a has document type + club-meeting-log package merged (#22/PR #29, #30/PR #32), Notion export import still open (#50)."
   turn_estimate: 1
-  chat_id_hint: "entex-charter-issue-14"
+  chat_id_hint: "entex-audit-2"
 
 navigation:
-  active_thread_id: "club-meeting-log-markdown-input"
-  active_plan: ""   # step-2 plans both Check pass; next plan is created at roadmap step 3a (club-meeting-log) P3/P4
+  active_thread_id: "club-meeting-log-3a"
+  active_plan: ""   # step-2 plans both Check pass; no P4 plan exists for PR #32 (document type) — Gate Keeper call in #39
   next_actions:
-    - "Await NPC/Aster review+merge of charter PR #17 (issue #14 §5 checkbox (1)). Merge = agreement on §3-(1)."
-    - "Follow-up PR (issue #14 §3-(2)(3)): docs/design/elements/ir-type-vocabulary.md — add `document` type (sections/extra_sections/blocks/max_heading_level; blocks heading/paragraph/list/quote/link/image), move `image` §7 → 「次に入れる」, keep time/小数/表 excluded (0 occurrences in 47 logs). Charter §5.1 already points there. Fold in old S2/S4 (pattern / is_valid_slug → fullmatch, 1 line)"
-    - "Follow-up: ADR-0001 Open questions are all answered by issue #14 — add a pointer/amendment (or ADR-0002 for the input-format decision). docs/TEAM.md: packages/=aster, src/entex/=npc split (charter §6 now refers to it)"
-    - "Roadmap step 3a (charter §11 after PR #17): new P1 要求.md for club-meeting-log under docs/requirements/, then P3 design for document type validation + Markdown → IR importer (data-import) + block TeX expansion (npc) and packages/club-meeting-log/ (aster). Image-less past logs first, `image` next. Open implementation issues per issue #14 §4"
+    - "Roadmap step 3a remainder: notion-export adapter under data-import (#50, NPC; Aster supplies anonymised Notion exports + expected IR). Then `image` block (ir-type-vocabulary.md 「次に入れる」; storage/src semantics still an Open question in 要求.md)"
     - "Roadmap step 3b: charter §6 pass/fail 'zero changes under src/entex/' is judged only with a REAL second doc-type (circle-monthly-report does not count). Fold in review S2 (RenderResult.title so the API stops calling load_package twice) and use GET /v1/doc-types as the judgment signal"
-    - "Small patches (patch-reference first): W1 stream body in read_ir_body + chunked oversize test (with the auth/public-deploy plan); S1 fix api.md §3.1 sentence '新しい例外型は増やさない' (status untouched)"
-    - "Nice-to-have tests: S3 internal-error safety net (TestClient raise_server_exceptions=False), S5 Settings validation; S6 measure NFR-A1 with ENTEX_MAX_CONCURRENT_RENDERS=4 in Docker; Starlette httpx→httpx2 only if CI turns warnings into errors. After PR #12 merge, run `make docker-serve` once in the user's Docker env (only UAT item not exercised — no Docker on this host)"
-    - "Branch note: cloud-agent branches (cursor/...-9732) are a harness requirement, outside AGENTS.md <issue>/<owner>/<topic> — noted, not to be 'fixed' unilaterally"
-  blockers: []   # 部会ログの様式待ちは issue #14 の実測で解消（2026-09-12）
+    - "Gate Keeper (Aster) items left open in #39: project-state.yaml scope_focus / active_pdca / gate_status.proposal still describe step 2 (api.md, api-render plan); how to record PR #32 without a P4 plan (#34 Refs)"
+    - "NPC-owned follow-ups from audit 2: #49 (one-line description wording), #51 (renormalise CRLF in .agents/skills — check the dip kit upstream first), close #30 (all done criteria met; see comment)"
+    - "Small patches (patch-reference first): W1 stream body in read_ir_body + chunked oversize test (with the auth/public-deploy plan)"
+    - "Nice-to-have tests: S3 internal-error safety net (TestClient raise_server_exceptions=False), S5 Settings validation; S6 measure NFR-A1 with ENTEX_MAX_CONCURRENT_RENDERS=4 in Docker; Starlette httpx→httpx2 only if CI turns warnings into errors. Run `make docker-serve` once in the user's Docker env (only UAT item not exercised — no Docker on this host)"
+    - "Branch note: cloud-agent branches (cursor/...) are a harness requirement, outside AGENTS.md <issue>/<owner>/<topic> — noted, not to be 'fixed' unilaterally"
+  blockers: []   # 部会ログの様式待ちは issue #14 の実測で解消、document 型の未実装は #30（PR #32）で解消（2026-09-12）
 
 alignment:
   project_state_path: docs/project-state.yaml
