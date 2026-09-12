@@ -76,6 +76,7 @@ charter §8 の主要要素のうち `renderer` を対象にする。IR（検証
 | `PackageError` | `packages.py`（`schema.json` の欠落・不正・`doc_type` 不一致、`template.tex.j2` の欠落） | パッケージ作成者向け。置くべきファイル名・不正な箇所を含める | 3 |
 | `DerivationError` | `ir/derive.py`（循環参照など） | パッケージ作成者向け（利用者には通常出ない。テンプレート作者向けの内部エラーとして扱う） | 3 |
 | `RenderError` | `renderer.py`（テンプレートの誤り・latexmk失敗） | 汎用メッセージ「PDFの生成に失敗しました。入力内容をご確認のうえ、解決しない場合は管理者へお問い合わせください」＋ latexmkの生ログは `out/<job>/latexmk.log` 相当のサーバ側ログにのみ書く。TeXのエラー文字列（`! `, `LaTeX Error` 等）を標準出力・戻り値に含めないことをテストで担保する（FR7） | 2 |
+| `RenderTimeoutError`（`RenderError` の派生。API 化で追加） | `renderer.py`（latexmk が `timeout` 秒で終わらない） | 「PDFの生成が時間内に終わりませんでした。しばらくしてからやり直してください。…」。API では `type` を `render-timeout` に分ける（[api.md](api.md) §3.3） | 2 |
 
 `IRValidationError` と `EnvelopeError` はスキーマ検証の時点で原因が特定できるため日本語文言を機械的に組み立てられるが、`RenderError` はlatexmkの出力を解析して原因別メッセージに分岐させる価値が低い（TeXのエラーは組版の詳細に依存し尽くせない）ため、当面は汎用メッセージ1種に留める。原因別メッセージが必要になった時点で拡張する。
 

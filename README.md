@@ -46,6 +46,7 @@ make docker-build    # 初回のみ。TeX Live を apt で入れるので数分�
 make docker-doctor   # lualatex / latexmk / luatexja が見えるか
 make tex-smoke       # tests/fixtures/smoke.tex → out/smoke/smoke.pdf（日本語組版の確認）
 make docker-test     # pytest（TeX を使うテスト込み）
+make docker-serve    # API を http://localhost:8000 で起こす（下の「API」節）
 make docker-shell    # 中に入って作業
 ```
 
@@ -74,6 +75,28 @@ entex render <json> --tex-only           # latexmk を呼ばず .tex だけ書�
 
 処理の流れは [docs/design/programs/renderer.md](docs/design/programs/renderer.md): `cli.py`（JSON を読む）→ `pipeline.py`（共通入口。CLI も API もここを通る）→ `ir/loader.py`（封筒・型検証）→ `ir/derive.py`（導出値）→ `renderer.py`（`tex/escape.py` でエスケープ → `template.tex.j2` → latexmk）。
 
+### API（着手順 2）
+
+```bash
+make docker-serve    # http://localhost:8000（コンテナの CMD も同じ uvicorn）
+curl -sS -X POST http://localhost:8000/v1/render \
+     -H 'Content-Type: application/json' \
+     --data-binary @packages/circle-monthly-report/examples/valid/01-typical.json \
+     -o report.pdf -D -          # ヘッダを表示しつつ PDF を保存
+curl -sS http://localhost:8000/v1/health       # {"status":"ok"|"degraded","version":…,"toolchain":{…}}
+curl -sS http://localhost:8000/v1/doc-types    # [{"doc_type":"circle-monthly-report","schema_version":1,"title":"…"}]
+```
+
+| メソッド / パス | 成功 | 失敗 |
+|---|---|---|
+| `POST /v1/render`（IR の JSON） | `200` `application/pdf`。`Content-Disposition` に ASCII の `filename` と UTF-8 の `filename*` | `400` 本文が JSON でない · `413` 本文過大 · `415` `Content-Type` 不一致 · `422` 封筒 / 中身の誤り · `500` 組版失敗 / 時間切れ / パッケージ不備 · `503` 混雑（`Retry-After`） |
+| `GET /v1/health` | `200 {"status":"ok"}` | `503 {"status":"degraded"}`（TeX 不在） |
+| `GET /v1/doc-types` · `GET /v1/doc-types/{doc_type}` | 一覧 / `schema.json` の内容 | `404` |
+
+失敗はすべて [RFC 9457 Problem Details](https://www.rfc-editor.org/rfc/rfc9457.html)（`application/problem+json`）。`type` の末尾（`ir-invalid` / `envelope-mismatch` / `render-failed` / …）で機械判別し、`detail` は日本語の完成文、`ir-invalid` だけ `issues[]`（`path` / `message`）を持つ。TeX のログは応答に出ず、サーバ側ログに `X-Request-ID`（応答ヘッダにも入る。`instance` は `urn:uuid:<同じ ID>`）付きで残る。OpenAPI は `/openapi.json`（生成物は `schemas/api/openapi.json`、`make schemas` で再生成）。
+
+環境変数（既定値）: `ENTEX_PACKAGES_DIR`（`./packages`）· `ENTEX_WORK_DIR`（システム tmp）· `ENTEX_RENDER_TIMEOUT`（`60` 秒）· `ENTEX_MAX_CONCURRENT_RENDERS`（CPU 数）· `ENTEX_QUEUE_WAIT_SECONDS`（`5`）· `ENTEX_MAX_BODY_BYTES`（`1048576`）· `ENTEX_KEEP_FAILED_JOBS`（`0`。`1` で失敗ジョブの一時ディレクトリを残す）。設計は [docs/design/programs/api.md](docs/design/programs/api.md)。認証はまだ無い（公開配置の前に別 plan）。
+
 ## Layout
 
 | Path | Shared? | Notes |
@@ -84,7 +107,7 @@ entex render <json> --tex-only           # latexmk を呼ばず .tex だけ書�
 | `scripts/` | yes | 開発補助シェル |
 | `Dockerfile` / `compose.yaml` / `Makefile` | yes | 開発環境定義 |
 | `docs/` | yes | 概要・要求・設計・ADR・用語 |
-| `schemas/` | yes | 共有スキーマ（IR 等） |
+| `schemas/` | yes | 共有スキーマ（IR の封筒・API の OpenAPI / Problem Details）。`make schemas` で再生成 |
 | `design/` | yes | デザイン成果物（図・モック） |
 | `.agents/` | yes | AI キット（skills / rules / plans / memory 骨格） |
 | `AGENTS.md` · `CLAUDE.md` | yes | AI エージェント向けの前提。`CLAUDE.md` は `AGENTS.md` へ転送するだけ |
