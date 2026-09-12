@@ -9,7 +9,14 @@ from pathlib import Path
 import pytest
 
 from entex.errors import EnvelopeError, IRValidationError, PackageError
-from entex.ir.loader import Envelope, ValidatedIR, load_and_validate
+from entex.ir.loader import (
+    ENVELOPE_SCHEMA_DIALECT,
+    ENVELOPE_SCHEMA_ID,
+    Envelope,
+    ValidatedIR,
+    envelope_json_schema_text,
+    load_and_validate,
+)
 from tests.conftest import EXAMPLES_DIR, REPO_ROOT, load_example
 
 VALID = sorted(p.name for p in (EXAMPLES_DIR / "valid").glob("*.json"))
@@ -256,8 +263,19 @@ def test_package_doc_type_must_match_directory(tmp_path: Path) -> None:
 
 def test_envelope_json_schema_is_in_sync_with_pydantic_model() -> None:
     path = REPO_ROOT / "schemas" / "ir" / "envelope.schema.json"
-    on_disk = json.loads(path.read_text(encoding="utf-8"))
-    assert on_disk == Envelope.model_json_schema(), (
+    assert path.read_text(encoding="utf-8") == envelope_json_schema_text(), (
         "schemas/ir/envelope.schema.json が entex.ir.loader.Envelope とずれている。"
         "`python -m entex.ir.loader` で再生成すること"
     )
+
+
+def test_envelope_file_carries_the_dialect_and_id_but_the_model_does_not() -> None:
+    """`$schema` / `$id` はファイルの属性。モデルに付けると openapi.json にも出てしまう。"""
+    path = REPO_ROOT / "schemas" / "ir" / "envelope.schema.json"
+    on_disk = json.loads(path.read_text(encoding="utf-8"))
+    assert on_disk["$schema"] == ENVELOPE_SCHEMA_DIALECT
+    assert on_disk["$id"] == ENVELOPE_SCHEMA_ID
+
+    model = Envelope.model_json_schema()
+    assert "$schema" not in model
+    assert "$id" not in model

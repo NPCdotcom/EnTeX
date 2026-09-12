@@ -1,4 +1,6 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/NPCdotcom/EnTeX/main/schemas/ir/envelope.schema.json",
   "additionalProperties": false,
   "description": "IR がどの文書種のどの版のスキーマに従うかを自己申告する封筒。content の形は packages/<doc_type>/schema.json が決める。",
   "properties": {
@@ -9,14 +11,14 @@
       "type": "string"
     },
     "schema_version": {
-      "description": "パッケージの schema.json の版",
+      "description": "パッケージの schema.json の版。ここで見るのは 1 以上の整数であることだけで、packages/<doc_type>/schema.json の版と一致するかは読み込み時に照合する。一致しない版は content を見る前に拒否する（ir-type-vocabulary.md §6.1。版を上げる基準も同節）",
       "minimum": 1,
       "title": "Schema Version",
       "type": "integer"
     },
     "content": {
       "additionalProperties": true,
-      "description": "中身。schema.json の fields に従う",
+      "description": "中身。schema.json の fields に従う。ここで見るのはオブジェクトであることだけで、未知のキーと導出フィールドのキーの拒否は packages/<doc_type>/schema.json の層が行う（ir-type-vocabulary.md §6.1）",
       "title": "Content",
       "type": "object"
     }
