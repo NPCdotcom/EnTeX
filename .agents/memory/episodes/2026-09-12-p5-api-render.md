@@ -9,7 +9,7 @@ tags: [implement, P5, H4, api, fastapi, rfc9457, feature/npc]
 
 ## Input
 
-User:「2で進みましょう。」— chose option 2 of my proposal: go straight to P5 of `api-render`, then run the P6 Check for `pipeline-and-cli` and `api-render` together. Same branch `feature/npc`, PR #10.
+User:「2で進みましょう。」— chose option 2 of my proposal: go straight to P5 of `api-render`, then run the P6 Check for `pipeline-and-cli` and `api-render` together. Same branch `feature/npc`. PR #10 turned out to be merged (02:47, merge commit) before this turn, so the new commits went into a new PR #12 (diff = 5 commits since merge-base 3c0e0b9).
 
 ## Done (TDD)
 
@@ -38,5 +38,5 @@ User:「2で進みましょう。」— chose option 2 of my proposal: go straig
 
 ## Next
 
-- P6 `review-conduct` for both plans (single review doc), then user merges PR #10.
-- `@coderabbitai review` on PR #10 after push.
+- P6 `review-conduct` for both plans (single review doc), then user merges PR #12.
+- `@coderabbitai review` posted on PR #12.

@@ -202,8 +202,8 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 | **actor** | `user` → `agent` |
 | **decision** | 「2で進みましょう。」= pipeline-and-cli の Check を先にせず api-render の P5 へ。Check は 2 plan まとめて 1 回 |
 | **phase** | P5（plan `api-render`）Do 完了 |
-| **summary** | TDD で `src/entex/api/`（settings / problems / routes / app）を新設。`POST /v1/render` → `application/pdf`、失敗は RFC 9457 Problem Details（13 種）、同期 `def` + `BoundedSemaphore`、リクエストごとの一時ディレクトリ、`X-Request-ID`。`RenderTimeoutError` を追加。`schemas/api/{problem.schema.json,openapi.json}` を生成し同期テスト。Dockerfile `CMD` uvicorn、`make docker-serve` / `make schemas`、README §API。`make lint` / `make test` 217 passed（TeX ありホスト）。ホストで uvicorn + curl → PDF 61 KB / 2.1 秒 |
-| **reason** | project-state `allowed_actions` に implement-conduct。plan `api-render` は agreed、依存 `pipeline-and-cli` は Do 完了 |
+| **summary** | TDD で `src/entex/api/`（settings / problems / routes / app）を新設。`POST /v1/render` → `application/pdf`、失敗は RFC 9457 Problem Details（13 種）、同期 `def` + `BoundedSemaphore`、リクエストごとの一時ディレクトリ、`X-Request-ID`。`RenderTimeoutError` を追加。`schemas/api/{problem.schema.json,openapi.json}` を生成し同期テスト。Dockerfile `CMD` uvicorn、`make docker-serve` / `make schemas`、README §API。`make lint` / `make test` 217 passed（TeX ありホスト）。ホストで uvicorn + curl → PDF 61 KB / 2.1 秒。PR #10 はこのターン前にマージ済みだったため新規 PR #12 |
+| **reason** | project-state `allowed_actions` に implement-conduct。plan `api-render` は agreed、依存 `pipeline-and-cli` は Do 完了（PR #10 で main へ） |
 
 ### Refs
 
