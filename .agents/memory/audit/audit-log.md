@@ -171,3 +171,26 @@ W1 / W2 はレビュー PR では直していない（review-conduct の「drive
 3（feature/npc の規約不一致）は「承知」= 認識のうえ継続。実装 PR のブランチ名は着手時に確認する。
 
 ---
+## 2026-09-12T03:30:00+00:00 | phase | p5-pipeline-and-cli-do
+
+| Field | Value |
+|-------|-------|
+| **event_type** | `phase` |
+| **actor** | `agent` |
+| **decision** | P5 Do 完了（Check 待ち） |
+| **phase** | P4 → P5（plan `pipeline-and-cli`） |
+| **summary** | ユーザー指示「pipeline-and-cli の P5 実装に進めてください」。TDD で `src/entex/pipeline.py` を新設し CLI を pipeline 経由に。W1（ジョブ名規則 + `./` 前置）・W2（テンプレ欠落 → `PackageError`）・S3（`TEXINPUTS` 終端）・S1（renderer.md IF 表・図）を解消。`make lint` / `make test` 168 passed（TeX ありホスト、skip 0） |
+| **reason** | project-state `allowed_actions` に implement-conduct、gate passed（P3→P4 で Go）。ブランチ指示なしのため feature/npc（PR #10）を継続 |
+
+### Refs
+
+- plan: `.agents/plans/programs/pipeline-and-cli.md`（AC1–AC5 ✓、Do 行）
+- design: `docs/design/programs/renderer.md`（IF 表・図・エラー表を実装に追従、status 据え置き）
+- episode: `.agents/memory/episodes/2026-09-12-p5-pipeline-and-cli.md`
+- team: `docs/project-state.yaml`（current_phase: P5、proposal: P5→P6 Check）
+
+### Detail（任意）
+
+設計との差 1 点: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落として `pct-hash.tex` にした（`JOB_NAME_RE` は満たす）。次のゲート判断（Check を今やるか api-render 後にまとめるか）はユーザー。
+
+---

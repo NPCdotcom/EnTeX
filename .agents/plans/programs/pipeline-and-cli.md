@@ -56,11 +56,11 @@ parent_hierarchy:
 
 ## Acceptance criteria（S1: ≤5 推奨）
 
-- [ ] AC1: `entex.pipeline.render_ir()` / `prepare()` / `RenderResult` が api.md §3.1 のシグネチャで存在し、`cli.py` は `load_and_validate` / `apply_derived` / `renderer.render` を直接 import しない（`pipeline` 経由のみ）。既存テストは W1 / W2 に関わる期待値の更新以外は変更なしで通る — `tests/test_pipeline.py`、`rg` による import 検査をテスト化
-- [ ] AC2 (W1): `render_ir(job_name="-bad")` / `"a b"` / `"x%y"` は `ValueError`。CLI で `-dash.json` / `pct%hash#.json` / `報告 8月.json` を `--tex-only` で処理すると `.tex` が正規化された名前（`dash.tex` / `pct-hash-.tex` 相当、または `document.tex`）で出て終了コード 0。TeX 環境では同 3 件から PDF が出る — `tests/test_cli.py`（ホスト）・`@requires_tex` 1 件
-- [ ] AC3 (W2): `template.tex.j2` を欠いたパッケージは `load_package()` が `PackageError`、CLI は終了コード 3 と日本語文。`tests/test_renderer.py::test_missing_template_is_a_render_error` は `PackageError` 期待に書き換える
-- [ ] AC4 (S1 / S3): renderer.md の IF 表・図が実装と一致（表の関数名・引数を `src/entex/` の実シグネチャと突き合わせる）。`TEXINPUTS` が既に設定されている環境でも既定の探索パスが残る（`test_texinputs_keeps_default_path`）
-- [ ] AC5: `make lint` / `make test` 通過。CLI の利用者向け出力（成功時の PDF パス、失敗時の日本語文と終了コード）が変わっていないことを既存の `tests/test_cli.py` で確認。`.tex` の決定性テスト（`test_build_tex_is_deterministic`）を `render_ir(tex_only=True)` 経由でも通す
+- [x] AC1: `entex.pipeline.render_ir()` / `prepare()` / `RenderResult` が api.md §3.1 のシグネチャで存在し、`cli.py` は `load_and_validate` / `apply_derived` / `renderer.render` を直接 import しない（`pipeline` 経由のみ）。既存テストは W1 / W2 に関わる期待値の更新以外は変更なしで通る — `tests/test_pipeline.py`、`rg` による import 検査をテスト化 → `tests/test_pipeline.py::test_cli_goes_through_the_pipeline_only`
+- [x] AC2 (W1): `render_ir(job_name="-bad")` / `"a b"` / `"x%y"` は `ValueError`。CLI で `-dash.json` / `pct%hash#.json` / `報告 8月.json` を `--tex-only` で処理すると `.tex` が正規化された名前（`dash.tex` / `pct-hash-.tex` 相当、または `document.tex`）で出て終了コード 0。TeX 環境では同 3 件から PDF が出る — `tests/test_cli.py`（ホスト）・`@requires_tex` 1 件 → 実際の正規化結果は `dash.tex` / `pct-hash.tex` / `8.tex`（末尾の `-` は落とす）。`test_render_tex_only_normalizes_odd_filenames` / `test_render_odd_filenames_produce_pdf`（TeX あり環境で 4 件 pass）
+- [x] AC3 (W2): `template.tex.j2` を欠いたパッケージは `load_package()` が `PackageError`、CLI は終了コード 3 と日本語文。`tests/test_renderer.py::test_missing_template_is_a_render_error` は `PackageError` 期待に書き換える → `test_missing_template_is_a_package_error`（renderer）・`test_render_missing_template_is_a_package_error`（cli、出力ディレクトリを作らないことも確認）
+- [x] AC4 (S1 / S3): renderer.md の IF 表・図が実装と一致（表の関数名・引数を `src/entex/` の実シグネチャと突き合わせる）。`TEXINPUTS` が既に設定されている環境でも既定の探索パスが残る（`test_texinputs_keeps_default_path`）→ renderer.md の図・IF 表・エラー分類表を更新（`status` は据え置き）。`test_texinputs_keeps_default_path` + `test_tex_filename_is_passed_with_dot_slash`
+- [x] AC5: `make lint` / `make test` 通過。CLI の利用者向け出力（成功時の PDF パス、失敗時の日本語文と終了コード）が変わっていないことを既存の `tests/test_cli.py` で確認。`.tex` の決定性テスト（`test_build_tex_is_deterministic`）を `render_ir(tex_only=True)` 経由でも通す → 168 passed（TeX ありホスト、skip 0）。`test_render_ir_tex_is_deterministic`
 
 ## Dependencies
 
@@ -80,7 +80,7 @@ parent_hierarchy:
 
 ## Open questions
 
-- CLI の PDF ファイル名を stem 正規化後の名前にするか、常に `document.pdf` にするか。**推奨**: 正規化後の名前（利用者が保存名を見てファイルを見分けられる）。合わなければ `document`
+- ~~CLI の PDF ファイル名を stem 正規化後の名前にするか、常に `document.pdf` にするか。**推奨**: 正規化後の名前（利用者が保存名を見てファイルを見分けられる）。合わなければ `document`~~ → **P5 で推奨どおり実装**（`normalize_job_name`: 不許可文字の連なりを `-` 1 つに、先頭末尾の `-`/`_` を落とし、64 文字で切り、空なら `document`）。README に例を記載
 
 ## Agent recommendations（計画時）
 
@@ -100,9 +100,11 @@ parent_hierarchy:
 | Date | Verdict | Summary |
 |------|---------|---------|
 | 2026-09-12 | on_track | plan 記録直後。P5 着手はユーザー指示待ち |
+| 2026-09-12 | on_track | Do 完了。AC1–AC5 すべて検証済み（168 tests, lint pass）。Check（P6 レビュー）待ち |
 
 ## PDCA log
 
 | Date | Phase | Note |
 |------|-------|------|
 | 2026-09-12 | Plan | api.md §5 の分割案どおり起票。W1 / W2 / S1 / S3 を Act としてここに吸収 |
+| 2026-09-12 | Do | TDD（Red: `tests/test_pipeline.py` → Green → Refactor）。`src/entex/pipeline.py` 新規（`JOB_NAME_RE` / `DEFAULT_JOB_NAME` / `normalize_job_name` / `PreparedIR` / `RenderResult` / `prepare` / `render_ir`）。`cli.py` は `pipeline` 経由のみ（ジョブ名は `normalize_job_name(stem)`、出力ディレクトリは元の stem）。`packages.load_package()` に `template.tex.j2` 存在検査（W2）。`renderer.render()` は latexmk 引数を `./<job>.tex`、`TEXINPUTS` を必ず区切りで終端（W1 / S3）。`build_tex` の欠落検査は安全網として残す（`test_build_tex_still_guards_against_a_vanished_template`）。設計との差: AC2 の例示 `pct-hash-.tex` は末尾 `-` を落とし `pct-hash.tex` に（規則 `JOB_NAME_RE` は満たすので許容範囲と判断）。renderer.md の図・IF 表・エラー分類表と README の CLI 節を追従。— files: src/entex/pipeline.py, src/entex/cli.py, src/entex/packages.py, src/entex/renderer.py, tests/test_pipeline.py, tests/test_cli.py, tests/test_renderer.py, docs/design/programs/renderer.md, README.md（commits d5675ab / 9f596ff / 8da1fd8 / 4fd5944 / 644edb0） |

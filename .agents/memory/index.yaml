@@ -141,10 +141,10 @@ entries:
     tier: knowledge
     granularity: thread
     path: .agents/plans/programs/pipeline-and-cli.md
-    summary: "P4 plan (H4, agreed) — entex.pipeline.render_ir/prepare, CLI on top, absorbs review W1 (job name) / W2 (missing template → PackageError) / S1 (renderer.md IF) / S3 (TEXINPUTS). TeX-independent"
-    tags: [plan, P4, H4, pipeline, cli]
+    summary: "P4 plan (H4, agreed; P5 Do done 2026-09-12, AC1–AC5 verified, Check pending) — entex.pipeline.render_ir/prepare, CLI on top, absorbs review W1 (job name) / W2 (missing template → PackageError) / S1 (renderer.md IF) / S3 (TEXINPUTS). TeX-independent"
+    tags: [plan, P4, P5, H4, pipeline, cli]
     recall: on_demand
-    linked: [design-api, review-renderer-cli-p6, project-state]
+    linked: [design-api, review-renderer-cli-p6, project-state, ep-p5-pipeline-and-cli]
 
   - id: plan-api-render
     scope: project
@@ -165,6 +165,16 @@ entries:
     tags: [review, api, P6, P3]
     recall: on_demand
     linked: [review-renderer-cli-p6, design-api]
+
+  - id: ep-p5-pipeline-and-cli
+    scope: project
+    tier: episodes
+    granularity: thread
+    path: .agents/memory/episodes/2026-09-12-p5-pipeline-and-cli.md
+    summary: "P5 Do of pipeline-and-cli on feature/npc (PR #10): entex.pipeline new, CLI via pipeline only, W1/W2/S1/S3 fixed, 168 tests pass on TeX host; pct-hash (no trailing dash) deviation noted"
+    tags: [implement, P5, pipeline, cli]
+    recall: on_demand
+    linked: [plan-pipeline-and-cli, design-api, design-renderer]
 
   # Optional pointer to global knowledge (no duplicate body):
   # - id: link-global-lessons
