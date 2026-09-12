@@ -9,6 +9,7 @@
 | [design/](design/) | H0–H5 design。製品の正本は [design/product/charter.md](design/product/charter.md) |
 | [design/elements/ir-type-vocabulary.md](design/elements/ir-type-vocabulary.md) | IR の型の語彙（月次報告書を題材に精査） |
 | [requirements/circle-monthly-report/要求.md](requirements/circle-monthly-report/要求.md) | P1 要求 — サークル月次活動報告書（最初の文書種） |
+| [requirements/circle-monthly-report/要件.md](requirements/circle-monthly-report/要件.md) | P2 要件 — 同上、検証可能な機能・非機能要件 |
 | [adr/](adr/) | Architecture decisions |
 | [glossary/](glossary/) | Terms |
 | [evaluations/](evaluations/) | Evaluation records |
@@ -18,7 +19,7 @@
 
 未作成（必要になった段階で作る）:
 
-- `requirements/circle-monthly-report/要件.md` — P2 検証可能な要件
+- `design/programs/renderer.md` — P3 基本設計（H4）
 - `LINEAR_PHASE_MAP.md` — Linear states ↔ P/H（optional。`project-state.yaml` の `linear_sync.map_doc` が参照している）
 
 Plans: [.agents/plans/](../.agents/plans/README.md)
