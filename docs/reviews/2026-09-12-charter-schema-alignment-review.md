@@ -2,8 +2,10 @@
 title: charter・IR型語彙・renderer設計と実装の整合レビュー（着手順1完了時点）
 kind: review
 phase: P6
-status: done
+scope_level: H4
+status: agreed
 created: 2026-09-12
+reviewed_commit: 7955490   # Merge pull request #8 (main)。本文の対象ツリー
 reviewer: Cursor cloud agent
 related_design:
   - docs/design/product/charter.md
@@ -16,6 +18,8 @@ related_requirements: docs/requirements/circle-monthly-report/要件.md
 ---
 
 # charter・IR型語彙・renderer設計と実装の整合レビュー
+
+> **2026-09-12 注記**: このレビューは PR #8（着手順1完了）時点のツリーに対するもので、main への取り込み（PR #31）はそのままの内容で行った。ADR-0001（題材の差し替え）と #21（`document` 型の追加。型語彙は12型）より前の記述を含むため、現在の設計・実装の説明としては読まないこと。当時の判定内容は変えていない。
 
 親: [renderer.md](../design/programs/renderer.md) の「次」— P6 review-conduct（本レビューで実施）
 
