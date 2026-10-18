@@ -92,6 +92,7 @@ User chat: **Japanese** · Kit canon: **English** — [LANGUAGE_POLICY.md](.agen
   - 接頭辞: `feat`(新機能) / `ui`(UI変更) / `remove`(削除) / `fix`(修正) / `docs`(ドキュメントのみ) / `style`(挙動に影響しない整形) / `refact`(リファクタリング) / `perf`(パフォーマンス改善) / `test`(テスト) / `wip`(作業途中) / `chore`(ビルド・ツール・依存など雑多)
   - 例: `feat:JSONから.texを組み立てる`、`fix:日本語のエスケープ漏れを直す`
   - scaffold 期の履歴（`docs: ...` 形式）は書き換えない。今後のコミットから適用する
+- Claude Code が付ける署名トレーラー（`Co-Authored-By:` の Anthropic 送信専用アドレス宛のもの、`Claude-Session:`）は履歴に残さない。`~/.claude/settings.json` の設定では止まらないため、`.githooks/commit-msg` が機械的に落とす（2026/10/18 決定、#54）。人間の共著者の `Co-Authored-By:` は残る
 - PR タイトルも同じ接頭辞を付け、末尾に issue 番号を添える（例: `feat:CLIでJSONからPDFを出す(#7)`）
 - 開発フロー: `main` を最新化 → 作業ブランチ作成 → 実装 → commit → `git push origin <ブランチ名>` → GitHub で PR → main へマージ
 - 上の3つ（main で作業しない / ブランチ名 / コミットの接頭辞）は `.githooks/` の hook が機械検査する。**クローンしたら一度 `make hooks` を実行する**（`make setup` からも呼ばれる）
