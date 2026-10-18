@@ -1,7 +1,30 @@
 #!/bin/sh
-# コミットメッセージが `接頭辞:やったこと` の形式かを検査する。
+# コミットメッセージを検査・整形する: Claude の署名トレーラーを落とし、`接頭辞:やったこと` の形式かを検査する。
 # 規則の正は AGENTS.md「Git 運用」。この hook はその機械検査であって、規則そのものではない。
 # 導入: make hooks（core.hooksPath を .githooks に向ける）
+
+# Claude の署名トレーラーの除去（2026/10/18、#54）。
+# Claude Code は環境によってコミットメッセージの末尾にトレーラーを付ける。
+# `~/.claude/settings.json` の includeCoAuthoredBy: false では止まらない（デスクトップアプリは
+# 設定とは別経路でトレーラーを付ける）ため、設定に頼らずここで機械的に落とす。
+# 落とす行: `Co-Authored-By:` のうち宛先が Anthropic の送信専用アドレスのもの、`Claude-Session:`。
+# 人間の共著者の `Co-Authored-By:` は残す（宛先で判定しているため影響しない）。
+#
+# SIGPIPE を無視する。`git commit ... | head -3` のように標準出力が早期に閉じられたとき、
+# 診断の echo が SIGPIPE でスクリプトを殺すのを避ける。
+trap '' PIPE
+
+strip_re='^(Co-Authored-By:[[:space:]].*<noreply@anthropic\.com>|Claude-Session:[[:space:]])'
+if grep -qiE "$strip_re" "$1"; then
+  strip_tmp="$1.strip"
+  grep -viE "$strip_re" "$1" > "$strip_tmp"
+  # 行を落とした結果として末尾に残る空行を詰める
+  awk 'BEGIN{blank=0}
+       {if ($0 ~ /^[[:space:]]*$/) {blank++} else {while (blank-->0) print ""; blank=0; print}}' \
+      "$strip_tmp" > "$1"
+  rm -f "$strip_tmp"
+  echo "[git hook] Claude の署名トレーラーを除いた。"
+fi
 
 set -e
 
